@@ -5,6 +5,7 @@ import { NavigationContainer, StackActions } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import Splash from './Component/Splash/Splash.js';
 import Login from './Component/Login/Login.js';
+import ForgotPassword from './Component/ForgotPassword/ForgotPassword.js';
 export default function App() {
   const Stack=createStackNavigator();
   const myScreen=()=>{
@@ -29,6 +30,11 @@ export default function App() {
       name="Login"
       component={Login}
       options={{ headerShown: false }}
+      />
+      <Stack.Screen
+      name="ForgotPassword"
+      component={ForgotPassword}
+      options={{title:false}}
       />
      </Stack.Navigator>
    </NavigationContainer>
