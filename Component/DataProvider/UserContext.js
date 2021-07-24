@@ -5,7 +5,7 @@ export const UserContext=crateContext();
 export default UserProvider=props=>{
     const[user,setUser]=useState(null);
     const[authUser,setAuthUser]=useState(null);
-
+    cosnt[dispatcher,setDispatcher]=useState(null);
     return(
         <UserContext.Provider value={{
             user,setUser,authUser,setAuthUser

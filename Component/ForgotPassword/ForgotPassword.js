@@ -2,6 +2,7 @@ import React,{useState} from 'react';
 import {View,Image,StyleSheet, TouchableOpacity,Text, ScrollView, Dimensions,Alert} from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import InputComp from '../WorkerComp/InputComp';
+import { regX } from '../WorkerComp/AppColor';
 export default function ForgotPassword(){
     // inputType =email,phone
     const [email,setEmail]=useState({
@@ -10,14 +11,14 @@ export default function ForgotPassword(){
         inputType:'',
     });
     const validatePhone=()=>{
-        if(regX.phoneFilter.test(user.emailPhone)){
-           setEmail({...email,inputType:'Phone'});
+        if(regX.phoneFilter.test(email.value)){
+         return true;
         
-    }emailPhoneError
+    }
 }
     const validateEmail=()=>{
-        if(regX.emailFilter.test(user.emailPhone)){
-            setEmail({...email,inputType:'Email'});
+        if(regX.emailFilter.test(email.value)){
+            return true;
     }
    
 }
