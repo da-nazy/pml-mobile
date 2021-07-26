@@ -1,5 +1,5 @@
 import React,{useState} from 'react';
-import { Dimensions,View,Text,TouchableOpacity,StyleSheet,StatusBar,ImageBackground,Image,ScrollView,ActivityIndicator} from 'react-native';
+import { TextInput,Dimensions,View,Text,TouchableOpacity,StyleSheet,StatusBar,ImageBackground,Image,ScrollView,ActivityIndicator} from 'react-native';
 import { AppColor } from '../WorkerComp/AppColor';
 import menu_bg from '../Assets/menu_bg.png';
 import Icon from 'react-native-vector-icons/FontAwesome5';
@@ -10,13 +10,53 @@ export default function Menu(){
     const [menuItem,setMenuItem]=useState([
       {
         icon: "box",
-        name: "Pickup",
-        callAction: "Pickup now!",
+        name: "Parcels",
+        callAction: 'Create  Items',
         // To pass pickup param
         func: () => {
          console.log("Okay");
         },
         id: 1,
+      },
+      {
+        icon: "boxes",
+        name: "Pickups",
+        callAction: "Request Pickups",
+        // To pass pickup param
+        func: () => {
+         console.log("Okay");
+        },
+        id: 2,
+      },
+      {
+        icon: "ship",
+        name: "Ship",
+        callAction: "Shipped Items",
+        // To pass pickup param
+        func: () => {
+         console.log("Okay");
+        },
+        id: 3,
+      },
+      {
+        icon: "wallet",
+        name: "Transactions",
+        callAction: "Customer Transactions",
+        // To pass pickup param
+        func: () => {
+         console.log("Okay");
+        },
+        id: 4,
+      },
+      {
+        icon: "shipping-fast",
+        name: "Xpress Pickup",
+        callAction: "Fast Track Pickup",
+        // To pass pickup param
+        func: () => {
+         console.log("Okay");
+        },
+        id: 4,
       },
     ])
     return (
@@ -50,6 +90,8 @@ export default function Menu(){
             >
               Hello!, Ani
             </Text>
+            <View ><TextInput>Okay</TextInput></View>
+
             <TouchableOpacity
               style={{ top: 40 }}
               onPress={() => navigate("Profile")}
@@ -58,7 +100,7 @@ export default function Menu(){
                 style={{
                   textAlign: "center",
                   fontWeight: "bold",
-                  fontSize: 12,
+                  fontSize:15,
                   color: "#fff",
                 }}
               >
@@ -141,7 +183,7 @@ export default function Menu(){
           </View>
           <View
             style={{
-              height: 300,
+              height: 450,
               margin: 5,
               flexDirection: "row",
               flexWrap: "wrap",
@@ -165,7 +207,7 @@ export default function Menu(){
                     }}
                   >
                     <Icon name={e.icon} size={40} color="#000" />
-                    <Text style={{ fontWeight: "bold" }}>{e.name}</Text>
+                    <Text style={{ fontWeight: "bold",color:`${AppColor.third}` }}>{e.name}</Text>
                     {e.callAction ? <Text>{e.callAction}</Text> : null}
                   </TouchableOpacity>
                 );
@@ -181,7 +223,7 @@ export default function Menu(){
         justifyContent: "center",
       },
       menu_bdy: {
-        height: Dimensions.get("screen").height / 1.5,
+        height: Dimensions.get("screen").height/1.62,
         borderTopRightRadius: 20,
         borderTopLeftRadius: 20,
         top: -20,

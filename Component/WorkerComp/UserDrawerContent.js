@@ -5,6 +5,7 @@ import { DrawerContentScrollView } from "@react-navigation/drawer";
 import Icon from 'react-native-vector-icons/FontAwesome5';
 export const  UserDrawerContent=(props)=>{
     const [sideBar,setSideBar]=useState([
+      
       {
         icon:'bars',
         name:'Menu',
@@ -14,6 +15,31 @@ export const  UserDrawerContent=(props)=>{
         icon:"phone-volume",
         name:"Support",
         func:()=>console.log("contact Support")
+      },
+      {
+        icon:'box',
+        name:'Parcels',
+        func:()=>console.log("Menu"),
+      },
+      {
+        icon:'box',
+        name:'Quick quotes',
+        func:()=>console.log("Menu"),
+      },
+      {
+        icon:'boxes',
+        name:'Pickups',
+        func:()=>console.log("Menu"),
+      },
+      {
+        icon:'thumbtack',
+        name:'Track Pickup',
+        func:()=>console.log("Menu"),
+      },
+      {
+        icon:'wallet',
+        name:'Wallet',
+        func:()=>console.log("Menu"),
       },
       {
         icon: "sign-out-alt",
