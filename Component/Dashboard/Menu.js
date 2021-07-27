@@ -3,9 +3,10 @@ import { TextInput,Dimensions,View,Text,TouchableOpacity,StyleSheet,StatusBar,Im
 import { AppColor } from '../WorkerComp/AppColor';
 import menu_bg from '../Assets/menu_bg.png';
 import Icon from 'react-native-vector-icons/FontAwesome5';
-export default function Menu(){
+export default function Menu({navigation}){
+  const {navigate}=navigation;
     const [wallet,setWallet]=useState({
-        walletLodaded:false,
+        walletLodaded:true,
     })
     const [menuItem,setMenuItem]=useState([
       {
@@ -14,7 +15,7 @@ export default function Menu(){
         callAction: 'Create  Items',
         // To pass pickup param
         func: () => {
-         console.log("Okay");
+           navigate('Parcel');
         },
         id: 1,
       },
@@ -24,7 +25,7 @@ export default function Menu(){
         callAction: "Request Pickups",
         // To pass pickup param
         func: () => {
-         console.log("Okay");
+         navigate('Pickup');
         },
         id: 2,
       },
@@ -34,7 +35,7 @@ export default function Menu(){
         callAction: "Shipped Items",
         // To pass pickup param
         func: () => {
-         console.log("Okay");
+         navigate('Ship');
         },
         id: 3,
       },
@@ -44,7 +45,7 @@ export default function Menu(){
         callAction: "Customer Transactions",
         // To pass pickup param
         func: () => {
-         console.log("Okay");
+         navigate('Transaction');
         },
         id: 4,
       },
@@ -54,7 +55,7 @@ export default function Menu(){
         callAction: "Fast Track Pickup",
         // To pass pickup param
         func: () => {
-         console.log("Okay");
+        navigate('XpressPickup')
         },
         id: 4,
       },
@@ -71,7 +72,7 @@ export default function Menu(){
             blurRadius={3}
           >
             <View
-              style={{ top: -80, justifyContent: "center", alignItems: "center" }}
+              style={{ top: -45, justifyContent: "center", alignItems: "center" }}
             >
               <Text style={{ fontSize: 15, fontWeight: "bold", color: "#fff" }}>
                 PMT
@@ -83,15 +84,15 @@ export default function Menu(){
             <Text
               style={{
                 fontSize: 25,
-                top: -25,
+                top: -20,
                 textAlign: "center",
                 color: "#fff",
               }}
             >
               Hello!, Ani
             </Text>
-            <View ><TextInput>Okay</TextInput></View>
-
+           
+            <View style={{flexDirection:'row',justifyContent:"center"}}><TextInput style={{width:160,height:40,marginLeft:10,borderRadius:5,backgroundColor:'#fff',padding:5}}/><TouchableOpacity style={{height:40,width:75,marginLeft:5,borderRadius:5,justifyContent:'center',backgroundColor:`${AppColor.third}`}}><Text style={{fontWeight:'bold',textAlign:'center',color:'#fff'}}>Track</Text></TouchableOpacity></View>
             <TouchableOpacity
               style={{ top: 40 }}
               onPress={() => navigate("Profile")}
@@ -101,6 +102,7 @@ export default function Menu(){
                   textAlign: "center",
                   fontWeight: "bold",
                   fontSize:15,
+                  marginBottom:10,
                   color: "#fff",
                 }}
               >

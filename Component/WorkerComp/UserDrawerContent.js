@@ -9,17 +9,17 @@ export const  UserDrawerContent=(props)=>{
       {
         icon:'bars',
         name:'Menu',
-        func:()=>console.log("Menu"),
+        func:()=>props.navigation.navigate('Menu'),
       },
       {
         icon:"phone-volume",
         name:"Support",
-        func:()=>console.log("contact Support")
+        func:()=>props.navigation.navigate('Support')
       },
       {
         icon:'box',
         name:'Parcels',
-        func:()=>console.log("Menu"),
+        func:()=>props.navigation.navigate('Parcel'),
       },
       {
         icon:'box',
@@ -29,7 +29,7 @@ export const  UserDrawerContent=(props)=>{
       {
         icon:'boxes',
         name:'Pickups',
-        func:()=>console.log("Menu"),
+        func:()=>props.navigation.navigate('Pickup'),
       },
       {
         icon:'thumbtack',
@@ -39,12 +39,13 @@ export const  UserDrawerContent=(props)=>{
       {
         icon:'wallet',
         name:'Wallet',
-        func:()=>console.log("Menu"),
+        func:()=>props.navigation.navigate('Transaction'),
       },
       {
         icon: "sign-out-alt",
         name: "Logout",
-        func: () => console.log("Logout"),
+        // need to disable going back
+        func: () =>props.navigation.navigate('Login'),
       },
     ])
   return(
@@ -95,7 +96,7 @@ export const  UserDrawerContent=(props)=>{
                 <Icon
                   name={e.icon}
                   size={20}
-                  color="#000"
+                  color={AppColor.third}
                   style={{ marginRight: 15, fontSize: 15, marginTop: 4 }}
                 />
                 <Text style={{ fontSize: 15 }}>{e.name}</Text>
