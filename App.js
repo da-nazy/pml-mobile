@@ -36,12 +36,12 @@ export default function App() {
       <Stack.Screen
       name="ForgotPassword"
       component={ForgotPassword}
-      options={{title:false}}
+      options={{title:false,headerShown:false}}
       />
        <Stack.Screen
       name="UserRegister"
       component={UserRegister}
-      options={{title:false}}
+      options={{title:"Register"}}
       />
       <Stack.Screen
       name="Dashboard"

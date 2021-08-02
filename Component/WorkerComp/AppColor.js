@@ -3,6 +3,7 @@ export const AppColor={
     secondary:'#433E91',
     third:'#F38640',
     forth:'#fff',
+    green:'#05CC47',
 }
 /**
  * export const OutPut=(e)=>{

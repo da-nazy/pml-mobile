@@ -7,12 +7,17 @@ import {
   Dimensions,
   ScrollView,
   Alert,
+  Switch,
+  StatusBar
 } from "react-native";
 import InputComp from "../WorkerComp/InputComp";
 import { AppColor, regX } from "../WorkerComp/AppColor";
+import { TextInput } from "react-native-paper";
 
 export default function Login({ navigation }) {
   const { navigate } = navigation;
+  const [isOtpEnabled, setOtpIsEnabled] = useState(false);
+  const toggleSwitch = () => setOtpIsEnabled(previousState => !previousState);
 
   const [emailPhone, setEmailPhone] = useState({
     emailPhone: "",
@@ -74,6 +79,7 @@ export default function Login({ navigation }) {
   };
   return (
     <ScrollView style={{ marginTop: 100 }}>
+      <StatusBar animated={true} backgroundColor={AppColor.third} />
       <View style={{ alignSelf: "center", marginBottom: 20 }}>
         <Text
           style={{
@@ -113,6 +119,7 @@ export default function Login({ navigation }) {
           setText={(e) => {
             setPassword({ ...password, password: e });
           }}
+          right={<TextInput.Icon name="eye"  onPress={()=>setPassword({...password,secure:!password.secure})}/>} 
         />
         {password.passwordError && (
           <Text style={{ marginLeft: 25, color: "red" }}>
@@ -126,7 +133,15 @@ export default function Login({ navigation }) {
           flexDirection: "column",
           justifyContent: "center",
         }}
-      >
+      > 
+      <Switch 
+      style={{marginRight:4}}
+      trackColor={{ false: `${AppColor.third}`, true:"#bbbbbb" }}
+      thumbColor={isOtpEnabled ? `${AppColor.third}` : "#f4f3f4"}
+      ios_backgroundColor="#3e3e3e"
+      onValueChange={toggleSwitch}
+      value={isOtpEnabled}
+    />
         <TouchableOpacity
           onPress={() => checkIpnut()}
           style={{
