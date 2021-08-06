@@ -209,7 +209,7 @@ export default function Menu({navigation}){
                     }}
                   >
                     <Icon name={e.icon} size={40} color="#000" />
-                    <Text style={{ fontWeight: "bold",color:`${AppColor.third}` }}>{e.name}</Text>
+                    <Text style={{ fontWeight: "bold",color:`${AppColor.third}`}}>{e.name}</Text>
                     {e.callAction ? <Text>{e.callAction}</Text> : null}
                   </TouchableOpacity>
                 );

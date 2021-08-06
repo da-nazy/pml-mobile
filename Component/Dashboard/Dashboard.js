@@ -12,6 +12,7 @@ import XpressPickup from '../Pickup/XpressPickup';
 import Support from '../Support/Support';
 import CreateParcel from '../Parcel/CreateParcel';
 import CreatePickup from '../Pickup/CreatePickup';
+import SelectCat from '../Parcel/SelectCat';
 const Drawer=createDrawerNavigator();
 export default function Dashboard(){
  //
@@ -27,6 +28,8 @@ export default function Dashboard(){
           <Drawer.Screen name="Support" component={Support} options={{headerShown:false}}/> 
           <Drawer.Screen name="Create Parcel" component={CreateParcel} options={{headerShown:false}}/> 
           <Drawer.Screen name="Create Pickup" component={CreatePickup} options={{headerShown:false}}/> 
+          <Drawer.Screen name="Select Category" component={SelectCat} options={{headerShown:false}}/> 
+         
          </Drawer.Navigator>  
     )
 }

@@ -2,7 +2,7 @@ import React,{useState} from 'react';
 import {View,Image,StyleSheet, TouchableOpacity,Text, ScrollView, Dimensions,Alert} from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import InputComp from '../WorkerComp/InputComp';
-import { regX } from '../WorkerComp/AppColor';
+import { AppColor, regX } from '../WorkerComp/AppColor';
 export default function ForgotPassword(){
     // inputType =email,phone
     const [email,setEmail]=useState({
@@ -41,7 +41,7 @@ export default function ForgotPassword(){
                    Enter your registered email to reset your password
                </Text>
            </View>
-           <View><InputComp mode="outlined" right={null}  label="Email or Phone" placeholder="Input value"  style={style.email} error={email.error} secureText={true} setText={(e)=>{setEmail({...email,value:e})}}/>
+           <View><InputComp mode="outlined" right={null}  label="Email or Phone" placeholder="Input value"  style={style.email} error={email.error} secureText={false} setText={(e)=>{setEmail({...email,value:e})}}/>
            {email.error?(<Text style={{marginLeft:25,color:'red'}}>Field Cannot be empty</Text>):null}
             </View>
             <TouchableOpacity onPress={()=>checkInput()} style={style.send}><Text style={{color:'#fff',textAlign:'center'}}>SEND</Text></TouchableOpacity>
@@ -59,7 +59,7 @@ const style=StyleSheet.create({
          margin:15,
          marginTop:20,
          height:45,
-         backgroundColor:'#000',
+         backgroundColor:`${AppColor.third}`,
         shadowColor: "#000",
         shadowOffset: {
           width: 0,

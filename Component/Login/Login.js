@@ -13,12 +13,16 @@ import {
 import InputComp from "../WorkerComp/InputComp";
 import { AppColor, regX } from "../WorkerComp/AppColor";
 import { TextInput } from "react-native-paper";
-
+import { api, apiRequest } from "../WorkerComp/Api";
+import LoaderComp from "../WorkerComp/LoaderComp";
 export default function Login({ navigation }) {
   const { navigate } = navigation;
   const [isOtpEnabled, setOtpIsEnabled] = useState(false);
   const toggleSwitch = () => setOtpIsEnabled(previousState => !previousState);
-
+   
+  const [appOp,setAppOp]=useState({
+    load:false,
+  })
   const [emailPhone, setEmailPhone] = useState({
     emailPhone: "",
     emailPhoneError: "",
@@ -29,6 +33,17 @@ export default function Login({ navigation }) {
     passwordError: false,
     secure: true,
   });
+
+  const requestSucc=(e)=>{
+    return Alert.alert("Success",e);
+  }
+  
+  const requestFail=(e)=>{
+    return Alert.alert("Error",e);
+  }
+  const requestPayload=(e)=>{
+    console.log(e);
+  }
 
   //(||)
   const validatePhone = () => {
@@ -71,11 +86,40 @@ export default function Login({ navigation }) {
   const checkIpnut = () => {
     console.log("check");
     navigate('Dashboard');
-    /**
-     * if (check()) {
-      Alert.alert("Success", "Values correct");
+    if (check()) {
+     // Alert.alert("Success", "Values correct");
+      // 
+      
+      var loginObject={
+        method:"post",
+        url:`${api.localUrl}${api.login}`,
+        data:{
+
+        }
+      }
+
+      var type;
+      if(validateEmail()){
+          type="email";
+      }
+      if(validatePhone()){
+          type="phone";
+      }  
+
+      if(isOtpEnabled){
+        // otp
+        loginObject.data['otp']=password.password;
+      }else{
+        // normal
+        loginObject.data['password']=password.password;
+      }
+
+      loginObject.data[type]=emailPhone.emailPhone;
+
+      console.log(loginObject);
+      apiRequest(loginObject,(e)=>setAppOp({...appOp,load:e}),(e)=>requestSucc(e),(e)=>requestFail(e),(e)=>requestPayload(e));
     }
-     */
+     
   };
   return (
     <ScrollView style={{ marginTop: 100 }}>
@@ -186,6 +230,7 @@ export default function Login({ navigation }) {
           <Text>Sign up</Text>
         </TouchableOpacity>
       </View>
+      {appOp.load&&(<LoaderComp size={20} color={AppColor.third}/>)}
     </ScrollView>
   );
 }

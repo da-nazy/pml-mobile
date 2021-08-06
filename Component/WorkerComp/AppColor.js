@@ -15,3 +15,18 @@ export const regX={
     emailFilter:/^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/,
 
 }
+export const emailCheck=(e)=>{
+  if(regX.emailFilter.test(e)){
+      return true;
+  }else{
+      console.log("email check false")
+  }
+}
+
+export const phoneCheck=(e)=>{
+    if(regX.phoneFilter.test(e)){
+        return true;
+    }else{
+        console.log("phone check false");
+    }
+}
