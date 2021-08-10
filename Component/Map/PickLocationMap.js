@@ -1,4 +1,4 @@
-import React,{useState,useEffect} from 'react';
+import React,{useState,useEffect,useRef} from 'react';
 import MapView from 'react-native-maps';
 import { StyleSheet, View, Dimensions, TouchableOpacity,Alert,JSON} from 'react-native';
 import InputComp from '../WorkerComp/InputComp';
@@ -6,14 +6,31 @@ import Icon from 'react-native-vector-icons/FontAwesome5';
 import { AppColor } from '../WorkerComp/AppColor';
 import { Locations } from './Locations';
 export default function PickLocationMap() {
-   
+    
+  const mapRef=useRef(null);
+
  // Calling the Location to get LatLng for user.
  const lat=(e)=>{
     console.log(e);
+    
  }  
  const lng=(e)=>{
 console.log(e);
+ return e;
  }
+useEffect(()=>{
+if(lat&&lng){
+ setCoordinates([{...coordinates,id:1,latitude:lat(),longitude:lng()}])
+ console.log(coordinates[0]);
+
+ mapRef.animateToCoordinate({
+  latitude: lat(),
+  longitude: lng()
+}, 1000)
+}
+
+
+},[lat(),lng()])
 
  Locations((e)=>lat(e),(e)=>lng(e));
 
@@ -22,14 +39,16 @@ console.log(e);
         longitude:null,
         address:'Searching...',
     })
-    const [coordinates]=useState([
+    const [coordinates,setCoordinates]=useState([
       {
         latitude: 6.459964,
         longitude: 7.548949,
+        id:1,
       },
       {
         latitude: 48.8323785,
         longitude: 2.3361663,
+        id:2,
       },
     ]);
   return (
@@ -50,6 +69,7 @@ console.log(e);
          provider="google"
          showsUserLocation={true}
          followsUserLocation={true}
+         ref={(mapView)=>{mapView=mapRef}}
     >
        
     </MapView>
@@ -67,10 +87,12 @@ const styles = StyleSheet.create({
     top:5,
   },
   pick:{
+    borderWidth:1,
     flexDirection:'row',
     position:'absolute',
+    margin:10,
     zIndex:1,
-    width:Dimensions.get('screen').width/1.2,borderRadius:5,
+    width:Dimensions.get('screen').width/2.5,borderRadius:5,
     backgroundColor:'#fff',
     justifyContent:'space-evenly',
     shadowColor: "#000",

@@ -39,10 +39,10 @@ export const Locations=(setLat,setLong)=>{
            setLoc(currentLatitude,currentLongitude);
             //Setting state Latitude to re re-render the Longitude Text
           },
-          error =>(error.message),
+          (error=(err)=>{console.log(err.message)}),
           { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 }
         );
-         watchID = navigator.geolocation.watchPosition(position => {
+        watchID = navigator.geolocation.watchPosition(position => {
           //Will give you the location on location change
           console.log(position);
           const currentLongitude = JSON.stringify(position.coords.longitude);
@@ -60,7 +60,7 @@ export const Locations=(setLat,setLong)=>{
         // console.log(currentLatitude);
          setLoc(currentLatitude,currentLongitude);
           //Setting state Latitude to re re-render the Longitude Text
-        });
+        },(error)=>{console.log(error.message)});
     })
 
          useEffect(()=>{
