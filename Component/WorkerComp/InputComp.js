@@ -1,6 +1,6 @@
 import * as React from 'react';
 import{TextInput} from 'react-native-paper';
-export default function InputComp({right,mode,label,placeholder,style,error,setText,secureText}){
+export default function InputComp({right,mode,label,placeholder,style,error,setText,secureText,editable,pointerEvents,value}){
 
     // mode : flat,outlined
     // label outlined input
@@ -10,6 +10,7 @@ export default function InputComp({right,mode,label,placeholder,style,error,setT
     return(
         <TextInput
         mode={mode}
+        value={value}
         label={label}
         placeholder={placeholder}
         right={right}
@@ -17,6 +18,8 @@ export default function InputComp({right,mode,label,placeholder,style,error,setT
         error={error}
         onChangeText={(e)=>setText(e)}
         secureTextEntry={secureText}
+        editable={editable}
+        pointerEvents={pointerEvents}
       />
     )
 }

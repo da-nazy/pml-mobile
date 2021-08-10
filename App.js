@@ -8,6 +8,8 @@ import Login from './Component/Login/Login.js';
 import ForgotPassword from './Component/ForgotPassword/ForgotPassword.js';
 import UserRegister from './Component/Register/UserRegister.js';
 import Dashboard from './Component/Dashboard/Dashboard.js';
+import PickLocationMap from './Component/Map/PickLocationMap.js';
+import UserProverider from './Component/DataProvider/UserContext';
 export default function App() {
   const Stack=createStackNavigator();
   const myScreen=()=>{
@@ -25,14 +27,22 @@ export default function App() {
     }
   }
   return (
-   <NavigationContainer>
+   <UserProverider>
+     <NavigationContainer>
      <Stack.Navigator>
+     <Stack.Screen
+      name="PickLocation"
+      component={PickLocationMap}
+      options={{ headerShown: false }}
+      />
       {myScreen()}
+     
       <Stack.Screen
       name="Login"
       component={Login}
       options={{ headerShown: false }}
       />
+     
       <Stack.Screen
       name="ForgotPassword"
       component={ForgotPassword}
@@ -51,14 +61,8 @@ export default function App() {
      </Stack.Navigator>
 
    </NavigationContainer>
+   </UserProverider>
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+
