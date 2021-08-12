@@ -13,7 +13,7 @@ export default function Pickup({navigation}){
          <PickupComp catIcon="boxes"  name="Food Stuffs" parcel="Empty" pickStatus="Unassigned"  func={()=>{console.log("Check")}}/>
     
         </ScrollView>
-        <CustomFab iconName="plus" fabFunc={()=>navigate("Create Pickup")}/> 
+        <CustomFab iconName="plus" fabFunc={()=>navigate("Select Category")}/> 
        </View>
     )
 }

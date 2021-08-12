@@ -12,7 +12,7 @@ export default function Parcel({navigation}){
          <ScrollView style={{height:Dimensions.get('screen').height/1.3}}>
         <ParcelComp name="A bag of Rice" catIcon="box" func={()=>console.log("okay")}/>
      </ScrollView>
-     <CustomFab iconName="plus" fabFunc={()=>navigate('Select Category')}/>
+     <CustomFab iconName="plus" fabFunc={()=>navigate('Create Parcel')}/>
     </View>
     )
 }

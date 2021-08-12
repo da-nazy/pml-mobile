@@ -2,7 +2,7 @@ import React,{useEffect,useContext,useState} from 'react';
 //import react in our code.
 import * as Location from 'expo-location';
 import { UserContext } from '../DataProvider/UserContext';
-export const Locations=(setLat,setLong)=>{
+export const Locations=(setCoordinate)=>{
   const usercontext=useContext(UserContext);
   const{userLoc,setUserLoc}=usercontext;
 
@@ -16,8 +16,7 @@ export const Locations=(setLat,setLong)=>{
      console.log("okay"+e);
       }
       const setLoc=(lat,lng)=>{
-       setLat(lat);
-       setLong(lng);
+       setCoordinate(Number.parseFloat(lat),Number.parseFloat(lng));
       }
 
     useEffect(()=>{
@@ -39,7 +38,9 @@ export const Locations=(setLat,setLong)=>{
            setLoc(currentLatitude,currentLongitude);
             //Setting state Latitude to re re-render the Longitude Text
           },
-          (error=(err)=>{console.log(err.message)}),
+          (error=(err)=>{
+
+          }),
           { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 }
         );
         watchID = navigator.geolocation.watchPosition(position => {
@@ -60,7 +61,9 @@ export const Locations=(setLat,setLong)=>{
         // console.log(currentLatitude);
          setLoc(currentLatitude,currentLongitude);
           //Setting state Latitude to re re-render the Longitude Text
-        },(error)=>{console.log(error.message)});
+        },(error)=>{
+            
+        });
     })
 
          useEffect(()=>{

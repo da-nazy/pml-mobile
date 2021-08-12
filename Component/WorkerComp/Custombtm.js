@@ -1,22 +1,16 @@
 import React,{useState,useRef} from 'react';
 import RBSheet from 'react-native-raw-bottom-sheet';
-export default function Custombtm({displayComp,operation}){
-    const btmRef=useRef(null);
+import { AppColor } from './AppColor';
+export default function Custombtm({displayComp,cod,copm,btmRef,height}){
     
-    if(operation){
-       btmRef.current.open();
-    }else{
-        btmRef.current.close();
-    }
 return(
     <RBSheet
     dragFromTopOnly={false}
     ref={btmRef}
-    closeOnDragDown={true}
-    closeOnPressMask={true}
+    closeOnDragDown={cod}
+    closeOnPressMask={copm}
     openDuration={12}
-
-    height={Dimensions.get('screen').height}
+    height={height}
     customStyles={{
         wrapper: {
             backgroundColor: "transparent"

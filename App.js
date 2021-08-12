@@ -8,8 +8,8 @@ import Login from './Component/Login/Login.js';
 import ForgotPassword from './Component/ForgotPassword/ForgotPassword.js';
 import UserRegister from './Component/Register/UserRegister.js';
 import Dashboard from './Component/Dashboard/Dashboard.js';
-import PickLocationMap from './Component/Map/PickLocationMap.js';
 import UserProverider from './Component/DataProvider/UserContext';
+
 export default function App() {
   const Stack=createStackNavigator();
   const myScreen=()=>{
@@ -30,11 +30,7 @@ export default function App() {
    <UserProverider>
      <NavigationContainer>
      <Stack.Navigator>
-     <Stack.Screen
-      name="PickLocation"
-      component={PickLocationMap}
-      options={{ headerShown: false }}
-      />
+    
       {myScreen()}
      
       <Stack.Screen

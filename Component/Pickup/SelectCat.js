@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState,useContext } from "react";
 import {
   View,
   Text,
@@ -12,32 +12,41 @@ import {
 import menu_bg from "../Assets/menu_bg.png";
 import Icon from "react-native-vector-icons/FontAwesome5";
 import { AppColor } from "../WorkerComp/AppColor";
+import { UserContext } from "../DataProvider/UserContext";
+export default function SelectCat({navigation}) {
+  const usercontext=useContext(UserContext);
+  const {navigate}=navigation;
+  const{userPickupDetails,setuserPickupDetails}=usercontext;
+  
+  const setPickupType=(e)=>{
+    setuserPickupDetails({...userPickupDetails,pickupType:e});
+     navigate('location');
+  }
 
-export default function SelectCat() {
   const [transport, setTransport] = useState([
     {
       image: "motorcycle",
       name: "Motor Bike",
       desc: "Ideal for light weight items: International passport, human hari, mobile phones e.t.c",
-      func:()=>{ console.log("Clicked on Moto Bike")}
+      func:()=>{setPickupType("Motor Bike")}
     },
     {
       image: "car-side",
       name: "Car",
       desc: "For items that cannot fit a motor bike: Microwave, bags of clothes, television, e.t.c",
-      func:()=>{console.log("Clicked on Car")}
+      func:()=>{setPickupType("Car")}
     },
     {
       image: "shuttle-van",
       name: "Mini Van",
       desc: "Ideal for big and bulky items: Refrigerator, washing machine,air conditionar, standing fan, e.t.c",
-      func:()=>{console.log("Clicked on Mini Van")}
+      func:()=>{setPickupType("Mini Van")}
     },
     {
       image: "truck-moving",
       name: "Truck",
       desc: "Perfect for moving very large items: Furniture, office equipment, outdoor equipment e.t.c ",
-      func:()=>{console.log("Clicked on Truck")}
+      func:()=>{setPickupType("Truck")}
     },
   ]);
   return (

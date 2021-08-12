@@ -1,6 +1,6 @@
 import * as React from 'react';
 import{TextInput} from 'react-native-paper';
-export default function InputComp({right,mode,label,placeholder,style,error,setText,secureText,editable,pointerEvents,value}){
+export default function InputComp({right,mode,label,placeholder,style,error,setText,secureText,editable,pointerEvents,value,disabled}){
 
     // mode : flat,outlined
     // label outlined input
@@ -9,6 +9,9 @@ export default function InputComp({right,mode,label,placeholder,style,error,setT
 
     return(
         <TextInput
+        disabled={disabled}
+        scrollEnabled={true}
+        
         mode={mode}
         value={value}
         label={label}

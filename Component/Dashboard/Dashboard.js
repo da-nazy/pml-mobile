@@ -12,7 +12,10 @@ import XpressPickup from '../Pickup/XpressPickup';
 import Support from '../Support/Support';
 import CreateParcel from '../Parcel/CreateParcel';
 import CreatePickup from '../Pickup/CreatePickup';
-import SelectCat from '../Parcel/SelectCat';
+import SelectCat from '../Pickup/SelectCat';
+import PickupLocationMap from '../Map/PickupLocationMap';
+import PickLocation from '../Map/PickLocation';
+
 const Drawer=createDrawerNavigator();
 export default function Dashboard(){
  //
@@ -29,7 +32,9 @@ export default function Dashboard(){
           <Drawer.Screen name="Create Parcel" component={CreateParcel} options={{headerShown:false}}/> 
           <Drawer.Screen name="Create Pickup" component={CreatePickup} options={{headerShown:false}}/> 
           <Drawer.Screen name="Select Category" component={SelectCat} options={{headerShown:false}}/> 
-         
+          <Drawer.Screen name="location" component={PickupLocationMap} options={{headerShown:false}}/> 
+          <Drawer.Screen name="PickLocation" component={PickLocation} options={{headerShown:false}}/> 
+           
          </Drawer.Navigator>  
     )
 }
