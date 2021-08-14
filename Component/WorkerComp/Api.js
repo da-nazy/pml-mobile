@@ -9,6 +9,27 @@ import axios from 'axios';
     lastName: 'Flintstone'
   }
  */
+export const pinColor={
+  color1:'red', 
+  color2:'tomato',
+  color3:'orange',
+  color4:'yellow',
+  color5:'gold',
+  color6:'wheat',
+  color7:'tan',
+  color8:'linen',
+  color9:'green',
+  color10:'blue',
+  color11:'navy',
+  color12:'aqua',
+  color13:'teal',
+  color14:'turquoise',
+  color14:'violet',
+  color15:'purple',
+  color16:'plum',
+  color17:'indigo',
+}
+
 export const api={
     login:'api/crm/customers/Login',
     register:'api/crm/customers',

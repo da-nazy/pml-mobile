@@ -22,6 +22,7 @@ export default function PickLocation({navigation}) {
   const succFunc=(e)=>{
     console.log(e);
   }
+ 
 
   const errorFunc=(e)=>{
     console.log(e);
@@ -29,12 +30,16 @@ export default function PickLocation({navigation}) {
 
   const payLoad=(e)=>{
    // console.log(e);
+   // console.log(e.data.results[0].address_components[2].long_name);
+  
     if(e.data.results[0].formatted_address||typeof e.data.results[0].formatted_address!=='undefined'){
       if(userPickupDetails.locType==1){
         setLocName({...locName,name:e.data.results[0].formatted_address});
        // setUserLoc({...userLoc,address:e.data.results[0].formatted_address});
+       console.log(e.data.results[0].formatted_address);
         }else if(userPickupDetails.locType==2){
         setLocName({...locName,name:e.data.results[0].formatted_address});
+        console.log(e.data.results[0].formatted_address);
        // setSenderLoc({...senderLoc,address:e.data.results[0].formatted_address});
         }else{
           console.log("okay")
@@ -42,12 +47,18 @@ export default function PickLocation({navigation}) {
        }
   }  
   
-  const  showDetails=()=>{
-    console.log(userLoc);
-    console.log(senderLoc);
-    console.log(userPickupDetails);
-  }
-   
+
+    const updatePickup=(e,c)=>{
+      if(userPickupDetails.locType==1){
+        // setUserLoc({...userLoc,lat:e.nativeEvent.coordinate.latitude,lng:e.nativeEvent.coordinate.longitude})
+           getLocationDetails(e,c);
+         console.log(userLoc);
+         }else if(userPickupDetails.locType==2){
+           // setSenderLoc({...senderLoc,lat:e.nativeEvent.coordinate.latitude,lng:e.nativeEvent.coordinate.longitude}
+           getLocationDetails(e,c);
+         console.log(senderLoc);
+         }
+    }
   const  gotoMap=()=>{
     console.log(userPickupDetails.locType);
     console.log(locName,pin);
@@ -66,15 +77,14 @@ export default function PickLocation({navigation}) {
 
 })
 
-  const getLocationDetails=(lat,lng)=>{
-    setLocName({...locName,name:'Searching....'})
-    var requestObject={
+  const getLocationDetails=(e,c)=>{
+     var requestObject={
       method:'get',
-      url:`${api.googleReversGeoCodeUrl}${pin.latitude},${pin.longitude}&key=${api.googleApiKey}`,
+      url:`${api.googleReversGeoCodeUrl}${e},${c}&key=${api.googleApiKey}`,
       data:{}
     }
 
-     apiRequest(requestObject,(e)=>setLocName({...locName,load:e}),(e)=>succFunc(e),(e)=>errorFunc(e),(e)=>payLoad(e));
+     apiRequest(requestObject,(e)=>console.log(e),(e)=>succFunc(e),(e)=>errorFunc(e),(e)=>payLoad(e));
  
   }
         
@@ -123,7 +133,7 @@ export default function PickLocation({navigation}) {
       {pin.longitude>0?
       <MapView style={styles.map}  
        zoomEnabled={true}
-       onMapReady={()=>console.log(getLocationDetails())}
+       onMapReady={()=>console.log("Okay")}
        initialRegion={{
       latitude: pin.latitude,
       longitude: pin.longitude,
@@ -141,19 +151,9 @@ export default function PickLocation({navigation}) {
      onDragEnd={(e)=>{
       setPin({ latitude:e.nativeEvent.coordinate.latitude,
         longitude:e.nativeEvent.coordinate.longitude
-       }) 
+       },updatePickup(e.nativeEvent.coordinate.latitude,e.nativeEvent.coordinate.longitude)) 
          
-         if(userPickupDetails.locType==1){
-         // setUserLoc({...userLoc,lat:e.nativeEvent.coordinate.latitude,lng:e.nativeEvent.coordinate.longitude})
-            getLocationDetails(e.nativeEvent.coordinate.latitude,e.nativeEvent.coordinate.longitude);
-          console.log(userLoc);
-          }else if(userPickupDetails.locType==2){
-            // setSenderLoc({...senderLoc,lat:e.nativeEvent.coordinate.latitude,lng:e.nativeEvent.coordinate.longitude}
-            getLocationDetails(e.nativeEvent.coordinate.latitude,e.nativeEvent.coordinate.longitude);
-          console.log(senderLoc);
-          }else{
-            console.log("okay")
-          }
+          
         }}
       >
         <Callout>
