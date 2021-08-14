@@ -4,7 +4,7 @@ import Icon from "react-native-vector-icons/FontAwesome5";
 import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
 import { AppColor } from "../WorkerComp/AppColor";
 import { UserContext } from "../DataProvider/UserContext";
-export default function SearchAdress({navigation}) {
+export default function SearchAdress({navigation,route}) {
   const {navigate}=navigation;
  const usercontext=useContext(UserContext);
  const {userLoc,setUserLoc,senderLoc,setSenderLoc,userPickupDetails,setuserPickupDetails}=usercontext;
@@ -54,6 +54,29 @@ export default function SearchAdress({navigation}) {
             rankby: "distance",
           }}
           onPress={(data, details = null) => {
+            console.log("Clicked")
+            /**
+             * if(userPickupDetails.locType==2){
+             // for sender 
+             if(userLoc.lat){
+               navigate('location',{
+                 showDirection:true,
+                 pickupLat:details.geometry.location.lat,
+                 pickupLng:details.geometry.location.lng,
+                 address:data.description,
+                 loc:2
+               })
+             }else{
+               navigate('location');
+             }
+
+            }else if(userPickupDetails.locType==1){
+               navigate('location',{
+                 
+               })
+               
+            }
+             */
             // 'details' is provided when fetchDetails = true
            // console.log(data, details);
            //console.log(details.geometry);
@@ -63,13 +86,15 @@ export default function SearchAdress({navigation}) {
            // console.log(data.description);
            // console.log(details.geometry.location);
             if(userPickupDetails.locType==1){
-            setUserLoc({...userLoc,lat:details.geometry.location.lat,lng:details.geometry.location.lng,address:data.description});
+            setUserLoc({...userLoc,lat:details.geometry.location.lat,lng:details.geometry.location.lng,address:data.description}, navigate('location'));
+          
             console.log(userLoc); 
             console.log(1);
           }else if(userPickupDetails.locType==2){
-            setSenderLoc({...senderLoc,lat:details.geometry.location.lat,lng:details.geometry.location.lng,address:data.description}); 
-          console.log(senderLoc); 
-          console.log(2);
+            setSenderLoc({...senderLoc,lat:details.geometry.location.lat,lng:details.geometry.location.lng,address:data.description}, navigate('location')); 
+           
+            console.log(senderLoc); 
+            console.log(2);
           }
          //  console.log(details.geometry.location)
             setRegion({

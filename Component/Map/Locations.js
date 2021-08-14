@@ -2,7 +2,7 @@ import React,{useEffect,useContext,useState} from 'react';
 //import react in our code.
 import * as Location from 'expo-location';
 import { UserContext } from '../DataProvider/UserContext';
-export const Locations=(setCoordinate)=>{
+export const locations=(setCoordinate)=>{
   const usercontext=useContext(UserContext);
   const{userLoc,setUserLoc}=usercontext;
 
@@ -16,6 +16,7 @@ export const Locations=(setCoordinate)=>{
      console.log("okay"+e);
       }
       const setLoc=(lat,lng)=>{
+        console.log("dannyoi")
        setCoordinate(Number.parseFloat(lat),Number.parseFloat(lng));
       }
 
@@ -27,19 +28,12 @@ export const Locations=(setCoordinate)=>{
             const currentLongitude = JSON.stringify(position.coords.longitude);
             //getting the Longitude from the location json
             const currentLatitude = JSON.stringify(position.coords.latitude);
-            //getting the Latitude from the location json
-            //setCurrentLongitude({ currentLongitude: currentLongitude });
-            //setLatitude(currentLatitude);
-           // console.log(currentLatitude);
-            //Setting state Longitude to re re-render the Longitude Text
-           // setCurrentLatitude({ currentLatitude: currentLatitude });
-           //setLongitude(currentLongitude);
-         //  console.log(currentLongitude);
+       
            setLoc(currentLatitude,currentLongitude);
             //Setting state Latitude to re re-render the Longitude Text
           },
           (error=(err)=>{
-
+        // console.log(err);
           }),
           { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 }
         );
@@ -64,8 +58,7 @@ export const Locations=(setCoordinate)=>{
         },(error)=>{
             
         });
-    })
-
+    },[])
          useEffect(()=>{
             navigator.geolocation.clearWatch(watchID);
          })   

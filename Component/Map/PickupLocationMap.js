@@ -1,24 +1,31 @@
-import React,{useState,useEffect,useRef} from 'react';
-import MapView from 'react-native-maps';
+import React,{useState,useEffect,useRef,useContext} from 'react';
+import MapView,{Marker} from 'react-native-maps';
 import { StyleSheet, View, Dimensions, TouchableOpacity,Alert,JSON} from 'react-native';
+import MapViewDirections from 'react-native-maps-directions';
 import InputComp from '../WorkerComp/InputComp';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import { AppColor } from '../WorkerComp/AppColor';
-import { Locations } from './Locations';
+import { locations } from './locations';
 import LoaderComp from '../WorkerComp/LoaderComp';
 import { apiRequest,api } from '../WorkerComp/Api';
 import { UserContext } from '../DataProvider/UserContext';
-import { useContext } from 'react/cjs/react.development';
 
 export default function PickupLocationMap({navigation}){
     const {navigate}=navigation;
     const usercontext=useContext(UserContext);
   const {userLoc,setUserLoc,senderLoc,setSenderLoc,userPickupDetails,setuserPickupDetails}=usercontext;
 
-   
+  // console.log(userLoc,senderLoc);
     const pickOperation=(e)=>{
+    
        setuserPickupDetails({...userPickupDetails,locType:e});
-       navigate('SearchAddress');
+       if(coordinates.latitude){
+        setUserLoc({...userLoc,lat:coordinates.latitude,lng:coordinates.longitude,address:coordinates.address},navigate('SearchAddress'));
+     
+      }else{
+         console.log("error")
+       }
+     // navigate('SearchAddress');
    }
 
   const succFunc=(e)=>{
@@ -26,23 +33,38 @@ export default function PickupLocationMap({navigation}){
   }
 
   const errorFunc=(e)=>{
-    Alert.alert("Error",e);
+  //  Alert.alert("Error",e);
+  console.log(e);
   }
+  
+  useEffect(()=>{
+    console.log(pickupAddress);
+  },[pickupAddress])
+  
+  // Calling the Location to get LatLng for user.
+  
+
+  const [pickupAddress,setPickupAddress]=useState({
+    latitude:null,
+    longitude:null,
+    address:'Searching...',
+    senderAddress:'...',
+})
+const [coordinates,setCoordinates]=useState(
+  {
+    address:'',
+    latitude:0,
+    longitude: 0,
+    id:1,
+  }
+ 
+);
 
   const payload=(e)=>{
-    console.log(e.data.results[0].formatted_address);
+   // console.log(e.data.results[0].formatted_address);
     if(e.data.results[0].formatted_address){
-   setPickupAddress({...pickupAddress,address:e.data.results[0].formatted_address})
-      if(userPickupDetails.locType==1){
-      setUserLoc({...userLoc,address:e.data.results[0].formatted_address})
-      }else if(userPickupDetails.locType==2){
-      setSenderLoc({...senderLoc,address:e.data.results[0].formatted_address})
-      console.log(e.data.results[0].formatted_address);
-      console.log("second");
-      
-      }else{
-        console.log("Error loctype undefined");
-      }
+     // setPickupAddress({...pickupAddress,address:e.data.results[0].formatted_address})
+     setCoordinates({...coordinates,address:e.data.results[0].formatted_address},console.log(coordinates))
   }
   }
 
@@ -55,22 +77,19 @@ export default function PickupLocationMap({navigation}){
 
 
      
-   Locations((e,c)=>setcoord(e,c));
+     locations((e,c)=>setcoord(e,c));
+     
   
     const setcoord=(e,c)=>{
+      //console.log(e,c);
       if(!coordinates.longitude>0){
-        setCoordinates({...coordinates,latitude:e,longitude:c}); 
-      
-        if(userPickupDetails.locType==1){
-          setUserLoc({...userLoc,lat:e,lng:c});
-        }else if(userPickupDetails.locType==2){
-          setSenderLoc({...senderLoc,lat:e,lng:c});
-        }else{
-          console.log("Error loctype undefined");
-        }
+        setCoordinates({...coordinates,latitude:e,longitude:c},console.log(coordinates)); 
+       // setUserLoc({...userLoc,lat:e,lng:c});
+      console.log(e,c)
+      console.log("danny");
       }
        //   setAppOperation({...appOperation,currentLoc:true});
-      // reverseGeoCode(e,c);
+      //   reverseGeoCode(e,c);
     }
 
   const reverseGeoCode=(lat,lng)=>{
@@ -88,53 +107,77 @@ export default function PickupLocationMap({navigation}){
 
   const mapRef=useRef(null);
   
- // Calling the Location to get LatLng for user.
  
-    const [pickupAddress,setPickupAddress]=useState({
-        latitude:null,
-        longitude:null,
-        address:'Searching...',
-    })
-    const [coordinates,setCoordinates]=useState(
-      {
-        latitude:0,
-        longitude: 0,
-        id:1,
-      }
-     
-    );
     useEffect(()=>{
-     reverseGeoCode(coordinates.latitude,coordinates.longitude);
+    if(!coordinates.address){
+      reverseGeoCode(coordinates.latitude,coordinates.longitude);
+     
+    }
     },[coordinates])
   return (
     <View style={styles.container}>
         <View style={styles.pick}>
             <View style={{height:90,alignSelf:'center',width:'5%'}}><Icon name="circle" size={15} color={AppColor.third}/><View style={{flex:1 ,borderStyle:'dotted',borderLeftWidth: 1, borderLeftRadius: 1,marginLeft:6,}}></View><Icon name="circle" size={15} color="#000"/></View>
             <View style={{width:'90%'}}>
-            <TouchableOpacity  onPress={()=>pickOperation(1)} ><InputComp  value={pickupAddress.address} style={styles.btn}  mode="outlined" editable={false}  label="Pick-up  Address " placeholder="Searching..." setText={(e)=>console.log(e)}/></TouchableOpacity>
-            <TouchableOpacity  onPress={()=>pickOperation(2)} ><InputComp style={styles.btn} pointerEvents="none" mode="outlined"  editable={false} label="Drop-off Address " placeholder="Searching..." setText={(e)=>console.log(e)}/></TouchableOpacity>
+            <TouchableOpacity  onPress={()=>pickOperation(1)} ><InputComp  value={userLoc.address?userLoc.address:coordinates.address} style={styles.btn}  mode="outlined" editable={false}  label="Pick-up  Address " placeholder="Searching..." setText={(e)=>console.log(e)}/></TouchableOpacity>
+            <TouchableOpacity  onPress={()=>pickOperation(2)} ><InputComp value={senderLoc.address?senderLoc.address:pickupAddress.senderAddress} style={styles.btn} pointerEvents="none" mode="outlined"  editable={false} label="Drop-off Address " placeholder="Searching..." setText={(e)=>console.log(e)}/></TouchableOpacity>
          </View>
+         
         </View>
-     {coordinates.latitude>0?
-     <MapView 
-      style={styles.map}  
-       initialRegion={{
-        latitude: coordinates.latitude,
-        longitude: coordinates.longitude,
-        latitudeDelta: 0.0622,
-        longitudeDelta: 0.0121,
-      }} 
-         provider="google"
-         showsUserLocation={true}
-         showsMyLocationButton={true}
-         followsUserLocation={true}
-  
-        ref={mapRef}
-        animateCamera={true}
-    >   
-
-    </MapView>:null}
-    {appOperation.load&&(<LoaderComp size={15} color={AppColor.third}/>)}
+        {userLoc.lat&&senderLoc.lat?
+        //setPickupAddress({...pickupAddress,senderAddress:senderLoc.address})
+     
+          <MapView style={styles.map} 
+          onMapReady={()=>console.log("MapDirection View")} 
+        initialRegion={{
+         latitude: userLoc.lat,
+         longitude:userLoc.lng,
+         latitudeDelta: 0.0622,
+         longitudeDelta: 0.0121,
+        
+     }} 
+          provider="google"
+     >
+         <MapViewDirections
+         
+         lineDashPattern={[0]}
+           origin={{
+             latitude:userLoc.lat,
+             longitude:userLoc.lng,
+           }}
+           destination={{
+             latitude:senderLoc.lat,
+             longitude:senderLoc.lng,
+           }}
+           apikey='AIzaSyCE41gWBv1AfHzJNsyvCQe6FIPpYHLKcrs' // insert your API Key here
+           strokeWidth={4}
+           strokeColor="#111111"
+         />
+       <Marker coordinate={{latitude:userLoc.lat,longitude:userLoc.lng}} />
+      <Marker coordinate={{latitude:senderLoc.lat,longitude:senderLoc.lng}} />
+     </MapView>
+          
+:coordinates.latitude>0&&!senderLoc.lat?
+<MapView 
+ style={styles.map}  
+  initialRegion={{
+   latitude: coordinates.latitude,
+   longitude: coordinates.longitude,
+   latitudeDelta: 0.0622,
+   longitudeDelta: 0.0121,
+ }} 
+    provider="google"
+    showsUserLocation={true}
+    showsMyLocationButton={true}
+    followsUserLocation={true}
+    onMapReady={()=>console.log("Location view")}
+   
+    
+   ref={mapRef}
+   animateCamera={true}
+>  
+</MapView>:null}
+ {appOperation.load&&(<LoaderComp size={15} color={AppColor.third}/>)}
     </View>
   );
 }

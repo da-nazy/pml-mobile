@@ -9,6 +9,7 @@ export default UserProvider=props=>{
         lng:null,
         address:null,
         type:1,
+       
     })
 
     const[senderLoc,setSenderLoc]=useState({
@@ -16,6 +17,7 @@ export default UserProvider=props=>{
         lng:null,
         address:null,
         type:2,
+        
     })
 
     // locType:1 for user 2: for sender

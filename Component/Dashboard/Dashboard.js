@@ -34,7 +34,6 @@ export default function Dashboard(){
           <Drawer.Screen name="Select Category" component={SelectCat} options={{headerShown:false}}/> 
           <Drawer.Screen name="location" component={PickupLocationMap} options={{headerShown:false}}/> 
           <Drawer.Screen name="PickLocation" component={PickLocation} options={{headerShown:false}}/> 
-           
          </Drawer.Navigator>  
     )
 }

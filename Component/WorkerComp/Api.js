@@ -45,25 +45,27 @@ export const apiRequest=(requestObject,load,succFunc,errorFun,getPayload)=>{
           load(false);
           if(response.data.success){
               // check the response data payload is not null
+             // console.log(response);
               succFunc(response.data.message);
               if(response.data.payload.lenght!=0){
                   // payload isn't null
                   //console.log(response.data.payload);
-                  console.log("danny")
+                 // console.log("danny")
                //   getPayload(response.data.payload);
               }
             //  console.log(response.data.message);
-           
+            
           }
           getPayload(response);
-       // console.log(response);
+        
+      // console.log(response);
       }).catch(function (error){
           load(false);
           console.log("danny");
          // errorFun(error.response.data.message);
          // console.log(error.response.data);
          // typeof keyword is used to check the datatype
-         console.log(error);
+         console.log(error.response);
          if(typeof error.response!=='undefined'){
             
             if(error.response.data.message){
