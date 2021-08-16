@@ -25,7 +25,7 @@ export default function Login({ navigation }) {
   })
   const [emailPhone, setEmailPhone] = useState({
     emailPhone: "",
-    emailPhoneError: "",
+    emailPhoneError:false,
   });
 
   const [password, setPassword] = useState({

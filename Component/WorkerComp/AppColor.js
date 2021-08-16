@@ -4,6 +4,7 @@ export const AppColor={
     third:'#F38640',
     forth:'#fff',
     green:'#05CC47',
+    lightThird:'#FEE4A8',
 }
 /**
  * export const OutPut=(e)=>{
