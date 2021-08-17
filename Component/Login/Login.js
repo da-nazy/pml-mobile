@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState,useContext } from "react";
 import {
   View,
   Text,
@@ -15,7 +15,11 @@ import { AppColor, regX } from "../WorkerComp/AppColor";
 import { TextInput } from "react-native-paper";
 import { api, apiRequest } from "../WorkerComp/Api";
 import LoaderComp from "../WorkerComp/LoaderComp";
+import { UserContext } from "../DataProvider/UserContext";
 export default function Login({ navigation }) {
+  const usercontext=useContext(UserContext);
+  const {authUser,setAuthUser,user,setUser}=usercontext;
+  
   const { navigate } = navigation;
   const [isOtpEnabled, setOtpIsEnabled] = useState(false);
   const toggleSwitch = () => setOtpIsEnabled(previousState => !previousState);
@@ -35,14 +39,43 @@ export default function Login({ navigation }) {
   });
 
   const requestSucc=(e)=>{
-    return Alert.alert("Success",e);
+  //  return Alert.alert("Success",e);
+  console.log(e);
   }
   
   const requestFail=(e)=>{
     return Alert.alert("Error",e);
+  } 
+  const userProfilePayLoad=(e)=>{
+    console.log(e.data.payload);
+     setUser(e.data.payload,navigate('Dashboard'))
   }
+
+  const getUserProfile=(e)=>{
+    // To get the user 
+    var userObject={
+      method:'get',
+      url:`${api.localUrl}${api.userProfile}`,
+          headers:{
+              Authorization:' Bearer ' + e,
+            }
+      
+  }
+  console.log(userObject);
+    apiRequest(userObject,(e)=>setAppOp({...appOp,load:e}),(e)=>requestSucc(e),(e)=>requestFail(e),(e)=>userProfilePayLoad(e));
+  
+  }
+
+  
   const requestPayload=(e)=>{
-    console.log(e);
+    console.log(e.data.payload.token);
+    if(e.data.payload.token){
+      setAuthUser({...authUser,token:e.data.payload.token},getUserProfile(e.data.payload.token));
+      console.log("Okay")
+    }else{
+      console.log("Unknown error");
+    }
+
   }
 
   //(||)
@@ -85,7 +118,7 @@ export default function Login({ navigation }) {
   };
   const checkIpnut = () => {
     console.log("check");
-    navigate('Dashboard');
+   // navigate('Dashboard');
     if (check()) {
      // Alert.alert("Success", "Values correct");
       // 

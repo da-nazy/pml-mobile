@@ -1,5 +1,5 @@
 import React from "react";
-import { TouchableOpacity, View, Text, StyleSheet } from "react-native";
+import { TouchableOpacity, View, Text, StyleSheet, Alert } from "react-native";
 import Icon from "react-native-vector-icons/FontAwesome5";
 import { AppColor } from "./AppColor";
 import { RadioButton } from "react-native-paper";
@@ -114,29 +114,32 @@ export const noParcel = () => {
   );
 };
 
-export const parcelComp = (e,addRemove,check) => {
-  console.log(e);
- return  e.map((item,index)=>{
+export const succFunc=(e)=>{
+Alert.Alert("Success",e)
+}
+export const failFunc=(e)=>{
+Alert.alert("Error",e);
+}
+export const getPayload=(e)=>{
+  return e;
+}
+
+export const parcelComp = (item) => {
+ 
     return(
-         <View key={index} style={style.parcelComp}>
-      <RadioButton
-        value="second"
-        status={check(item.id)?'checked':'unchecked'}
-        onPress={() =>addRemove(item.id,item)}
-        style={{ width: "10%" }}
-        color={AppColor.third}
-      />
-      <Text style={{ width: "70%", alignSelf: "center" }}>{item.name}</Text>
+         <View style={style.parcelComp}>
+      <Text style={{ width: "66%", alignSelf: "center" }}>{item.name}</Text>
       <TouchableOpacity onPress={()=>console.log(item)} style={{ width: "10%", justifyContent: "center" }}>
         {IconComp("eye", { alignSelf: "center" }, 15, AppColor.third)}
       </TouchableOpacity>
     </View>
     )
-  })
+  
  
 };
 const style = StyleSheet.create({
   parcelComp: {
+    paddingLeft:5,
     flexDirection: "row",
     justifyContent: "space-between",
     margin: 5,

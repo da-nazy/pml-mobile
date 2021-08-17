@@ -44,7 +44,7 @@ export default function PickupLocationMap({ navigation }) {
           margin: 5,
         }}
       >
-        <TouchableOpacity onPress={()=>console.log(userLoc,senderLoc)} style={styles.procBtn}>
+        <TouchableOpacity onPress={()=>navigate('Details')} style={styles.procBtn}>
           <Text
             style={{
               textAlign: "center",

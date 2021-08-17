@@ -3,6 +3,7 @@ import React,{useState,createContext} from 'react';
 export const UserContext=createContext();
 
 export default UserProvider=props=>{
+
     const[user,setUser]=useState(null);
     const[userLoc,setUserLoc]=useState({
         lat:null,
@@ -25,12 +26,14 @@ export default UserProvider=props=>{
         pickupType:'',
         locType:1,
     })
-    const[authUser,setAuthUser]=useState(null);
+    const[authUser,setAuthUser]=useState({
+        token:'',
+    });
     const[dispatcher,setDispatcher]=useState(null);
 
     return(
         <UserContext.Provider value={{
-            user,setUser,authUser,setAuthUser,userPickupDetails,setuserPickupDetails,senderLoc,setSenderLoc,userLoc,setUserLoc
+          user,setUser,authUser,setAuthUser,userPickupDetails,setuserPickupDetails,senderLoc,setSenderLoc,userLoc,setUserLoc
         }}>
             {props.children}
         </UserContext.Provider>

@@ -31,7 +31,7 @@ export const pinColor={
 }
 
 export const api={
-    login:'api/crm/customers/Login',
+    login:'api/erp/staff/login',
     register:'api/crm/customers',
     userProfile:'api/erp/staff/me',
     createPickup:'',
@@ -39,8 +39,9 @@ export const api={
     viewParcel:'',
     createParcel:'',
     editProfile:'',
+    getState:'api/erp/states',
     recoverPassword:'api/erp/staff/otp',
-    localUrl:'http://172.16.17.30/',
+    localUrl:'http://172.16.17.104/',
     remoteUrl:'',  
     googleReversGeoCodeUrl:'https://maps.googleapis.com/maps/api/geocode/json?latlng=',
     googleApiKey:'AIzaSyCE41gWBv1AfHzJNsyvCQe6FIPpYHLKcrs',
@@ -72,11 +73,12 @@ export const apiRequest=(requestObject,load,succFunc,errorFun,getPayload)=>{
                   // payload isn't null
                   //console.log(response.data.payload);
                  // console.log("danny")
-               //   getPayload(response.data.payload);
+              //   getPayload(response.data.payload);
               }
             //  console.log(response.data.message);
             
           }
+          // Should run the check on your own
           getPayload(response);
         
       // console.log(response);

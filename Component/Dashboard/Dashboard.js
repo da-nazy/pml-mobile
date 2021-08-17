@@ -15,10 +15,17 @@ import CreatePickup from '../Pickup/CreatePickup';
 import SelectCat from '../Pickup/SelectCat';
 import PickupLocationMap from '../Map/PickupLocationMap';
 import PickLocation from '../Map/PickLocation';
-
+import Details from '../WorkerComp/Details';
 const Drawer=createDrawerNavigator();
 export default function Dashboard(){
- //
+ /**
+  * 
+       <Stack.Screen
+       name="Details"
+       component={Details}
+       options={{headerShown:false}}
+       />
+  */
     return(
         <Drawer.Navigator  initialRouteName='Menu' drawerContent={(props)=><UserDrawerContent {...props}/>}>
           <Drawer.Screen name="Menu" component={Menu} options={{headerShown:false}}/>
@@ -34,6 +41,7 @@ export default function Dashboard(){
           <Drawer.Screen name="Select Category" component={SelectCat} options={{headerShown:false}}/> 
           <Drawer.Screen name="location" component={PickupLocationMap} options={{headerShown:false}}/> 
           <Drawer.Screen name="PickLocation" component={PickLocation} options={{headerShown:false}}/> 
+          <Drawer.Screen name="Details" component={Details} options={{headerShown:false}}/>
          </Drawer.Navigator>  
     )
 }

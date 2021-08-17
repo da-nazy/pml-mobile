@@ -9,7 +9,6 @@ import ForgotPassword from './Component/ForgotPassword/ForgotPassword.js';
 import UserRegister from './Component/Register/UserRegister.js';
 import Dashboard from './Component/Dashboard/Dashboard.js';
 import UserProverider from './Component/DataProvider/UserContext';
-import Details from './Component/WorkerComp/Details.js';
 
 export default function App() {
   const Stack=createStackNavigator();
@@ -32,11 +31,6 @@ export default function App() {
      <NavigationContainer>
      <Stack.Navigator>
 
-       <Stack.Screen
-       name="Details"
-       component={Details}
-       options={{headerShown:false}}
-       />
        
       {myScreen()}
       <Stack.Screen
