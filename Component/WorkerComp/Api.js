@@ -31,12 +31,13 @@ export const pinColor={
 }
 
 export const api={
-    login:'api/erp/staff/login',
+    login:'api/crm/customers/Login',
     register:'api/crm/customers',
-    userProfile:'api/erp/staff/me',
+    userProfile:'api/crm/customers/me',
+    checkUser:'api/crm/customers/any?',
     userParcels:'api/pml/pml-parcels?createdBy=',
-    createPickup:'',
-    viewPickup:'',
+    createPickup:'api/pml/pml-pickups/public',
+    userPickup:'api/pml/pml-pickups?createdBy=',
     viewParcel:'',
     createParcel:'',
     editProfile:'',
@@ -68,7 +69,7 @@ export const apiRequest=(requestObject,load,succFunc,errorFun,getPayload)=>{
           load(false);
           if(response.data.success){
               // check the response data payload is not null
-             // console.log(response);
+              console.log(response);
               succFunc(response.data.message);
               if(response.data.payload.lenght!=0){
                   // payload isn't null

@@ -18,10 +18,15 @@ import SelectableFlatlist, { STATE } from 'react-native-selectable-flatlist';
 import { api,apiRequest} from "./Api";
 import { UserContext } from "../DataProvider/UserContext";
 import LoaderComp from "./LoaderComp";
-export default function Details() {
-  
+export default function Details({navigation}) {
+    
+  const{navigate}=navigation;
+
   const usercontext=useContext(UserContext);
-  const{userLoc,senderLoc,userPickupDetails,user,authUser}=usercontext;
+  const{userLoc,senderLoc,userPickupDetails,user,authUser,setUserLoc,setSenderLoc,setuserPickupDetails}=usercontext;
+
+  const[userParcels,setUserParcels]=useState(null);
+
     const [appDetails,setAppDetails]=useState({
       load:false,
       userValid:null,
@@ -58,7 +63,8 @@ export default function Details() {
 
   const succFunc=(e)=>{
   if(e){
-    Alert.alert("Success",e);
+   // Alert.alert("Success",e);
+   console.log(e);
   }else{
     console.log(e);
   }
@@ -69,6 +75,14 @@ export default function Details() {
   }
     const getUserParcelPayload=(e)=>{
       console.log(e)
+      if(e.data.payload.length!==0){
+        setUserParcels(e.data.payload);
+      }else{
+        setUserParcels("Empty Parcel");
+      }
+
+    
+
     }
   const getStatePayload=(e)=>{
     console.log(e);
@@ -155,29 +169,41 @@ export default function Details() {
        apiRequest(userParcelObect,(e)=>setAppDetails({...appDetails,load:e}),(e)=>succFunc(e),(e)=>failFunc(e),(e)=>getUserParcelPayload(e));
  
     }
+    const clearAppState=()=>{
+      setUserLoc({userLoc, lat:null, lng:null,address:null,type:1});
+      setSenderLoc({senderLoc, lat:null, lng:null,address:null,type:1});
+      setuserPickupDetails({...userPickupDetails, pickupType:'',locType:1,})
+    }
+   const compPickOp=()=>{
+     clearAppState();
+     navigate('Pickup');
+   }
+    const createPickupPayload=(e)=>{
+      //console.log(e);
+     // console.log(e.data.payload);
+     Alert.alert("Success",`Pickup Creation ${e.data.message}`,[
+      {
+        text: 'Ok',
+        onPress: () => compPickOp(),
+      },]);
+     //if successfull take to pickup section and clear things
+    }
 
     const userCheckPayload=(e)=>{
-      console.log(e.data.payload);
+      console.log(e.data.payload.id);
       if(e.data.payload.length!==0){
-         setAppDetails({...appDetails,userValid:'check'});
+         setAppDetails({...appDetails,userValid:'check',receiverObjectId:e.data.payload.id});
       }else{
         setAppDetails({...appDetails,userValid:'times'});
+        Alert.alert("USER NOT FOUND","Create user!");
       }
     }
     const isUserValid=()=>{
       setAppDetails({...appDetails,userValid:null});
       if(recipientVerification()){
-        var type;
-        if(validatePhone(recpientPhoneEmail.emailPhone)){
-          type="phone";
-        }
-        if(validateEmail(recpientPhoneEmail.emailPhone)){
-          type="email";
-        }
- 
         var userCheckObject={
           method:"get",
-          url:`${api.localUrl}${api.register}?${type}=${recpientPhoneEmail.emailPhone}`,
+          url:`${api.localUrl}${api.checkUser}phone=${recpientPhoneEmail.emailPhone}`,
           headers:{
            Authorization:' Bearer ' + authUser.token,
          }
@@ -197,13 +223,12 @@ export default function Details() {
         check=false;
       }else{
        // setRecipientPhoneEmail({...recpientPhoneEmail,emailPhoneError:false});
-        if(validatePhone(recpientPhoneEmail.emailPhone)||validateEmail(recpientPhoneEmail.emailPhone)){
-          console.log("erroremail")
+        if(validatePhone(recpientPhoneEmail.emailPhone)){
+          console.log("erroremail");
           setRecipientPhoneEmail({...recpientPhoneEmail,emailPhoneError:false});
         }else{
           check=false;
           setRecipientPhoneEmail({...recpientPhoneEmail,emailPhoneError:true});
-   
         }
       }
       return check;
@@ -219,18 +244,75 @@ export default function Details() {
      if(!pickupDesc.description){
        check=false;
        setPickupDesc({...pickupDesc,descError:true});
+      
      }else{
        setPickupDesc({...pickupDesc,descError:false});
      }
+     if(!stateFrom.stateId){
+       check=false;
+       
+     }
+     if(!stateTo.stateId){
+       check=false;
+     }
+     if(!appDetails.receiverObjectId){
+         check=false;
+         console.log("here1");
+         console.log(appDetails.receiverObjectId);
+     }
 
+    return check;
 
+   }
+
+   const createPickup=()=>{
+     if(inputCheck()){
+       //check parcels
+       
+      var createPickupObject={
+        method:"post",
+        url:`${api.localUrl}${api.createPickup}`,
+        data:{
+         senderType:"C",
+         recipientType:"C",
+         senderPhone:user.phone?user.phone:'',
+         recipientPhone:appDetails.receiverObjectId?recpientPhoneEmail.emailPhone:'',
+         stateFrom:stateFrom.stateId,
+         stateTo:stateTo.stateId,
+         deliveryAddress:senderLoc.address,
+         vehicleType:userPickupDetails.pickupType,
+         description:pickupDesc.description,
+         sender:user.id,
+         recipient:appDetails.receiverObjectId,
+         locationTo:{"coordinates":[userLoc.lat,userLoc.lng],"address":userLoc.address},
+         locationFrom:{"coordinates":[senderLoc.lat,senderLoc.lng],"address":senderLoc.address}
+        },
+        headers:{
+         Authorization:' Bearer ' + authUser.token,
+       }
+      }
+      if(selectedParcel){
+         createPickupObject['pmlParcels']=selectedParcel;
+      }
+      console.log(createPickupObject);
+
+     apiRequest(createPickupObject,(e)=>setAppDetails({...appDetails,load:e}),(e)=>succFunc(e),(e)=>failFunc(e),(e)=>createPickupPayload(e));
+
+      
+        }else{
+      Alert.alert("Empty fields","Fill in the correct values.")
+     }
+   
+       
    }
  const head=(e)=>{
      return( <View style={{flexDirection:'column',justifyContent:'center',height:35,paddingLeft:10,backgroundColor:`${AppColor.lightThird}`}}><Text style={{fontWeight:'bold',fontSize:15}}>{e}</Text></View>
      )
  }
  const addParcelHead=(e)=>{
-    return( <View style={{flexDirection:'row',justifyContent:'space-between',height:35,paddingLeft:10,backgroundColor:`${AppColor.lightThird}`}}><View style={{flexDirection:'row',justifyContent:"center"}}>{IconComp("box",{alignSelf:'center',marginRight:5},15,AppColor.third)}<Text style={{fontWeight:'bold',fontSize:15,alignSelf:"center"}}>{e}</Text></View><TouchableOpacity onPress={()=>userParcels()} style={{marginRight:8,justifyContent:'center'}}>{IconComp('plus',{fontWeight:'bold',marginRight:5},18,AppColor.third)}</TouchableOpacity></View>
+    return( <View style={{flexDirection:'row',justifyContent:'space-between',height:35,paddingLeft:10,backgroundColor:`${AppColor.lightThird}`}}>
+      <View style={{flexDirection:'row',justifyContent:"center"}}>{IconComp("box",{alignSelf:'center',marginRight:5},15,AppColor.third)}
+      <Text style={{fontWeight:'bold',fontSize:15,alignSelf:"center"}}>{e}</Text></View><TouchableOpacity onPress={()=>getUserParcels()} style={{marginRight:8,justifyContent:'center'}}>{IconComp('plus',{fontWeight:'bold',marginRight:5},18,AppColor.third)}</TouchableOpacity></View>
     ) 
  }
  
@@ -241,7 +323,7 @@ export default function Details() {
           {head("Sender's Info:")}
          <View style={{padding:8}}>
         <InputComp label="Pickup Address" mode="outlined" value={pickupAddress.address?pickupAddress.address:userLoc.address}  editable={false}/>
-        <InputComp label="Sender Phone" mode="outlined" value={user.phone?user.phone:''} />
+        <InputComp label="Sender Phone" mode="outlined" value={user.phone?user.phone:''} editable={false} />
         <InputComp label="vehicle Type" mode="outlined" editable={false} value={userPickupDetails.pickupType} />
         <InputComp label="Description" mode="outlined" setText={(e)=>setPickupDesc({...pickupDesc,description:e})} error={pickupDesc.descError} />
         <View style={{ flexDirection: "row", margin: 10,justifyContent:"center" }}>
@@ -281,7 +363,7 @@ export default function Details() {
             )}
           </View>)}
           <InputComp
-            label="Receipent Phone or Email"
+            label="Receipent Phone "
             mode="outlined"
             style={{ width: "80%" }}
             setText={(e)=>setRecipientPhoneEmail({...recpientPhoneEmail,emailPhone:e})}
@@ -316,8 +398,9 @@ export default function Details() {
       <View style={style.sendCont}>
           {addParcelHead("Add Parcels:")}
          <View style={{padding:8}}>
-         {false&&(noParcel())}
-         <SafeAreaView style={{flex: 1}}>
+         {userParcels=="Empty Parcel"&&(noParcel())}
+        {userParcels!=="Empty Parcel"&&userParcels&& 
+        <SafeAreaView style={{flex: 1}}>
          <SelectableFlatlist
                         // data={[{ test: 'test1' }, { test: 'test2' }, { test: 'test3' }]}
                         //TODO selected parcels should be updated so that It won't be populated again.
@@ -329,12 +412,13 @@ export default function Details() {
                          initialSelectedIndex={[]}
                          cellItemComponent={(item, otherProps) => parcelComp(item)}
                        />
-         </SafeAreaView>
+         </SafeAreaView>}
          {/*parcelComp(item,(e)=>addRemoveParcel(e),(e)=>checkParcel(e))*/}
      
         </View>
       </View>
-      <TouchableOpacity style={style.contBtn}>
+      <TouchableOpacity  onPress={()=>createPickup()}
+      style={style.contBtn}>
         <Text
           style={{
             fontWeight: "bold",
@@ -346,7 +430,7 @@ export default function Details() {
           CONTINUE
         </Text>
       </TouchableOpacity>
-      {appDetails.load&&<LoaderComp/>}
+      {appDetails.load&&<LoaderComp size={25} color={AppColor.third}/>}
     </ScrollView>
   );
 }

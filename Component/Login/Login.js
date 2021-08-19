@@ -150,7 +150,7 @@ export default function Login({ navigation }) {
       loginObject.data[type]=emailPhone.emailPhone;
 
       console.log(loginObject);
-      apiRequest(loginObject,(e)=>setAppOp({...appOp,load:e}),(e)=>requestSucc(e),(e)=>requestFail(e),(e)=>requestPayload(e));
+     apiRequest(loginObject,(e)=>setAppOp({...appOp,load:e}),(e)=>requestSucc(e),(e)=>requestFail(e),(e)=>requestPayload(e));
     }
      
   };

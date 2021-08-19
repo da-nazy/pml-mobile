@@ -1,15 +1,23 @@
-import React from "react";
+import React,{useContext} from "react";
 import { TouchableOpacity, View, Text, StyleSheet, Alert } from "react-native";
 import Icon from "react-native-vector-icons/FontAwesome5";
 import { AppColor } from "./AppColor";
 import { RadioButton } from "react-native-paper";
-
+import { UserContext } from "../DataProvider/UserContext";
 export const regX={
   phoneFilter:/^\d{11}$/,
   emailFilter:/^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/,
 
 }
 
+  export const clearAppState=()=>{
+    const usercontext=useContext(UserContext);
+    const{userLoc,senderLoc,setUserLoc,setSenderLoc,setuserPickupDetails,userPickupDetails}=usercontext;
+
+     setUserLoc({userLoc, lat:null, lng:null,address:null,type:1});
+     setSenderLoc({senderLoc, lat:null, lng:null,address:null,type:1});
+     setuserPickupDetails({...userPickupDetails, pickupType:'',locType:1,});
+  }
 export const validatePhone=(e)=>{
   if(regX.phoneFilter.test(e)){
  //   setUser({...user,type:'email'});

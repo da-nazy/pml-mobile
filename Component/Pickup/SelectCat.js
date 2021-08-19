@@ -26,28 +26,47 @@ export default function SelectCat({navigation}) {
   const [transport, setTransport] = useState([
     {
       image: "motorcycle",
-      name: "Motor Bike",
+      name: "BIKE",
       desc: "Ideal for light weight items: International passport, human hari, mobile phones e.t.c",
-      func:()=>{setPickupType("Motor Bike")}
+      func:()=>{setPickupType("BIKE")}
     },
     {
       image: "car-side",
-      name: "Car",
+      name: "CAR",
       desc: "For items that cannot fit a motor bike: Microwave, bags of clothes, television, e.t.c",
-      func:()=>{setPickupType("Car")}
+      func:()=>{setPickupType("CAR")}
     },
     {
       image: "shuttle-van",
-      name: "Mini Van",
+      name: "BUS",
       desc: "Ideal for big and bulky items: Refrigerator, washing machine,air conditionar, standing fan, e.t.c",
-      func:()=>{setPickupType("Mini Van")}
+      func:()=>{setPickupType("BUS")}
     },
     {
       image: "truck-moving",
-      name: "Truck",
+      name: "TRUCK",
       desc: "Perfect for moving very large items: Furniture, office equipment, outdoor equipment e.t.c ",
-      func:()=>{setPickupType("Truck")}
+      func:()=>{setPickupType("TRUCK")}
     },
+    {
+      image: "taxi",
+      name: "TAXI",
+      desc: "Perfect for outing or occassions with family and friends e.t.c ",
+      func:()=>{setPickupType("TAXI")}
+    },
+    {
+      image: "car-alt",
+      name: "JEEP",
+      desc: "Perfect for outing or occassions with family and friends e.t.c ",
+      func:()=>{setPickupType("JEEP")}
+    },
+    {
+      image: "caravan",
+      name: "KEKE",
+      desc: "Perfect for outing or occassions with family and friends e.t.c ",
+      func:()=>{setPickupType("KEKE")}
+    },
+
   ]);
   return (
     <View>
@@ -75,8 +94,10 @@ export default function SelectCat({navigation}) {
          borderTopLeftRadius:10,
          top:-10,
          backgroundColor:'#fff',
+        
         }}
       >
+       <View style={{marginBottom:20}}>
        {transport&&(transport.map((e,i)=>{
            return(
             <TouchableOpacity 
@@ -98,6 +119,7 @@ export default function SelectCat({navigation}) {
           </TouchableOpacity>
            )
        }))}
+       </View>
       </ScrollView>
     </View>
   );
@@ -124,5 +146,6 @@ const style = StyleSheet.create({
     shadowOpacity: 0.29,
     shadowRadius: 4.65,
     elevation: 4,
+  
   },
 });
