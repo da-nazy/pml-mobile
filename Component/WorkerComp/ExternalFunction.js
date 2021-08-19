@@ -4,6 +4,26 @@ import Icon from "react-native-vector-icons/FontAwesome5";
 import { AppColor } from "./AppColor";
 import { RadioButton } from "react-native-paper";
 
+export const regX={
+  phoneFilter:/^\d{11}$/,
+  emailFilter:/^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/,
+
+}
+
+export const validatePhone=(e)=>{
+  if(regX.phoneFilter.test(e)){
+ //   setUser({...user,type:'email'});
+      return true;  
+}
+}
+export const validateEmail=(e)=>{
+ if(regX.emailFilter.test(e)){
+ //   setUser({...user,type:'email'});
+      return true;  
+}
+
+}
+
 export const packaging = [
   {
     name: "BAG",

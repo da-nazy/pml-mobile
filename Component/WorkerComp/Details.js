@@ -12,7 +12,7 @@ import {
 } from "react-native";
 import InputComp from "./InputComp";
 import { AppColor } from "./AppColor";
-import { IconComp,noParcel,parcelComp } from "./ExternalFunction";
+import { IconComp,noParcel,parcelComp,validateEmail,validatePhone} from "./ExternalFunction";
 import { Picker } from "@react-native-community/picker";
 import SelectableFlatlist, { STATE } from 'react-native-selectable-flatlist';
 import { api,apiRequest} from "./Api";
@@ -24,7 +24,8 @@ export default function Details() {
   const{userLoc,senderLoc,userPickupDetails,user,authUser}=usercontext;
     const [appDetails,setAppDetails]=useState({
       load:false,
-
+      userValid:null,
+      receiverObjectId:'',
     });
 
   const [pickupAddress,setPickupAddress]=useState({
@@ -56,16 +57,23 @@ export default function Details() {
 }, [])
 
   const succFunc=(e)=>{
-  Alert.alert("Success",e)
+  if(e){
+    Alert.alert("Success",e);
+  }else{
+    console.log(e);
+  }
   }
 
   const failFunc=(e)=>{
   Alert.alert("Error",e);
   }
-
+    const getUserParcelPayload=(e)=>{
+      console.log(e)
+    }
   const getStatePayload=(e)=>{
     console.log(e);
-    setNgState(e.data.payload);
+   setNgState(e.data.payload);
+   // console.log(ngState);
   }
     const[item,setItems]=useState([
         {
@@ -92,8 +100,9 @@ export default function Details() {
     })
     const[recpientPhoneEmail,setRecipientPhoneEmail]=useState({
       emailPhone:'',
+      emailPhoneError:false,
     })
-   const[selectedParce,setSelectedParcel]=useState(null);
+   const[selectedParcel,setSelectedParcel]=useState(null);
    const[parcel,setParcel]=useState(null);
 
     const selected=[];
@@ -133,7 +142,72 @@ export default function Details() {
        apiRequest(stateObject,(e)=>setAppDetails({...appDetails,load:e}),(e)=>succFunc(e),(e)=>failFunc(e),(e)=>getStatePayload(e));
  
     }
+     
+    const getUserParcels=()=>{
+     var userParcelObect={
+          method:"get",
+         url:`${api.localUrl}${api.userParcels}${user.id}`,
+         headers:{
+          Authorization:' Bearer ' + authUser.token,
+        }
+       }
+       console.log(userParcelObect);
+       apiRequest(userParcelObect,(e)=>setAppDetails({...appDetails,load:e}),(e)=>succFunc(e),(e)=>failFunc(e),(e)=>getUserParcelPayload(e));
+ 
+    }
+
+    const userCheckPayload=(e)=>{
+      console.log(e.data.payload);
+      if(e.data.payload.length!==0){
+         setAppDetails({...appDetails,userValid:'check'});
+      }else{
+        setAppDetails({...appDetails,userValid:'times'});
+      }
+    }
+    const isUserValid=()=>{
+      setAppDetails({...appDetails,userValid:null});
+      if(recipientVerification()){
+        var type;
+        if(validatePhone(recpientPhoneEmail.emailPhone)){
+          type="phone";
+        }
+        if(validateEmail(recpientPhoneEmail.emailPhone)){
+          type="email";
+        }
+ 
+        var userCheckObject={
+          method:"get",
+          url:`${api.localUrl}${api.register}?${type}=${recpientPhoneEmail.emailPhone}`,
+          headers:{
+           Authorization:' Bearer ' + authUser.token,
+         }
+        }
+        console.log(userCheckObject);
+
+        apiRequest(userCheckObject,(e)=>setAppDetails({...appDetails,load:e}),(e)=>succFunc(e),(e)=>failFunc(e),(e)=>userCheckPayload(e));
+ 
+      }else{
+        console.log("Error");
+      }
+    }
+    const recipientVerification=()=>{
+      var check=true;
+      if(!recpientPhoneEmail.emailPhone){
+        setRecipientPhoneEmail({...recpientPhoneEmail,emailPhoneError:true});
+        check=false;
+      }else{
+       // setRecipientPhoneEmail({...recpientPhoneEmail,emailPhoneError:false});
+        if(validatePhone(recpientPhoneEmail.emailPhone)||validateEmail(recpientPhoneEmail.emailPhone)){
+          console.log("erroremail")
+          setRecipientPhoneEmail({...recpientPhoneEmail,emailPhoneError:false});
+        }else{
+          check=false;
+          setRecipientPhoneEmail({...recpientPhoneEmail,emailPhoneError:true});
    
+        }
+      }
+      return check;
+    }
    const inputCheck=()=>{
      // Things to check
      // Statefrom and to
@@ -156,9 +230,10 @@ export default function Details() {
      )
  }
  const addParcelHead=(e)=>{
-    return( <View style={{flexDirection:'row',justifyContent:'space-between',height:35,paddingLeft:10,backgroundColor:`${AppColor.lightThird}`}}><View style={{flexDirection:'row',justifyContent:"center"}}>{IconComp("box",{alignSelf:'center',marginRight:5},15,AppColor.third)}<Text style={{fontWeight:'bold',fontSize:15,alignSelf:"center"}}>{e}</Text></View><TouchableOpacity style={{marginRight:8,justifyContent:'center'}}>{IconComp('plus',{fontWeight:'bold',marginRight:5},18,AppColor.third)}</TouchableOpacity></View>
+    return( <View style={{flexDirection:'row',justifyContent:'space-between',height:35,paddingLeft:10,backgroundColor:`${AppColor.lightThird}`}}><View style={{flexDirection:'row',justifyContent:"center"}}>{IconComp("box",{alignSelf:'center',marginRight:5},15,AppColor.third)}<Text style={{fontWeight:'bold',fontSize:15,alignSelf:"center"}}>{e}</Text></View><TouchableOpacity onPress={()=>userParcels()} style={{marginRight:8,justifyContent:'center'}}>{IconComp('plus',{fontWeight:'bold',marginRight:5},18,AppColor.third)}</TouchableOpacity></View>
     ) 
  }
+ 
   return (
     <ScrollView>
       <StatusBar animated={true} backgroundColor={AppColor.third} />
@@ -174,7 +249,7 @@ export default function Details() {
             {IconComp("sync-alt", {justifyContent:'center',alignSelf:'center'}, 15, AppColor.third)}
           </TouchableOpacity>
           <Picker
-            selectedValue={stateFrom}
+            selectedValue={stateFrom.stateId}
             onValueChange={(itemValue, itemIndex) =>
               setStateFrom({...stateFrom,stateId:itemValue})
             }
@@ -197,21 +272,22 @@ export default function Details() {
         <View style={{padding:10}}>
         <InputComp label="Delivery Address" mode="outlined" value={deliveryAdd.address?deliveryAdd.address:senderLoc.address} editable={false} />
         <View style={{ flexDirection: "row",justifyContent:'space-between' }}>
-          {false&&(<TouchableOpacity style={{ width: "10%", justifyContent: "center" }}>
+          {appDetails.userValid&&(<View style={{ width: "10%", justifyContent: "center" }}>
             { IconComp(
-              true ? "check" : "times",
+             appDetails.userValid,
               { textAlign: "center" },
               15,
               AppColor.third
             )}
-          </TouchableOpacity>)}
+          </View>)}
           <InputComp
             label="Receipent Phone or Email"
             mode="outlined"
             style={{ width: "80%" }}
             setText={(e)=>setRecipientPhoneEmail({...recpientPhoneEmail,emailPhone:e})}
+            error={recpientPhoneEmail.emailPhoneError}
           />
-          <TouchableOpacity style={{ justifyContent: "center", width: "10%" }}>
+          <TouchableOpacity onPress={()=>isUserValid()} style={{ justifyContent: "center", width: "10%" }}>
             {IconComp("sync-alt", { textAlign: "center" }, 15, AppColor.third)}
           </TouchableOpacity>
         </View>
@@ -220,7 +296,7 @@ export default function Details() {
             {IconComp("sync-alt", null, 15, AppColor.third)}
           </TouchableOpacity>
           <Picker
-            selectedValue={stateFrom}
+            selectedValue={stateTo.stateId}
             onValueChange={(itemValue, itemIndex) =>
               setStateTo({...stateTo,stateId:itemValue})
             }
