@@ -1,5 +1,5 @@
 import React, { useContext ,useEffect,useState,useCallback} from 'react';
-import { View,Text,Dimensions,StyleSheet,ScrollView} from 'react-native';
+import { View,Text,Dimensions,StyleSheet,ScrollView, RefreshControl} from 'react-native';
 import CustomFab from '../WorkerComp/CustomFab';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import { AppColor } from '../WorkerComp/AppColor';
@@ -15,6 +15,7 @@ export default function Pickup({navigation}){
     const [userPickup,setUserPickup]=useState(null);
       const [appDetails,setAppDetails]=useState({
           load:false,
+          refresh:false,
       });
 
    const wait=(timeOut)=>{
@@ -66,7 +67,10 @@ export default function Pickup({navigation}){
     return(
         <View style={{backgroundColor:'#fff',paddingBottom:40}}>
         <View style={{flexDirection:'row',justifyContent:'center',padding:15,borderBottomWidth:1,borderBottomColor:`${AppColor.third}`}}><Icon name="boxes" size={15} color={AppColor.third} /><Text style={{fontWeight:'bold',textAlign:'center',fontSize:15,marginLeft:5}}>Pickups</Text></View>
-        <ScrollView style={{height:Dimensions.get('screen').height/1.29}}>
+        <ScrollView
+         refreshControl={<RefreshControl refreshing={appDetails.refresh}/>}
+         onRefresh={onRefresh}
+        style={{height:Dimensions.get('screen').height/1.29}}>
          {userPickup?(<PickupComp catIcon="boxes"  name="Food Stuffs" parcel="Empty" pickStatus="Unassigned"  func={()=>{console.log("Check")}}/>
     ):console.log("No pickup found!")}
         </ScrollView>
