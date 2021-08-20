@@ -28,14 +28,15 @@ export default function App() {
    <UserProverider>
      <NavigationContainer>
      <Stack.Navigator>
-       
-      <Stack.Screen
+    
+     <Stack.Screen
       name="CreateParcel"
       component={CreateParcel}
       options={{headerShown:false}}
       />
-       
       {myScreen()}
+        
+      
       <Stack.Screen
       name="Login"
       component={Login}

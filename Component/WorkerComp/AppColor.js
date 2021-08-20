@@ -14,7 +14,15 @@ export const AppColor={
 export const regX={
     phoneFilter:/^\d{11}$/,
     emailFilter:/^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/,
+    numberFilter:/^[0-9]+$/
+}
 
+export const numberCheck=(e)=>{
+    if(regx.numberFilter.test(e)){
+        return true;
+    }else{
+        console.log("Not a number");
+    }
 }
 export const emailCheck=(e)=>{
   if(regX.emailFilter.test(e)){

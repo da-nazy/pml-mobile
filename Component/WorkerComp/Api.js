@@ -41,6 +41,7 @@ export const api={
     viewParcel:'',
     createParcel:'',
     editProfile:'',
+    getCategory:'api/pml/categories',
     getState:'api/erp/states',
     recoverPassword:'api/erp/staff/otp',
     localUrl:'http://192.168.43.122/',
