@@ -7,7 +7,7 @@ import ForgotPassword from './Component/ForgotPassword/ForgotPassword.js';
 import UserRegister from './Component/Register/UserRegister.js';
 import Dashboard from './Component/Dashboard/Dashboard.js';
 import UserProverider from './Component/DataProvider/UserContext';
-
+import CreateParcel from './Component/Parcel/CreateParcel';
 export default function App() {
   const Stack=createStackNavigator();
   const myScreen=()=>{
@@ -28,7 +28,12 @@ export default function App() {
    <UserProverider>
      <NavigationContainer>
      <Stack.Navigator>
-
+       
+      <Stack.Screen
+      name="CreateParcel"
+      component={CreateParcel}
+      options={{headerShown:false}}
+      />
        
       {myScreen()}
       <Stack.Screen
