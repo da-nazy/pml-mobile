@@ -19,7 +19,7 @@ export default function SelectCat({navigation}) {
   const{userPickupDetails,setuserPickupDetails}=usercontext;
   
   const setPickupType=(e)=>{
-    setuserPickupDetails({...userPickupDetails,pickupType:e});
+    setuserPickupDetails({...userPickupDetails,pickupType:e,operation:'pickup'});
      navigate('location');
   }
 

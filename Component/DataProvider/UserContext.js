@@ -22,9 +22,12 @@ export default UserProvider=props=>{
     })
 
     // locType:1 for user 2: for sender
+    // operation should be null pickup or parcel
+
     const[userPickupDetails,setuserPickupDetails]=useState({
         pickupType:'',
         locType:1,
+        operation:null,
     })
     const[authUser,setAuthUser]=useState({
         token:'',

@@ -1,4 +1,4 @@
-import React, { useState,useRef} from "react";
+import React, { useState, useEffect, useContext } from "react";
 import {
   View,
   Text,
@@ -9,25 +9,37 @@ import {
   TouchableOpacity,
   Alert,
 } from "react-native";
-import { AppColor } from "../WorkerComp/AppColor";
+import { AppColor,numberCheck} from "../WorkerComp/AppColor";
 import Icon from "react-native-vector-icons/FontAwesome5";
 import InputComp from "../WorkerComp/InputComp";
 import { Picker } from "@react-native-community/picker";
-import { IconComp,packaging} from "../WorkerComp/ExternalFunction";
-import DateTimePicker from '@react-native-community/datetimepicker';
-
+import { UserContext } from "../DataProvider/UserContext";
+import { IconComp, packaging } from "../WorkerComp/ExternalFunction";
+import DateTimePicker from "@react-native-community/datetimepicker";
+import { api, apiRequest } from "../WorkerComp/Api";
 export default function CreateParcel() {
-  
+  const usercontext = useContext(UserContext);
+  const {
+    userLoc,
+    senderLoc,
+    userPickupDetails,
+    user,
+    authUser,
+    setUserLoc,
+    setSenderLoc,
+    setuserPickupDetails,
+  } = usercontext;
+
   const [ngState, setNgState] = useState(null);
-  const[dateshow,setDateShow]=useState(false);
-  const[appDate,setAppDate]=useState(new Date(1598051730000));
+  const [dateshow, setDateShow] = useState(false);
+  const [appDate, setAppDate] = useState(new Date(1598051730000));
   const [appDetails, setAppDetails] = useState({
     load: false,
-    categoryId:null,
-    packageId:null,
-    stateOp:'',
+    categoryId: null,
+    packageId: null,
+    stateOp: "",
   });
-  const [category,setCategory]=useState(null);
+  const [category, setCategory] = useState(null);
 
   const [name, setName] = useState({
     name: "",
@@ -49,30 +61,30 @@ export default function CreateParcel() {
   const [stateTo, setStateTo] = useState({
     stateToId: "",
   });
-  const [mass,setMass]=useState({
-    mass:'',
-    massError:false,
-  })
-  const[volume,setVolume]=useState({
-    volume:'',
-    volumeError:false,
-  })
-  const[quantity,setQuantity]=useState({
-    quantity:'',
-    quantityError:false,
-  })
-  const[id,setId]=useState({
-    id:'',
-    idError:false,
+  const [mass, setMass] = useState({
+    mass: "",
+    massError: false,
   });
-  const[expectedDate,setExpectedDate]=useState({
-    date:'',
-    dateError:false,
-  })
-  const[depatureDate,setDepatureDate]=useState({
-    date:'',
-    dateError:false,
-  })
+  const [volume, setVolume] = useState({
+    volume: "",
+    volumeError: false,
+  });
+  const [quantity, setQuantity] = useState({
+    quantity: "",
+    quantityError: false,
+  });
+  const [id, setId] = useState({
+    id: "",
+    idError: false,
+  });
+  const [expectedDate, setExpectedDate] = useState({
+    date: "",
+    dateError: false,
+  });
+  const [depatureDate, setDepatureDate] = useState({
+    date: "",
+    dateError: false,
+  });
 
   const succFunc = (e) => {
     console.log(e);
@@ -82,74 +94,150 @@ export default function CreateParcel() {
   };
   const getStatePayload = (e) => {
     console.log(e);
+    setNgState(e.data.payload);
   };
-    
 
- 
-  const inputCheck=()=>{
-       var check=true;
-    if(!name.name){
+  const getCategoryPayload = (e) => {
+    console.log(e);
+    setCategory(e.data.payload);
+  };
+
+  const inputCheck = () => {
+    var check = true;
+    if (!name.name) {
+      check = false;
+      setName({ ...name, nameError: true });
+    } else {
+      setName({ ...name, nameError: false });
+    }
+    if (!desc.desc) {
+      check = false;
+      setDesc({ ...desc, descError: true });
+    } else {
+      setDesc({ ...desc, descError: false });
+    }
+
+    if (!stateFrom.stateFromId) {
+      check = false;
+    }
+    if (!stateTo.stateToId) {
+      check = false;
+    }
+    if (!appDetails.categoryId) {
+      check = false;
+    }
+    if (!appDetails.packageId) {
+      check = false;
+    }
+
+    if (!mass.mass) {
+      check = false;
+      setMass({ ...mass, massError: true });
+    } else {
+      if(numberCheck(mass.mass)){
+        setMass({ ...mass, massError: false });
+      }else{
+        check=false;
+        setMass({ ...mass, massError:true });
+      }
+    }
+
+    if (!volume.volume) {
+      check = false;
+      setVolume({ ...volume, volumeError: true });
+    } else {
+      if(numberCheck(volume.volume)){
+        setVolume({ ...volume, volumeError: false });
+      }else{
+        check=false;
+        setVolume({ ...volume, volumeError:true });
+      }
+    }
+
+    if (!quantity.quantity) {
+      check = false;
+      setQuantity({ ...quantity, quantityError: true });
+    } else {
+      if(numberCheck(quantity.quantity)){
+        setQuantity({ ...quantity, quantityError: false });
+      }else{
+        check=false;
+        setQuantity({ ...quantity, quantityError:true });
+      }
+    }
+
+    if (!id.id) {
+      check = false;
+      setId({ ...id, idError: true });
+    } else {
+      setId({ ...id, idError: false });
+    }
+    if(!expectedDate.date){
       check=false;
-      setName({...name,nameError:true});
+      setExpectedDate({...expectedDate,dateError:true})
     }else{
       
-      setName({...name,nameError:false});
+      setExpectedDate({...expectedDate,dateError:false})
     }
-    if(!desc.desc){
+    if(!depatureDate.date){
       check=false;
-      setDesc({...desc,descError:true});
+      setDepatureDate({...depatureDate,dateError:true})
     }else{
-      setDesc({...desc,descError:false});
+     setDepatureDate({...depatureDate,dateError:false})
     }
-     
-    if(!stateFrom.stateFromId){
-      check=false;
+    return check;
+  };
+
+  const onChange = (even, selectedDate) => {
+    //
+
+    setDateShow(false);
+    //console.log(selectedDate.toDateString());
+    if (even.type == "set") {
+      if (appDetails.stateOp == 1) {
+        console.log("Expected Date");
+        setAppDetails({ ...appDetails, stateOp: "" });
+         setExpectedDate({
+          ...expectedDate,
+          stateId: selectedDate.toDateString(),
+        });
+      } else {
+        console.log("Departure Date");
+        setAppDetails({ ...appDetails, stateOp: "" });
+        setDepatureDate({
+          ...depatureDate,
+          stateId: selectedDate.toDateString(),
+        });
+      }
+    } else {
+      //cancel Button
+      return null;
     }
-    if(!stateTo.stateToId){
-      check=false;
-    }
-    if(!appDetails.categoryId){
-      check=false;
-    }
-    if(!appDetails.packageId){
-      check=false;
-    }
+  };
 
-     }
-
-     const onChange=(even,selectedDate)=>{
-     //  
-       setDateShow(false);
-       console.log(selectedDate.toDateString());
-       if(appDetails.stateOp==1){
-          console.log("Expected Date");
-          setAppDetails({...appDetails,stateOp:''});
-           setExpectedDate({...expectedDate,stateId:selectedDate.toDateString()})
-       }else{
-
-         console.log("Departure Date");
-         setAppDetails({...appDetails,stateOp:''});
-         setDepatureDate({...depatureDate,stateId:selectedDate.toDateString()})
-     
-       }
-     }
-
-
-     const selectDate=(op)=>{
-       // Select Date From and To
-       if(op==1){
-     // date from 
+  const selectDate = (op) => {
+    // Select Date From and To
+    if (op == 1) {
+      // date from
       setDateShow(true);
-      setAppDetails({...appDetails,stateOp:op});
+      setAppDetails({ ...appDetails, stateOp: op });
+    } else if (op == 2) {
+      setDateShow(true);
+      setAppDetails({ ...appDetails, stateOp: op });
+      // date To
+    }
+  };
+  useEffect(() => {
+    if (!ngState) {
+      getState();
+    }
+  }, [ngState]);
 
-       }else if(op==2){
-
-        setDateShow(true);
-        setAppDetails({...appDetails,stateOp:op});
-         // date To
-     
-       }
-     }
+  useEffect(() => {
+    if (!category) {
+      getCategory();
+    }
+  }, [category]);
 
   const getState = () => {
     // state request object
@@ -169,7 +257,24 @@ export default function CreateParcel() {
       (e) => getStatePayload(e)
     );
   };
-
+  const getCategory = () => {
+    // state request object
+    var stateObject = {
+      method: "get",
+      url: `${api.localUrl}${api.getCategory}`,
+      headers: {
+        Authorization: " Bearer " + authUser.token,
+      },
+    };
+    console.log(stateObject);
+    apiRequest(
+      stateObject,
+      (e) => setAppDetails({ ...appDetails, load: e }),
+      (e) => succFunc(e),
+      (e) => failFunc(e),
+      (e) => getCategoryPayload(e)
+    );
+  };
   return (
     <View
       style={{
@@ -200,7 +305,7 @@ export default function CreateParcel() {
           Create Parcel
         </Text>
       </View>
-      <ScrollView>
+      <ScrollView style={{ marginTop: 10 }}>
         <View style={{ flexDirection: "row" }}>
           <View style={style.inputContainer}>
             <InputComp
@@ -215,11 +320,6 @@ export default function CreateParcel() {
                 setName({ ...name, name: e });
               }}
             />
-            {name.nameError ? (
-              <Text style={{ marginLeft: 25, color: "red" }}>
-                Invalid input.
-              </Text>
-            ) : null}
           </View>
           <View style={{ width: "50%", height: 70 }}>
             <InputComp
@@ -234,11 +334,6 @@ export default function CreateParcel() {
                 setDesc({ ...desc, desc: e });
               }}
             />
-            {desc.descError ? (
-              <Text style={{ marginLeft: 25, color: "red" }}>
-                Invalid input.
-              </Text>
-            ) : null}
           </View>
         </View>
 
@@ -294,16 +389,16 @@ export default function CreateParcel() {
         >
           <View style={{ width: "49%", borderWidth: 1, borderRadius: 2 }}>
             <Picker
-              selectedValue={stateFrom.stateId}
+              selectedValue={appDetails.categoryId}
               onValueChange={(itemValue, itemIndex) =>
-              //  setCategory({ ...category, stateId: itemValue })
-              setAppDetails({...appDetails,categoryId:itemValue})
+                //  setCategory({ ...category, stateId: itemValue })
+                setAppDetails({ ...appDetails, categoryId: itemValue })
               }
               style={{ borderWidth: 1, width: "100%" }}
             >
               <Picker.Item label="Category " value="" />
-              {ngState &&
-                ngState.map((e, i) => {
+              {category &&
+                category.map((e, i) => {
                   return <Picker.Item key={i} label={e.name} value={e.id} />;
                 })}
             </Picker>
@@ -311,14 +406,14 @@ export default function CreateParcel() {
 
           <View style={{ width: "49%", borderWidth: 1, borderRadius: 2 }}>
             <Picker
-              selectedValue={stateTo.stateId}
+              selectedValue={appDetails.packageId}
               onValueChange={(itemValue, itemIndex) =>
                 setAppDetails({ ...appDetails, packageId: itemValue })
               }
               style={{ borderWidth: 1, width: "100%" }}
             >
               <Picker.Item label="Packaging" value="" />
-              { packaging&&
+              {packaging &&
                 packaging.map((e, i) => {
                   return <Picker.Item key={i} label={e.name} value={e.name} />;
                 })}
@@ -333,17 +428,12 @@ export default function CreateParcel() {
               label="Mass:"
               placeholder="KG"
               style={style.name}
-              error={name.nameError}
+              error={mass.massError}
               secureText={false}
               setText={(e) => {
-                setName({ ...name, name: e });
+                setMass({ ...mass, mass: e });
               }}
             />
-            {name.nameError ? (
-              <Text style={{ marginLeft: 25, color: "red" }}>
-                Invalid input.
-              </Text>
-            ) : null}
           </View>
           <View style={{ width: "50%", height: 70 }}>
             <InputComp
@@ -352,17 +442,12 @@ export default function CreateParcel() {
               label="Volume:"
               placeholder="Item Volume"
               style={style.name}
-              error={name.nameError}
+              error={volume.volumeError}
               secureText={false}
               setText={(e) => {
-                setName({ ...name, name: e });
+                setVolume({ ...volume, volume: e });
               }}
             />
-            {name.nameError ? (
-              <Text style={{ marginLeft: 25, color: "red" }}>
-                Invalid input.
-              </Text>
-            ) : null}
           </View>
         </View>
         <View style={{ flexDirection: "row" }}>
@@ -373,17 +458,12 @@ export default function CreateParcel() {
               label="Quantity:"
               placeholder="Enter Quantity:"
               style={style.name}
-              error={name.nameError}
+              error={quantity.quantityError}
               secureText={false}
               setText={(e) => {
-                setName({ ...name, name: e });
+                setQuantity({ ...quantity, quantity: e });
               }}
             />
-            {name.nameError ? (
-              <Text style={{ marginLeft: 25, color: "red" }}>
-                Invalid input.
-              </Text>
-            ) : null}
           </View>
           <View style={{ width: "50%", height: 70 }}>
             <InputComp
@@ -392,55 +472,49 @@ export default function CreateParcel() {
               label="Identification:"
               placeholder="Identification Means"
               style={style.name}
-              error={name.nameError}
+              error={id.idError}
               secureText={false}
               setText={(e) => {
-                setName({ ...name, name: e });
+                setId({ ...id, id: e });
               }}
             />
-            {name.nameError ? (
-              <Text style={{ marginLeft: 25, color: "red" }}>
-                Invalid input.
-              </Text>
-            ) : null}
           </View>
         </View>
-        
+
         <View style={{ flexDirection: "row" }}>
-          <TouchableOpacity  onPress={()=>selectDate(1)} style={style.inputContainer}>
+          <TouchableOpacity
+            onPress={() => selectDate(1)}
+            style={style.inputContainer}
+          >
             <InputComp
               mode="outlined"
               right={null}
               label="Expected Date:"
               placeholder="Enter Date"
-              value={expectedDate.stateId?expectedDate.stateId:''}
+              value={expectedDate.stateId ? expectedDate.stateId : ""}
               style={style.name}
-              error={name.nameError}
+              error={expectedDate.dateError}
               secureText={false}
-              setText={(e) => {
-                setName({ ...name, name: e });
-              }}
               editable={false}
             />
-         </TouchableOpacity>
+          </TouchableOpacity>
 
-          <TouchableOpacity onPress={()=>selectDate(2)} style={{ width: "50%", height: 70 }}>
+          <TouchableOpacity
+            onPress={() => selectDate(2)}
+            style={{ width: "50%", height: 70 }}
+          >
             <InputComp
               mode="outlined"
               right={null}
               label="Depature Date:"
               placeholder="Enter Item Description"
               style={style.name}
-              error={name.nameError}
-              value={depatureDate.stateId?depatureDate.stateId:''}
+              error={depatureDate.dateError}
+              value={depatureDate.stateId ? depatureDate.stateId : ""}
               secureText={false}
-              setText={(e) => {
-                setName({ ...name, name: e });
-              }}
               editable={false}
             />
-            </TouchableOpacity>
-
+          </TouchableOpacity>
         </View>
 
         <View style={{ flexDirection: "column" }}>
@@ -451,14 +525,10 @@ export default function CreateParcel() {
               label="Location From :"
               placeholder="Enter Location From "
               style={style.name}
-              error={name.nameError}
               secureText={false}
-              setText={(e) => {
-                setName({ ...name, name: e });
-              }}
+              value={userLoc.address ? userLoc.address : ""}
               editable={false}
             />
-            
           </View>
           <View style={{ height: 70 }}>
             <InputComp
@@ -467,22 +537,16 @@ export default function CreateParcel() {
               label="Location To:"
               placeholder="Enter Location To"
               style={style.name}
-              error={name.nameError}
+              value={senderLoc.address ? senderLoc.address : ""}
               secureText={false}
               editable={false}
-              setText={(e) => {
-                setName({ ...name, name: e });
-              }}
             />
-           
           </View>
         </View>
         <TouchableOpacity>
           {IconComp("images", { marginLeft: 10 }, 25, AppColor.third)}
         </TouchableOpacity>
-        <TouchableOpacity
-          style={style.createBtn}
-        >
+        <TouchableOpacity onPress={() => inputCheck()} style={style.createBtn}>
           <Text
             style={{
               textAlign: "center",
@@ -495,28 +559,25 @@ export default function CreateParcel() {
           </Text>
         </TouchableOpacity>
 
-      
-         {dateshow&&(
-            <DateTimePicker
+        {dateshow && (
+          <DateTimePicker
             testID="dateTimePicker"
             value={appDate}
             mode="date"
             is24Hour={true}
             display="default"
             onChange={onChange}
-             />
-         )}
-       
-
+            onTouchCancel={() => console.log("error")}
+          />
+        )}
       </ScrollView>
-     
     </View>
   );
 }
 
 const style = StyleSheet.create({
   name: {
-    height: 50,
+    height: 55,
     margin: 2,
     backgroundColor: "#fff",
     shadowColor: "#000",
@@ -531,23 +592,23 @@ const style = StyleSheet.create({
 
   inputContainer: {
     width: "50%",
-    height: 70,
+    height: 80,
   },
 
   createBtn: {
-   margin: 10,
-            borderRadius: 5,
-            height: 50,
-            justifyContent: "center",
-            backgroundColor: `${AppColor.third}`,
-            shadowColor: "#000",
-            shadowOffset: {
-              width: 0,
-              height: 1,
-            },
-            shadowOpacity: 0.22,
-            shadowRadius: 2.22,
-            
-            elevation: 3,
+    margin: 10,
+    borderRadius: 5,
+    height: 50,
+    justifyContent: "center",
+    backgroundColor: `${AppColor.third}`,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.22,
+    shadowRadius: 2.22,
+
+    elevation: 3,
   },
 });

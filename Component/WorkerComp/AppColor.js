@@ -1,3 +1,4 @@
+
 export const AppColor={
     primary:'#000',
     secondary:'#433E91',
@@ -18,12 +19,13 @@ export const regX={
 }
 
 export const numberCheck=(e)=>{
-    if(regx.numberFilter.test(e)){
+    if(regX.numberFilter.test(e)){
         return true;
     }else{
         console.log("Not a number");
+        return false;
     }
-}
+} 
 export const emailCheck=(e)=>{
   if(regX.emailFilter.test(e)){
       return true;

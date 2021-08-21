@@ -29,6 +29,17 @@ export default function PickupLocationMap({ navigation }) {
     userPickupDetails,
     setuserPickupDetails,
   } = usercontext;
+    
+  const operation=()=>{
+    console.log(userPickupDetails.operation);
+      if(userPickupDetails.operation=='pickup'){
+        navigate('Details');
+      }else if(userPickupDetails.operation=='parcel'){
+        navigate('Create Parcel');
+      }else{
+        console.log("Operation Error")
+      }
+  }
 
   const proceed = () => {
     return (
@@ -44,7 +55,7 @@ export default function PickupLocationMap({ navigation }) {
           margin: 5,
         }}
       >
-        <TouchableOpacity onPress={()=>navigate('Details')} style={styles.procBtn}>
+        <TouchableOpacity onPress={()=>operation()} style={styles.procBtn}>
           <Text
             style={{
               textAlign: "center",

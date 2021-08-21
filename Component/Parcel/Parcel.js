@@ -1,10 +1,13 @@
-import React from 'react';
+import React,{useContext} from 'react';
 import { View,Text,ScrollView,StyleSheet,Dimensions} from 'react-native';
 import CustomFab from '../WorkerComp/CustomFab';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import { AppColor } from '../WorkerComp/AppColor';
 import ParcelComp from './ParcelComp';
+import {UserContext} from '../DataProvider/UserContext';
 export default function Parcel({navigation}){
+  const usercontext=useContext(UserContext);
+  const {userPickupDetails,setuserPickupDetails}=usercontext;
   const {navigate}=navigation;
     return (
     <View style={{backgroundColor:'#fff',paddingBottom:45}} >
@@ -12,7 +15,7 @@ export default function Parcel({navigation}){
          <ScrollView style={{height:Dimensions.get('screen').height/1.3}}>
         <ParcelComp name="A bag of Rice" catIcon="box" func={()=>console.log("okay")}/>
      </ScrollView>
-     <CustomFab iconName="plus" fabFunc={()=>navigate('Create Parcel')}/>
+     <CustomFab iconName="plus" fabFunc={()=>setuserPickupDetails({...userPickupDetails,operation:'parcel'},navigate('location'))}/>
     </View>
     )
 }
