@@ -172,7 +172,7 @@ export default function Details({navigation}) {
     const clearAppState=()=>{
       setUserLoc({userLoc, lat:null, lng:null,address:null,type:1});
       setSenderLoc({senderLoc, lat:null, lng:null,address:null,type:1});
-      setuserPickupDetails({...userPickupDetails, pickupType:'',locType:1,})
+      setuserPickupDetails({...userPickupDetails, pickupType:'',locType:1,operation:''})
     }
    const compPickOp=()=>{
      clearAppState();

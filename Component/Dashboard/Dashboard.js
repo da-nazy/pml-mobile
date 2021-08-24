@@ -100,11 +100,7 @@ export default function Dashboard() {
         component={Details}
         options={{ headerShown: false }}
       />
-      <Drawer.Screen
-        name="CreateParcel"
-        component={CreateParcel}
-        options={{ headerShown: false }}
-      />
+      
     </Drawer.Navigator>
   );
 }

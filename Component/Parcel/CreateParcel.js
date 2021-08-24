@@ -14,10 +14,13 @@ import Icon from "react-native-vector-icons/FontAwesome5";
 import InputComp from "../WorkerComp/InputComp";
 import { Picker } from "@react-native-community/picker";
 import { UserContext } from "../DataProvider/UserContext";
-import { IconComp, packaging } from "../WorkerComp/ExternalFunction";
+import { IconComp, packaging,validatePhone } from "../WorkerComp/ExternalFunction";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { api, apiRequest } from "../WorkerComp/Api";
-export default function CreateParcel() {
+import LoaderComp from "../WorkerComp/LoaderComp";
+import axios from 'axios';
+export default function CreateParcel({navigation}) {
+  const{navigate}=navigation;
   const usercontext = useContext(UserContext);
   const {
     userLoc,
@@ -33,12 +36,24 @@ export default function CreateParcel() {
   const [ngState, setNgState] = useState(null);
   const [dateshow, setDateShow] = useState(false);
   const [appDate, setAppDate] = useState(new Date(1598051730000));
+  const[estimateBill,setEstimateBill]=useState({
+    bill:'',
+    error:false,
+  })
+  const[worth,setWorth]=useState({
+    worth:'',
+    worthError:'',
+  })
   const [appDetails, setAppDetails] = useState({
     load: false,
     categoryId: null,
     packageId: null,
     stateOp: "",
+    userValid:null,
+    receiverObjectId:'',
+
   });
+  
   const [category, setCategory] = useState(null);
 
   const [name, setName] = useState({
@@ -90,28 +105,91 @@ export default function CreateParcel() {
     console.log(e);
   };
   const failFunc = (e) => {
-    Alert.Alert("Error", e);
+    Alert.alert("Error", e);
   };
   const getStatePayload = (e) => {
     console.log(e);
     setNgState(e.data.payload);
   };
-
+  
+  const userCheckPayload=(e)=>{
+    console.log(e.data.payload.id);
+    if(e.data.payload.length!==0){
+       setAppDetails({...appDetails,userValid:'check',receiverObjectId:e.data.payload.id});
+    }else{
+      setAppDetails({...appDetails,userValid:'times'});
+      Alert.alert("USER NOT FOUND","Create user!");
+    }
+  }
   const getCategoryPayload = (e) => {
     console.log(e);
     setCategory(e.data.payload);
   };
+  const[recpientPhoneEmail,setRecipientPhoneEmail]=useState({
+    emailPhone:'',
+    emailPhoneError:false,
+  })
+
+  const clearAppState=()=>{
+    setUserLoc({userLoc, lat:null, lng:null,address:null,type:1});
+    setSenderLoc({senderLoc, lat:null, lng:null,address:null,type:1});
+    setuserPickupDetails({...userPickupDetails, pickupType:'',locType:1,operation:''})
+  }
+
+  const userVerification=()=>{
+    var check=true;
+    if(!recpientPhoneEmail.emailPhone){
+      setRecipientPhoneEmail({...recpientPhoneEmail,emailPhoneError:true});
+      check=false;
+    }else{
+     // setRecipientPhoneEmail({...recpientPhoneEmail,emailPhoneError:false});
+      if(validatePhone(recpientPhoneEmail.emailPhone)){
+       
+        setRecipientPhoneEmail({...recpientPhoneEmail,emailPhoneError:false});
+      }else{
+        check=false;
+        setRecipientPhoneEmail({...recpientPhoneEmail,emailPhoneError:true});
+      }
+    }
+    return check;
+  }
+
+  const isUserValid=()=>{
+    setAppDetails({...appDetails,userValid:null});
+    if(userVerification()){
+      var userCheckObject={
+        method:"get",
+        url:`${api.localUrl}${api.checkUser}phone=${recpientPhoneEmail.emailPhone}`,
+        headers:{
+         Authorization:' Bearer ' + authUser.token,
+       }
+      }
+      console.log(userCheckObject);
+
+      apiRequest(userCheckObject,(e)=>setAppDetails({...appDetails,load:e}),(e)=>succFunc(e),(e)=>failFunc(e),(e)=>userCheckPayload(e));
+
+    }else{
+      console.log("Error");
+    }
+  }
+    
+  const compParcel=()=>{
+    clearAppState();
+    navigate('Parcel');
+  }
 
   const inputCheck = () => {
     var check = true;
     if (!name.name) {
       check = false;
+      
       setName({ ...name, nameError: true });
     } else {
       setName({ ...name, nameError: false });
     }
     if (!desc.desc) {
       check = false;
+    
       setDesc({ ...desc, descError: true });
     } else {
       setDesc({ ...desc, descError: false });
@@ -139,6 +217,18 @@ export default function CreateParcel() {
       }else{
         check=false;
         setMass({ ...mass, massError:true });
+      }
+    }
+
+    if (!worth.worth) {
+      check = false;
+      setWorth({ ...worth, worthError: true });
+    } else {
+      if(numberCheck(worth.worth)){
+        setWorth({ ...worth, worthError: false });
+      }else{
+        check=false;
+        setWorth({ ...worth,worthError:true });
       }
     }
 
@@ -175,19 +265,174 @@ export default function CreateParcel() {
     if(!expectedDate.date){
       check=false;
       setExpectedDate({...expectedDate,dateError:true})
+   
     }else{
-      
       setExpectedDate({...expectedDate,dateError:false})
     }
+
     if(!depatureDate.date){
       check=false;
       setDepatureDate({...depatureDate,dateError:true})
     }else{
      setDepatureDate({...depatureDate,dateError:false})
     }
+
+    if(!appDetails.receiverObjectId){
+      check=false;
+      console.log("here1");
+      console.log(appDetails.receiverObjectId);
+  }
+    if(!estimateBill.bill){
+      check=false;
+      setEstimateBill({...estimateBill,error:true});
+    }else{
+      
+      setEstimateBill({...estimateBill,error:false});
+    }
+
+  if(!userLoc.lat&&!userLoc.lng){
+    check=false;
+  }
+  if(!senderLoc.lat&&!senderLoc.lng){
+    check=false;
+  }
+   
     return check;
   };
+     
+  const billingPayload=(e)=>{
+ 
+  setEstimateBill({...estimateBill,bill:e.data.payload});
+  
+  }
 
+  const createParcelPayload=(e)=>{
+    console.log(e);
+    Alert.alert("Success","Parcel Created Successfully",[
+      {
+        text:'Ok',
+      onPress:()=>compParcel(),
+      }
+    ])
+  }
+  const estimateCheck=()=>{
+     var check=true;
+     if (!mass.mass) {
+      check = false;
+      setMass({ ...mass, massError: true });
+    } else {
+      if(numberCheck(mass.mass)){
+        setMass({ ...mass, massError: false });
+      }else{
+        check=false;
+        setMass({ ...mass, massError:true });
+      }
+    }
+
+    if (!worth.worth) {
+      check = false;
+      setWorth({ ...worth, worthError: true });
+    } else {
+      if(numberCheck(worth.worth)){
+        setWorth({ ...worth, worthError: false });
+      }else{
+        check=false;
+        setWorth({ ...worth,worthError:true });
+      }
+    }
+
+    if (!volume.volume) {
+      check = false;
+      setVolume({ ...volume, volumeError: true });
+    } else {
+      if(numberCheck(volume.volume)){
+        setVolume({ ...volume, volumeError: false });
+      }else{
+        check=false;
+        setVolume({ ...volume, volumeError:true });
+      }
+    }
+
+    if (!appDetails.categoryId) {
+      check = false;
+    }
+    if(!userLoc.lat&&!userLoc.lng&&!userLoc.address){
+        check=false;
+    }
+    if(!senderLoc.lat&&!senderLoc.lng&&!senderLoc.address){
+      check=false;
+    }
+
+   
+     return check;
+  }
+
+  const getEstimateBilling=()=>{
+    if(estimateCheck()){
+     var billingObject={
+       method:'post',
+       url:`${api.localUrl}${api.estimatedBilling}`,
+       data:{
+        mass:Number.parseInt(mass.mass),
+        volume:Number.parseInt(volume.volume),
+        worth:Number.parseInt(worth.worth),
+        category:appDetails.categoryId,
+        locationFrom:{"coordinates":[userLoc.lat,userLoc.lng]},
+        locationTo:{"coordinates":[senderLoc.lat,senderLoc.lng]},
+
+       
+      },
+      headers:{
+        Authorization:' Bearer ' + authUser.token,
+      } 
+     }
+   //  console.log(billingObject);
+
+     apiRequest(billingObject,(e)=>setAppDetails({...appDetails,load:e}),(e)=>succFunc(e),(e)=>failFunc(e),(e)=>billingPayload(e));
+    
+
+    }else{
+      Alert.alert("Error","Empty fields detected for estimated billing");
+    }
+  }
+  
+  const registerParcel=()=>{
+    if(inputCheck()){
+       var createParcelObject={
+         method:'POST',
+         url:`${api.localUrl}${api.createParcel}`,
+      headers:{
+        Authorization:' Bearer ' + authUser.token,
+      } ,
+         data:{
+          category:appDetails.categoryId,
+          packaging:appDetails.packageId,
+          name:name.name,
+          sender:user.id,
+          recipient:appDetails.receiverObjectId,
+          worth:worth.worth,
+          description:desc.desc,
+          locationTo:{"coordinates":[userLoc.lat,userLoc.lng],"address":userLoc.address},
+          locationFrom:{"coordinates":[senderLoc.lat,senderLoc.lng],"address":senderLoc.address}, 
+          stateFrom:stateFrom.stateFromId,
+          stateTo:stateTo.stateToId,
+          expectedDate:expectedDate.date,
+          departureDate:depatureDate.date,
+          costPayable:estimateBill.bill,
+          paymentGateway:"PAYSTACK",
+          mass:mass.mass,
+          volume:volume.volume,
+          identification:id.id,
+          quantity:quantity.quantity,
+         }
+       }
+       console.log(createParcelObject);
+       apiRequest(createParcelObject,(e)=>setAppDetails({...appDetails,load:e}),(e)=>succFunc(e),(e)=>failFunc(e),(e)=>createParcelPayload(e));
+    
+    }else{
+      console.log("Invalide input");
+    }
+  }
   const onChange = (even, selectedDate) => {
     //
 
@@ -199,14 +444,14 @@ export default function CreateParcel() {
         setAppDetails({ ...appDetails, stateOp: "" });
          setExpectedDate({
           ...expectedDate,
-          stateId: selectedDate.toDateString(),
+          date: selectedDate.toDateString(),
         });
       } else {
         console.log("Departure Date");
         setAppDetails({ ...appDetails, stateOp: "" });
         setDepatureDate({
           ...depatureDate,
-          stateId: selectedDate.toDateString(),
+          date: selectedDate.toDateString(),
         });
       }
     } else {
@@ -279,7 +524,8 @@ export default function CreateParcel() {
     <View
       style={{
         backgroundColor: "#fff",
-        height: Dimensions.get("screen").height,
+        height: Dimensions.get("screen").height/1.12,
+        padding:10,
       }}
     >
       <StatusBar animated={true} backgroundColor={AppColor.third} />
@@ -347,9 +593,9 @@ export default function CreateParcel() {
         >
           <View style={{ width: "49%", borderWidth: 1, borderRadius: 2 }}>
             <Picker
-              selectedValue={stateFrom.stateId}
+              selectedValue={stateFrom.stateFromId}
               onValueChange={(itemValue, itemIndex) =>
-                setStateFrom({ ...stateFrom, stateId: itemValue })
+                setStateFrom({ ...stateFrom, stateFromId: itemValue })
               }
               style={{ borderWidth: 1, width: "100%" }}
             >
@@ -363,9 +609,9 @@ export default function CreateParcel() {
 
           <View style={{ width: "49%", borderWidth: 1, borderRadius: 2 }}>
             <Picker
-              selectedValue={stateTo.stateId}
+              selectedValue={stateTo.stateToId}
               onValueChange={(itemValue, itemIndex) =>
-                setStateTo({ ...stateTo, stateId: itemValue })
+                setStateTo({ ...stateTo, stateToId: itemValue })
               }
               style={{ borderWidth: 1, width: "100%" }}
             >
@@ -451,6 +697,58 @@ export default function CreateParcel() {
           </View>
         </View>
         <View style={{ flexDirection: "row" }}>
+          <View style={{ width: "100%", height: 70 }}>
+            <InputComp
+              mode="outlined"
+              right={null}
+              label="Worth:"
+              placeholder="#"
+              style={style.name}
+              error={worth.worthError}
+              secureText={false}
+              setText={(e) => {
+                setWorth({ ...worth, worth: e });
+              }}
+            />
+          </View>
+       </View>
+       <View style={{ flexDirection: "row",justifyContent:'space-between' }}>
+          {appDetails.userValid&&<View style={{ width: "10%", justifyContent: "center" }}>
+            { IconComp(
+             appDetails.userValid,
+              { textAlign: "center" },
+              15,
+              AppColor.third
+            )}
+          </View>}<InputComp
+            label="Receipent Phone "
+            mode="outlined"
+            style={{ width: "80%",backgroundColor:'#fff'}}
+            setText={(e)=>setRecipientPhoneEmail({...recpientPhoneEmail,emailPhone:e})}
+            error={recpientPhoneEmail.emailPhoneError}
+          />
+          <TouchableOpacity onPress={()=>isUserValid()} style={{ justifyContent: "center", width: "10%" }}>
+            {IconComp("sync-alt", { textAlign: "center" }, 15, AppColor.third)}
+          </TouchableOpacity>
+        </View>
+
+        <View style={{ flexDirection: "row",justifyContent:'space-between' }}>
+          {appDetails.userValid&&<View style={{ width: "10%", justifyContent: "center" }}>
+         
+          </View>}<InputComp
+            label="Estimated Billing "
+            mode="outlined"
+            editable={false}
+            value={estimateBill.bill?estimateBill.bill.toString():''}
+            style={{ width: "80%" ,backgroundColor:'#fff'}}
+            error={estimateBill.error}
+          />
+          <TouchableOpacity onPress={()=>getEstimateBilling()} style={{ justifyContent: "center", width: "10%" }}>
+            {IconComp("sync-alt", { textAlign: "center" }, 15, AppColor.third)}
+          </TouchableOpacity>
+        </View>
+          
+        <View style={{ flexDirection: "row" }}>
           <View style={{ width: "50%", height: 70 }}>
             <InputComp
               mode="outlined"
@@ -491,7 +789,7 @@ export default function CreateParcel() {
               right={null}
               label="Expected Date:"
               placeholder="Enter Date"
-              value={expectedDate.stateId ? expectedDate.stateId : ""}
+              value={expectedDate.date? expectedDate.date : ""}
               style={style.name}
               error={expectedDate.dateError}
               secureText={false}
@@ -510,7 +808,7 @@ export default function CreateParcel() {
               placeholder="Enter Item Description"
               style={style.name}
               error={depatureDate.dateError}
-              value={depatureDate.stateId ? depatureDate.stateId : ""}
+              value={depatureDate.date ? depatureDate.date : ""}
               secureText={false}
               editable={false}
             />
@@ -546,7 +844,7 @@ export default function CreateParcel() {
         <TouchableOpacity>
           {IconComp("images", { marginLeft: 10 }, 25, AppColor.third)}
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => inputCheck()} style={style.createBtn}>
+        <TouchableOpacity onPress={() => registerParcel()} style={style.createBtn}>
           <Text
             style={{
               textAlign: "center",
@@ -571,6 +869,7 @@ export default function CreateParcel() {
           />
         )}
       </ScrollView>
+       {appDetails.load&&<LoaderComp size={25} color={AppColor.third}/>}
     </View>
   );
 }

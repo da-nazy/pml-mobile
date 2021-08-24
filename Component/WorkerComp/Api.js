@@ -39,15 +39,16 @@ export const api={
     createPickup:'api/pml/pml-pickups/public',
     userPickup:'api/pml/pml-pickups?createdBy=',
     viewParcel:'',
-    createParcel:'',
+    createParcel:'api/pml/pml-parcels/public',
     editProfile:'',
     getCategory:'api/pml/categories',
     getState:'api/erp/states',
     recoverPassword:'api/erp/staff/otp',
-    localUrl:'http://172.16.17.31/',
+    localUrl:'http://192.168.43.122/',
     remoteUrl:'',  
     googleReversGeoCodeUrl:'https://maps.googleapis.com/maps/api/geocode/json?latlng=',
     googleApiKey:'AIzaSyCE41gWBv1AfHzJNsyvCQe6FIPpYHLKcrs',
+    estimatedBilling:'api/pml/pml-parcels/estimate-billing'
 }
 
 //https://maps.googleapis.com/maps/api/geocode/json?latlng=6.4637031,7.5515096&key=AIzaSyCE41gWBv1AfHzJNsyvCQe6FIPpYHLKcrs
@@ -61,7 +62,7 @@ export const api={
 
 export const apiRequest=(requestObject,load,succFunc,errorFun,getPayload)=>{
    
-    console.log(requestObject.url);   
+    console.log(requestObject);   
     load(true);
     axios(
         requestObject
@@ -70,7 +71,7 @@ export const apiRequest=(requestObject,load,succFunc,errorFun,getPayload)=>{
           load(false);
           if(response.data.success){
               // check the response data payload is not null
-              console.log(response);
+             // console.log(response);
               succFunc(response.data.message);
               if(response.data.payload.lenght!=0){
                   // payload isn't null
@@ -87,11 +88,14 @@ export const apiRequest=(requestObject,load,succFunc,errorFun,getPayload)=>{
       // console.log(response);
       }).catch(function (error){
           load(false);
-          console.log("danny");
+       //   console.log("danny");
+       //   console.log(error.response.data);
+       //   console.log(error.response.status);
+       //   console.log(error.response.headers);
          // errorFun(error.response.data.message);
          // console.log(error.response.data);
          // typeof keyword is used to check the datatype
-         console.log(error.response);
+       //  console.log(error.response);
          if(typeof error.response!=='undefined'){
             
             if(error.response.data.message){
