@@ -62,7 +62,7 @@ export default function Menu({navigation}){
     ])
     return (
 
-        <View>
+        <View style={{height:Dimensions.get('screen').height}}>
         <StatusBar animated={true} backgroundColor={AppColor.third} />
         <View style={{ backgroundColor: "#000", height: 240 }}>
           <ImageBackground
