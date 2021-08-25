@@ -61,8 +61,8 @@ const resetPwdSucc=(e)=>{
 }
    const userProfilePayload=(e)=>{
      console.log("danny2");
-       setUser(e);
-       setAppOp({...appOp,userid:e.id});
+       setUser(e.data.payload);
+       setAppOp({...appOp,userid:e.data.payload.id});
    }
 const userProfileSuc=(e)=>{
    // console.log(e);

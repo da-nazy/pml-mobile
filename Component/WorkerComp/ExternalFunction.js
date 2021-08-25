@@ -165,6 +165,25 @@ export const parcelComp = (item) => {
   
  
 };
+
+export const modalView=(setView,mdbStyle,mdStyle)=>{
+  return(
+   <View style={mdbStyle}> 
+     <Modal 
+     style={mdStyle}
+   animationType="slide"
+   transparent={true}
+   visible={modalVisible}
+   onRequestClose={() => {
+     Alert.alert("Modal has been closed.");
+     setModalVisible(!modalVisible);
+   }}
+ >
+  
+ </Modal></View>
+
+  )
+}
 const style = StyleSheet.create({
   parcelComp: {
     paddingLeft:5,

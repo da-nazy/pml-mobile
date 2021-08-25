@@ -30,7 +30,7 @@ export default function ResetPassword({showText,setAlert,load,token,id,fail,succ
      // as a component
      var resetObject={
       method:'put',
-      url:`${api.localUrl}${api.userProfile}/${id}`,
+      url:`${api.localUrl}${api.editCustomer}/${id}`,
       data:{
         password:currentPwd.currentPassword,
       },
@@ -58,7 +58,7 @@ export default function ResetPassword({showText,setAlert,load,token,id,fail,succ
         
       }
       console.log(resetObject);
-      apiRequest(resetObject,(e)=>setResetOp({...resetOp,load:e}),(e)=>onSucc(e),(e)=>onFail(e),(e)=>{console.log(e)});
+      apfRequest(resetObject,(e)=>setResetOp({...resetOp,load:e}),(e)=>onSucc(e),(e)=>onFail(e),(e)=>{console.log(e)});
     
      }
     }

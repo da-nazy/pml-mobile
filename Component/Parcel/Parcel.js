@@ -1,11 +1,11 @@
-import React,{useContext} from 'react';
-import { View,Text,ScrollView,StyleSheet,Dimensions,RefreshControl} from 'react-native';
+import React,{useContext,useCallback,useEffect} from 'react';
+import { View,Text,ScrollView,StyleSheet,Dimensions,RefreshControl, Alert,Modal} from 'react-native';
 import CustomFab from '../WorkerComp/CustomFab';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import { AppColor } from '../WorkerComp/AppColor';
 import ParcelComp from './ParcelComp';
 import {UserContext} from '../DataProvider/UserContext';
-import { api } from '../WorkerComp/Api';
+import { api,apiRequest} from '../WorkerComp/Api';
 import { useState } from 'react/cjs/react.development';
 import LoaderComp from '../WorkerComp/LoaderComp';
 export default function Parcel({navigation}){
@@ -25,21 +25,32 @@ export default function Parcel({navigation}){
   }
   const userparcelPayload=(e)=>{
     console.log(e);
+    setUserParcel(e.data.payload);
   }
+
+  const deleteParcelPayload=(e)=>{
+    console.log(e);
+    Alert.alert("Success",e.data.message);
+  }
+
   const {navigate}=navigation;
 
   const wait=(timeout)=>{
-    return new Promise(resoolve=>setTimeout(resolve,timeout));
+    return new Promise(resolve=>setTimeout(resolve,timeout));
   }
-
-  /**
-   * const onRefresh=useCallback=(()=>{
+   
+  const onRefresh=useCallback(()=>{
     console.log("OnRefreshing");
-    getUserParcel();
+   
     wait(200).then(()=>console.log("ended"));
   },[]);
-   */
+  
 
+  useEffect(()=>{
+    if(!userParcel){
+      getUserParcel();
+    }
+  },[userParcel])
   const getUserParcel=()=>{
      var parcelObject={
        method:'',
@@ -48,17 +59,40 @@ export default function Parcel({navigation}){
         Authorization:' Bearer ' + authUser.token,
        }
      }
+     console.log(parcelObject);
      apiRequest(parcelObject,(e)=>setAppDetails({...appDetails,load:e}),(e)=>succFunc(e),(e)=>failFunc(e),(e)=>userparcelPayload(e));
 
   }
+   
+  const deleteParcel=(id)=>{
+       var deleteParcelObject={
+         method:'DELETE',
+         url:`${api.localUrl}${api.deleteParcel}${id}`,
+         headers:{
+           Authorization:' Bearer ' + authUser.token,
+         }
+       }
 
+       console.log(deleteParcelObject);
+      // apiRequest(deleteParcelObject,(e)=>setAppDetails({...appDetails,load:e}),(e)=>succFunc(e),(e)=>failFunc(e),(e)=>deleteParcelPayload(e));
+  
+  }
+  const viewParcel=()=>{
+
+  }
     return (
     <View style={{backgroundColor:'#fff',paddingBottom:45}} >
        <View style={{flexDirection:'row',justifyContent:'center',padding:15,borderBottomWidth:1,borderBottomColor:`${AppColor.third}`}}><Icon name="box" size={15} color={AppColor.third} /><Text style={{fontWeight:'bold',textAlign:'center',fontSize:15,marginLeft:5}}>Parcel</Text></View>
          <ScrollView
-        
+         refreshControl={<RefreshControl refreshing={appDetails.refresh}/>}
+         onRefresh={onRefresh}
+
           style={{height:Dimensions.get('screen').height/1.3}}>
-        <ParcelComp name="A bag of Rice" catIcon="box" func={()=>console.log("okay")}/>
+      
+        {userParcel&&userParcel.map((e,i)=>{
+          return(
+            <ParcelComp  key={i} name={e.name} catIcon="box" func={()=>console.log(e)}/>)
+        })}
      </ScrollView>
      <CustomFab iconName="plus" fabFunc={()=>setuserPickupDetails({...userPickupDetails,operation:'parcel'},navigate('location'))}/>
    {appDetails.load&&<LoaderComp size={25} color={AppColor.third}/>}
