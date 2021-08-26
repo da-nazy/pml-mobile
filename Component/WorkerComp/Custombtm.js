@@ -5,7 +5,7 @@ export default function Custombtm({displayComp,cod,copm,btmRef,height}){
     
 return(
     <RBSheet
-    dragFromTopOnly={false}
+    dragFromTopOnly={true}
     ref={btmRef}
     closeOnDragDown={cod}
     closeOnPressMask={copm}
@@ -20,7 +20,7 @@ return(
         },
         container: {
             backgroundColor: '#fff',
-            marginBottom: 20
+            
         }
     }}
 >

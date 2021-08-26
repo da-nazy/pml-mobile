@@ -1,4 +1,4 @@
-import React,{useContext,useCallback,useEffect} from 'react';
+import React,{useContext,useCallback,useEffect,useRef} from 'react';
 import { View,Text,ScrollView,StyleSheet,Dimensions,RefreshControl, Alert,Modal} from 'react-native';
 import CustomFab from '../WorkerComp/CustomFab';
 import Icon from 'react-native-vector-icons/FontAwesome5';
@@ -8,15 +8,20 @@ import {UserContext} from '../DataProvider/UserContext';
 import { api,apiRequest} from '../WorkerComp/Api';
 import { useState } from 'react/cjs/react.development';
 import LoaderComp from '../WorkerComp/LoaderComp';
+import ViewParcel from './ViewParcel';
+import Custombtm from '../WorkerComp/Custombtm';
 export default function Parcel({navigation}){
   const usercontext=useContext(UserContext);
   const {userPickupDetails,setuserPickupDetails,authUser,user}=usercontext;
   const [userParcel,setUserParcel]=useState(null);
-   
+  const btmRef=useRef(null);
+
   const[appDetails,setAppDetails]=useState({
     refresh:false,
     load:false,
+    singleParcel:'',
   })
+
   const succFunc=(e)=>{
     console.log(e);
   }
@@ -77,9 +82,10 @@ export default function Parcel({navigation}){
       // apiRequest(deleteParcelObject,(e)=>setAppDetails({...appDetails,load:e}),(e)=>succFunc(e),(e)=>failFunc(e),(e)=>deleteParcelPayload(e));
   
   }
-  const viewParcel=()=>{
-
+  const viewParcel=(e)=>{
+   setAppDetails({...appDetails,singleParcel:e},btmRef.current.open())
   }
+
     return (
     <View style={{backgroundColor:'#fff',paddingBottom:45}} >
        <View style={{flexDirection:'row',justifyContent:'center',padding:15,borderBottomWidth:1,borderBottomColor:`${AppColor.third}`}}><Icon name="box" size={15} color={AppColor.third} /><Text style={{fontWeight:'bold',textAlign:'center',fontSize:15,marginLeft:5}}>Parcel</Text></View>
@@ -91,12 +97,12 @@ export default function Parcel({navigation}){
       
         {userParcel&&userParcel.map((e,i)=>{
           return(
-            <ParcelComp  key={i} name={e.name} catIcon="box" func={()=>console.log(e)}/>)
+            <ParcelComp  key={i} name={e.name} catIcon="box" func={()=>viewParcel(e)}/>)
         })}
      </ScrollView>
      <CustomFab iconName="plus" fabFunc={()=>setuserPickupDetails({...userPickupDetails,operation:'parcel'},navigate('location'))}/>
    {appDetails.load&&<LoaderComp size={25} color={AppColor.third}/>}
-    
+     <Custombtm displayComp={()=><ViewParcel parcel={appDetails.singleParcel}/>} cod={true} copm={true} btmRef={btmRef} height={550}/>
     </View>
     )
 }
