@@ -1,9 +1,8 @@
 import React,{useState} from 'react';
-import { View,Text, ScrollView,StyleSheet, TouchableOpacity} from 'react-native';
+import { View,Text, ScrollView,StyleSheet, TouchableOpacity,Alert} from 'react-native';
 import { AppColor } from '../WorkerComp/AppColor';
-import { IconComp} from '../WorkerComp/ExternalFunction';
 import InputComp from '../WorkerComp/InputComp';
-import { packaging } from '../WorkerComp/ExternalFunction';
+import { packaging ,IconComp} from '../WorkerComp/ExternalFunction';
 import { Picker } from "@react-native-community/picker";
 export default function ViewParcel({parcel}){
     console.log(parcel);
@@ -33,6 +32,8 @@ export default function ViewParcel({parcel}){
     const [appDetails,setAppDetails]=useState({
       edit:false,
       userValid:'',
+      locToValid:'',
+      locFromValid:'', 
     })
 
      const [name,setName]=useState({
@@ -90,10 +91,50 @@ export default function ViewParcel({parcel}){
     const getCategory=()=>{
 
     }
+
     const isUserValid=()=>{
 
     }
+    const userEdit=()=>{
 
+    }
+    
+    const editUser=()=>{
+      
+      console.log(appDetails.edit);
+      if(appDetails.edit){
+        // run the  edit 
+        // after which set edit false
+        console.log(appDetails.edit);
+      }else{
+        // set edit true
+        setAppDetails({...appDetails,edit:true});
+       console.log(appDetails.edit);
+      }
+    }
+    
+    const getGeocode=(e)=>{
+    console.log(e);
+    }
+
+    const getCost=()=>{
+
+    }
+    const deleteParcel=()=>{
+      console.log(parcel.id);
+      Alert.alert("Caution",`Are you sure you want to delete the parcel with code ${parcel.code}?`,[
+        {
+        text:"Cancle",
+        onPress:()=>console.log("cancle"),
+        style:style.cancel,
+      },
+      {
+        text:"Okay",
+        onPress:()=>console.log("Okay"),
+        style:style.okay,
+      },
+    ])
+    }
     return(
         <View>
             <Text style={{fontWeight:'bold',textAlign:'center',fontSize:18}}> View Parcel</Text>
@@ -160,15 +201,16 @@ export default function ViewParcel({parcel}){
           style={style.name}
           error={name.nameError}
           secureText={false}
-          disabled={!appDetails.edit}
+          disabled={true}
           setText={(e) => {
             setName({ ...name, name: e });
           }}
         />
        
       </View>
-      <View style={{marginTop:5}}>
-        <InputComp
+      <View style={{marginTop:5,flexDirection:'row'}}>
+      <View style={{width:`${appDetails.edit?'80%':'100%'}`}}>
+      <InputComp
           inputType="CostPayable:"
           value={parcel.costPayable.toString()}
           mode="outlined"
@@ -178,12 +220,15 @@ export default function ViewParcel({parcel}){
           style={style.name}
           error={name.nameError}
           secureText={false}
-          disabled={!appDetails.edit}
+          disabled={true}
           setText={(e) => {
             setName({ ...name, name: e });
           }}
         />
-       
+        </View>
+        {appDetails.edit&&(<TouchableOpacity onPress={()=>getCost()} style={{ justifyContent: "center", width: "10%" }}>
+            {IconComp("sync-alt", { textAlign: "center" }, 15, AppColor.third)}
+          </TouchableOpacity>)}
       </View>
 
       <View style={{marginTop:5}}>
@@ -224,7 +269,12 @@ export default function ViewParcel({parcel}){
        
       </View>
 
-      <View style={{marginTop:5}}>
+      <View style={{marginTop:5,flexDirection:'row'}}>
+      {appDetails.locToValid?(
+      <View style={{width:"10%",justifyContent:"center"}}>
+        {IconComp(appDetails.locToValid,{textAlign:"center"},15,AppColor.third)}
+        </View>):null}
+        <View style={{width:appDetails.edit?'80%':'100%'}}>
         <InputComp
           inputType="LocationTo:"
           value={parcel.locationTo.address}
@@ -240,10 +290,18 @@ export default function ViewParcel({parcel}){
             setName({ ...name, name: e });
           }}
         />
-       
+          </View>
+        {appDetails.edit&&<TouchableOpacity onPress={()=>getGeocode()} style={{ justifyContent: "center", width: "10%" }}>
+            {IconComp("sync-alt", { textAlign: "center" }, 15, AppColor.third)}
+          </TouchableOpacity>}
       </View>
-      <View style={{marginTop:5}}>
-        <InputComp
+      <View style={{marginTop:5,flexDirection:'row'}}>
+      {appDetails.locFromValid?(
+      <View style={{width:"10%",justifyContent:"center"}}>
+        {IconComp(appDetails.locFromValid,{textAlign:"center"},15,AppColor.third)}
+        </View>):null}
+     <View style={{width:appDetails.edit?'80%':'100%'}}>
+     <InputComp
           inputType="LocationFrom:"
           value={parcel.locationFrom.address}
           mode="outlined"
@@ -258,7 +316,10 @@ export default function ViewParcel({parcel}){
             setName({ ...name, name: e });
           }}
         />
-       
+     </View>
+        {appDetails.edit&&<TouchableOpacity onPress={()=>getGeocode()} style={{ justifyContent: "center", width: "10%" }}>
+            {IconComp("sync-alt", { textAlign: "center" }, 15, AppColor.third)}
+          </TouchableOpacity>}
       </View>
       <View style={{marginTop:5}}>
         <InputComp
@@ -280,7 +341,11 @@ export default function ViewParcel({parcel}){
       </View>
      
       <View style={{ flexDirection: "row",justifyContent:'space-between',marginTop:5}}>
-      {appDetails.userValid&&(<View style={{width:"10%",justifyContent:"center"}}>{IconComp(appDetails.userValid,{textAlign:"center"},15,AppColor.third)}</View>)}
+      {appDetails.userValid?(
+      <View style={{width:"10%",justifyContent:"center"}}>
+        {IconComp(appDetails.userValid,{textAlign:"center"},15,AppColor.third)}
+        </View>):null}
+          <View style={{width:appDetails.edit?'80%':'100%'}}>
           <InputComp
           inputType="Phone:"
           value={parcel.recipientPhone}
@@ -296,6 +361,7 @@ export default function ViewParcel({parcel}){
             setName({ ...name, name: e });
           }}
         />
+            </View>
          {appDetails.edit&&<TouchableOpacity onPress={()=>isUserValid()} style={{ justifyContent: "center", width: "10%" }}>
             {IconComp("sync-alt", { textAlign: "center" }, 15, AppColor.third)}
           </TouchableOpacity>}
@@ -312,7 +378,7 @@ export default function ViewParcel({parcel}){
           style={style.name}
           error={name.nameError}
           secureText={false}
-          disabled={!appDetails.edit}
+          disabled={true}
           setText={(e) => {
             setName({ ...name, name: e });
           }}
@@ -382,14 +448,14 @@ export default function ViewParcel({parcel}){
           style={style.name}
           error={name.nameError}
           secureText={false}
-          disabled={!appDetails.edit}
+          disabled={true}
           setText={(e) => {
             setName({ ...name, name: e });
           }}
         />  
       </View>   
 
-      <View style={{ marginTop:10, borderWidth: 1, borderRadius: 2,borderColor:'#bbb',marginBottom:10 }}>
+      <View style={{ marginTop:10, borderWidth: 1, borderRadius: 2,borderColor:`${appDetails.edit?'#000':'#bbb'}`,marginBottom:10 }}>
             <Picker
               selectedValue={packageId.packageId}
               onValueChange={(itemValue, itemIndex) =>
@@ -406,14 +472,14 @@ export default function ViewParcel({parcel}){
           </View>
 
          <View style={{flexDirection:'row'}}> 
-         <View style={{ borderWidth: 1, borderRadius: 2,borderColor:'#bbb',marginTop:10 ,width:appDetails.edit?'90%':'100%'}}>
+         <View style={{ borderWidth: 1, borderRadius: 2,borderColor:`${appDetails.edit?'#000':'#bbb'}`,marginTop:10 ,width:appDetails.edit?'90%':'100%'}}>
             <Picker
               selectedValue={category.catId}
               onValueChange={(itemValue, itemIndex) =>
                 //  setCategory({ ...category, stateId: itemValue })
                 setCategory({ ...category, catId: itemValue })
               }
-              style={{ borderWidth: 1, width: "100%",color:'#bbb' }}
+              style={{ borderWidth: 1, width: "100%",color:`${appDetails.edit?'#000':'#bbb'}` }}
             >
               <Picker.Item label="Category " value="" />
               {category.category &&
@@ -431,10 +497,10 @@ export default function ViewParcel({parcel}){
 
                 {/** Edit Delete */}
                 <View style={{flexDirection:'row',margin:15,justifyContent:"space-evenly",marginBottom:25}}>
-                  <TouchableOpacity style={style.actionBtn}>
+                  <TouchableOpacity onPress={()=>editUser()} style={style.actionBtn}>
                     <Text style={style.actionBtnText}>Edit</Text>
                   </TouchableOpacity>
-                  <TouchableOpacity style={style.actionBtn}>
+                  <TouchableOpacity onPress={()=>deleteParcel()} style={style.actionBtn}>
                     <Text style={style.actionBtnText}>Delete</Text>
                   </TouchableOpacity>
                 </View>
@@ -477,7 +543,7 @@ shadowRadius: 4.65,
 elevation: 6,
     },
     name:{
-      height:45,
+      height:50,
       marginTop:15,
       width:'100%',
     },
@@ -485,5 +551,11 @@ elevation: 6,
       textAlign:'center',
       fontWeight:'bold',
       color:'#fff'
+    },
+    cancel:{
+       backgroundColor:'#000'
+    },
+    okay:{
+      backgroundColor:'#000'
     }
 })
