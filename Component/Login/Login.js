@@ -64,6 +64,8 @@ const resetPwdSucc=(e)=>{
        setUser(e.data.payload);
        setAppOp({...appOp,userid:e.data.payload.id});
    }
+   
+   
 const userProfileSuc=(e)=>{
    // console.log(e);
    if(isOtpEnabled){

@@ -1,10 +1,25 @@
-import React,{useState} from 'react';
+import React,{useState,useContext,useEffect} from 'react';
 import { TextInput,Dimensions,View,Text,TouchableOpacity,StyleSheet,StatusBar,ImageBackground,Image,ScrollView,ActivityIndicator} from 'react-native';
 import { AppColor } from '../WorkerComp/AppColor';
 import menu_bg from '../Assets/menu_bg.png';
 import Icon from 'react-native-vector-icons/FontAwesome5';
+import {UserContext} from '../DataProvider/UserContext';
 export default function Menu({navigation}){
+  const usercontext=useContext(UserContext);
+  const {user}=usercontext;
   const {navigate}=navigation;
+  
+  const[appDetails,setAppDetails]=useState({
+    name:'',
+  })
+    
+  useEffect(()=>{
+  // setAppDetails({...appDetails,name:user.surname?user.surname:''});
+  if(user){
+    setAppDetails({...appDetails,name:user.surname});
+  }
+  },[user])
+
     const [wallet,setWallet]=useState({
         walletLodaded:true,
     })
@@ -89,7 +104,7 @@ export default function Menu({navigation}){
                 color: "#fff",
               }}
             >
-              Hello!, Ani
+              Hello!, {appDetails.name?appDetails.name:''}
             </Text>
            
             <View style={{flexDirection:'row',justifyContent:"center"}}><TextInput style={{width:160,height:40,marginLeft:10,borderRadius:5,backgroundColor:'#fff',padding:5}}/><TouchableOpacity style={{height:40,width:75,marginLeft:5,borderRadius:5,justifyContent:'center',backgroundColor:`${AppColor.third}`}}><Text style={{fontWeight:'bold',textAlign:'center',color:'#fff'}}>Track</Text></TouchableOpacity></View>

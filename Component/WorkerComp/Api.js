@@ -45,7 +45,7 @@ export const api={
     getCategory:'api/pml/categories',
     getState:'api/erp/states',
     recoverPassword:'api/crm/customers/otp',
-    localUrl:'http://192.168.1.168/',
+    localUrl:'http://192.168.43.122/',
     remoteUrl:'',  
     googleReversGeoCodeUrl:'https://maps.googleapis.com/maps/api/geocode/json?latlng=',
     googleApiKey:'AIzaSyCE41gWBv1AfHzJNsyvCQe6FIPpYHLKcrs',
