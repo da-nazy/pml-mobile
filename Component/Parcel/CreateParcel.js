@@ -8,13 +8,14 @@ import {
   Dimensions,
   TouchableOpacity,
   Alert,
+  refreshControl
 } from "react-native";
 import { AppColor,numberCheck} from "../WorkerComp/AppColor";
 import Icon from "react-native-vector-icons/FontAwesome5";
 import InputComp from "../WorkerComp/InputComp";
 import { Picker } from "@react-native-community/picker";
 import { UserContext } from "../DataProvider/UserContext";
-import { IconComp, packaging,validatePhone } from "../WorkerComp/ExternalFunction";
+import { IconComp, packaging,validatePhone} from "../WorkerComp/ExternalFunction";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { api, apiRequest } from "../WorkerComp/Api";
 import LoaderComp from "../WorkerComp/LoaderComp";
@@ -51,6 +52,7 @@ export default function CreateParcel({navigation}) {
     stateOp: "",
     userValid:null,
     receiverObjectId:'',
+    refresh:false,
 
   });
   
@@ -121,6 +123,12 @@ export default function CreateParcel({navigation}) {
       Alert.alert("USER NOT FOUND","Create user!");
     }
   }
+
+  const onRefresh=useCallback(()=>{
+   setAppDetails({...appDetails,refresh:true});
+   console.log("okay");
+
+  })
   const getCategoryPayload = (e) => {
     console.log(e);
     setCategory(e.data.payload);
@@ -430,7 +438,7 @@ export default function CreateParcel({navigation}) {
        apiRequest(createParcelObject,(e)=>setAppDetails({...appDetails,load:e}),(e)=>succFunc(e),(e)=>failFunc(e),(e)=>createParcelPayload(e));
     
     }else{
-      console.log("Invalide input");
+      Alert.alert("Error","Empty fields detected");
     }
   }
   const onChange = (even, selectedDate) => {
@@ -551,7 +559,12 @@ export default function CreateParcel({navigation}) {
           Create Parcel
         </Text>
       </View>
-      <ScrollView style={{ marginTop: 10 }}>
+      <ScrollView style={{ marginTop: 10 }}
+         refreshControl={
+          <RefreshControl refreshing={appDetails.refresh}
+          onRefresh={()=>onRefresh()}
+          />}
+      >
         <View style={{ flexDirection: "row" }}>
           <View style={style.inputContainer}>
             <InputComp

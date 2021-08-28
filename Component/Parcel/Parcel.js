@@ -45,10 +45,12 @@ export default function Parcel({navigation}){
   }
    
   const onRefresh=useCallback(()=>{
-    console.log("OnRefreshing");
-   
-    wait(200).then(()=>console.log("ended"));
-  },[]);
+
+    setAppDetails({...appDetails,refresh:true});
+    getUserParcel();
+    console.log("Okay")
+    wait(200).then(()=>setAppDetails({...appDetails,refresh:false}));
+  });
   
 
   useEffect(()=>{
@@ -56,10 +58,12 @@ export default function Parcel({navigation}){
       getUserParcel();
     }
   },[userParcel])
+
   const getUserParcel=()=>{
+    console.log("log");
      var parcelObject={
        method:'',
-       url:`${api.localUrl}${api.userParcels}${user.id}`,
+       url:`${api.localUrl}${api.userParcels}${user.id}&paymentStatus=PENDING`,
        headers:{
         Authorization:' Bearer ' + authUser.token,
        }
@@ -90,8 +94,11 @@ export default function Parcel({navigation}){
     <View style={{backgroundColor:'#fff',paddingBottom:45}} >
        <View style={{flexDirection:'row',justifyContent:'center',padding:15,borderBottomWidth:1,borderBottomColor:`${AppColor.third}`}}><Icon name="box" size={15} color={AppColor.third} /><Text style={{fontWeight:'bold',textAlign:'center',fontSize:15,marginLeft:5}}>Parcel</Text></View>
          <ScrollView
-         refreshControl={<RefreshControl refreshing={appDetails.refresh}/>}
-         onRefresh={onRefresh}
+         refreshControl={
+         <RefreshControl refreshing={appDetails.refresh}
+         onRefresh={()=>onRefresh()}
+         />}
+        
 
           style={{height:Dimensions.get('screen').height/1.3}}>
       

@@ -218,3 +218,7 @@ const style = StyleSheet.create({
     elevation: 3,
   },
 });
+
+export  const wait=(timeout)=>{
+  return new Promise(resolve=>setTimeout(resolve,timeout));
+}
