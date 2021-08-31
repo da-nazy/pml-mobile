@@ -128,10 +128,12 @@ export default function Details({navigation}) {
         const parcelId=[];
          selectedItem.map((e)=>{
           parcelId.push(e.id);
+          
          })
          
          if(parcelId){
            console.log(parcelId);
+         setSelectedParcel(parcelId);
          }
      
       }
@@ -180,7 +182,7 @@ export default function Details({navigation}) {
    }
     const createPickupPayload=(e)=>{
       //console.log(e);
-     // console.log(e.data.payload);
+     console.log(e.data.payload);
      Alert.alert("Success",`Pickup Creation ${e.data.message}`,[
       {
         text: 'Ok',
@@ -283,20 +285,21 @@ export default function Details({navigation}) {
          vehicleType:userPickupDetails.pickupType,
          description:pickupDesc.description,
          sender:user.id,
+         pmlParcels:selectedParcel,
          recipient:appDetails.receiverObjectId,
-         locationTo:{"coordinates":[userLoc.lat,userLoc.lng],"address":userLoc.address},
-         locationFrom:{"coordinates":[senderLoc.lat,senderLoc.lng],"address":senderLoc.address}
+         locationFrom:{"coordinates":[userLoc.lat,userLoc.lng],"address":userLoc.address},
+         locationTo:{"coordinates":[senderLoc.lat,senderLoc.lng],"address":senderLoc.address}
         },
         headers:{
          Authorization:' Bearer ' + authUser.token,
+         'Cache-Control': 'no-cache',
        }
       }
-      if(selectedParcel){
-         createPickupObject['pmlParcels']=selectedParcel;
-      }
+     
+
       console.log(createPickupObject);
 
-     apiRequest(createPickupObject,(e)=>setAppDetails({...appDetails,load:e}),(e)=>succFunc(e),(e)=>failFunc(e),(e)=>createPickupPayload(e));
+    apiRequest(createPickupObject,(e)=>setAppDetails({...appDetails,load:e}),(e)=>succFunc(e),(e)=>failFunc(e),(e)=>createPickupPayload(e));
 
       
         }else{
@@ -404,7 +407,7 @@ export default function Details({navigation}) {
          <SelectableFlatlist
                         // data={[{ test: 'test1' }, { test: 'test2' }, { test: 'test3' }]}
                         //TODO selected parcels should be updated so that It won't be populated again.
-                         data={item}
+                         data={userParcels}
                          checkColor={AppColor.third}
                          state={STATE.EDIT}
                          multiSelect={true}

@@ -1,10 +1,15 @@
-import React,{useState} from 'react';
+import React,{useState,useContext} from 'react';
 import { View,Text, ScrollView,StyleSheet, TouchableOpacity,Alert} from 'react-native';
 import { AppColor } from '../WorkerComp/AppColor';
 import InputComp from '../WorkerComp/InputComp';
 import { packaging ,IconComp} from '../WorkerComp/ExternalFunction';
+import {api,apiRequest} from '../WorkerComp/Api';
 import { Picker } from "@react-native-community/picker";
+import LoaderComp from '../WorkerComp/LoaderComp';
+import { UserContext } from '../DataProvider/UserContext';
 export default function ViewParcel({parcel}){
+  const usercontext=useContext(UserContext);
+  const {authUser,user}=usercontext;
     console.log(parcel);
     // should only update pickup not added to a parcel
 
@@ -33,7 +38,9 @@ export default function ViewParcel({parcel}){
       edit:false,
       userValid:'',
       locToValid:'',
-      locFromValid:'', 
+      locFromValid:'',
+      load:false,
+
     })
 
      const [name,setName]=useState({
@@ -98,6 +105,14 @@ export default function ViewParcel({parcel}){
     const userEdit=()=>{
 
     }
+
+    const succFunc=(e)=>{
+      console.log(e.data.message);
+     // Alert.alert("Success",e.data.message);
+    }
+    const failFunc=(e)=>{
+      Alert.alert("Error",e);
+    }
     
     const editUser=()=>{
       
@@ -120,6 +135,25 @@ export default function ViewParcel({parcel}){
     const getCost=()=>{
 
     }
+
+    const removeParcel=(id)=>{
+      var deleteParcelObject={
+        method:'PATCH',
+        url:`${api.localUrl}${api.deleteParcel}${id?id:parcel.id}`,
+        headers:{
+          Authorization:' Bearer ' + authUser.token,
+        }
+      }
+
+      console.log(deleteParcelObject);
+      apiRequest(deleteParcelObject,(e)=>setAppDetails({...appDetails,load:e}),(e)=>succFunc(e),(e)=>failFunc(e),(e)=>deleteParcelPayload(e));
+ 
+ }
+ const deleteParcelPayload=(e)=>{
+  console.log(e);
+ // Alert.alert("Success",e.data.message);
+}
+
     const deleteParcel=()=>{
       console.log(parcel.id);
       Alert.alert("Caution",`Are you sure you want to delete the parcel with code ${parcel.code}?`,[
@@ -130,7 +164,7 @@ export default function ViewParcel({parcel}){
       },
       {
         text:"Okay",
-        onPress:()=>console.log("Okay"),
+        onPress:()=>removeParcel(),
         style:style.okay,
       },
     ])
@@ -190,6 +224,7 @@ export default function ViewParcel({parcel}){
           }}
         /> 
       </View>
+
       <View style={{marginTop:5}}>
         <InputComp
           inputType="Code:"
@@ -206,8 +241,8 @@ export default function ViewParcel({parcel}){
             setName({ ...name, name: e });
           }}
         />
-       
       </View>
+      
       <View style={{marginTop:5,flexDirection:'row'}}>
       <View style={{width:`${appDetails.edit?'80%':'100%'}`}}>
       <InputComp
@@ -505,6 +540,7 @@ export default function ViewParcel({parcel}){
                   </TouchableOpacity>
                 </View>
                 </View>)}
+                {appDetails.load&&<LoaderComp size={25} color={AppColor.third}/>}
             </ScrollView>
             </View>
     )

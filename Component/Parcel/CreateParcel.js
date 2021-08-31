@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext,useCallback } from "react";
 import {
   View,
   Text,
@@ -8,14 +8,14 @@ import {
   Dimensions,
   TouchableOpacity,
   Alert,
-  refreshControl
+  RefreshControl
 } from "react-native";
 import { AppColor,numberCheck} from "../WorkerComp/AppColor";
 import Icon from "react-native-vector-icons/FontAwesome5";
 import InputComp from "../WorkerComp/InputComp";
 import { Picker } from "@react-native-community/picker";
 import { UserContext } from "../DataProvider/UserContext";
-import { IconComp, packaging,validatePhone} from "../WorkerComp/ExternalFunction";
+import { IconComp, packaging,validatePhone,wait} from "../WorkerComp/ExternalFunction";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { api, apiRequest } from "../WorkerComp/Api";
 import LoaderComp from "../WorkerComp/LoaderComp";
@@ -126,8 +126,9 @@ export default function CreateParcel({navigation}) {
 
   const onRefresh=useCallback(()=>{
    setAppDetails({...appDetails,refresh:true});
-   console.log("okay");
-
+   getCategory();
+   getState();
+  wait(200).then(()=>setAppDetails({...appDetails,refresh:false}))
   })
   const getCategoryPayload = (e) => {
     console.log(e);
@@ -411,6 +412,7 @@ export default function CreateParcel({navigation}) {
          url:`${api.localUrl}${api.createParcel}`,
       headers:{
         Authorization:' Bearer ' + authUser.token,
+        'Cache-Control': 'no-cache',
       } ,
          data:{
           category:appDetails.categoryId,

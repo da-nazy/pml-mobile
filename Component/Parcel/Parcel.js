@@ -33,10 +33,7 @@ export default function Parcel({navigation}){
     setUserParcel(e.data.payload);
   }
 
-  const deleteParcelPayload=(e)=>{
-    console.log(e);
-    Alert.alert("Success",e.data.message);
-  }
+ 
 
   const {navigate}=navigation;
 
@@ -73,19 +70,7 @@ export default function Parcel({navigation}){
 
   }
    
-  const deleteParcel=(id)=>{
-       var deleteParcelObject={
-         method:'DELETE',
-         url:`${api.localUrl}${api.deleteParcel}${id}`,
-         headers:{
-           Authorization:' Bearer ' + authUser.token,
-         }
-       }
-
-       console.log(deleteParcelObject);
-      // apiRequest(deleteParcelObject,(e)=>setAppDetails({...appDetails,load:e}),(e)=>succFunc(e),(e)=>failFunc(e),(e)=>deleteParcelPayload(e));
-  
-  }
+ 
   const viewParcel=(e)=>{
    setAppDetails({...appDetails,singleParcel:e},btmRef.current.open())
   }

@@ -1,4 +1,4 @@
-import React, { useContext ,useEffect,useState,useCallback} from 'react';
+import React, { useContext ,useEffect,useState,useCallback,useRef} from 'react';
 import { View,Text,Dimensions,StyleSheet,ScrollView, RefreshControl} from 'react-native';
 import CustomFab from '../WorkerComp/CustomFab';
 import Icon from 'react-native-vector-icons/FontAwesome5';
@@ -7,23 +7,28 @@ import PickupComp from './PickupComp';
 import { api,apiRequest } from '../WorkerComp/Api';
 import LoaderComp from '../WorkerComp/LoaderComp';
 import { UserContext } from '../DataProvider/UserContext';
-
+import Custombtm from '../WorkerComp/Custombtm';
+import ViewPickup from './ViewPickup';
 export default function Pickup({navigation}){
+    const btmRef=useRef(null);
     const usercontext=useContext(UserContext);
     const{authUser,user}=usercontext;
     const {navigate}=navigation;
     const [userPickup,setUserPickup]=useState(null);
+
       const [appDetails,setAppDetails]=useState({
           load:false,
           refresh:false,
+          pickup:null,
       });
 
    const wait=(timeOut)=>{
     return new Promise(resolve=>setTimeout(resolve,timeOut));
    }
    const onRefresh=useCallback(()=>{
-       console.log("onRefreshing");
-       wait(200).then(()=>console.log("ended"));
+      setAppDetails({...appDetails,refresh:true});
+      getUserPickup();
+       wait(200).then(()=>setAppDetails({...appDetails,refresh:true}));
    },[]);
 
       const succFunc=(e)=>{
@@ -34,6 +39,9 @@ export default function Pickup({navigation}){
           console.log(e)
       }
      
+      const showPickup=(e)=>{
+        setAppDetails({...appDetails,pickup:e},btmRef.current.open());
+      }
       const userPickupPayload=(e)=>{
         console.log(e.data.payload);
         setUserPickup(e.data.payload);
@@ -46,7 +54,10 @@ export default function Pickup({navigation}){
         if(!userPickup){
             getUserPickup();
         }   
+
+       
       }
+      
       // eslint-disable-next-line
       ,[userPickup])
      
@@ -57,6 +68,7 @@ export default function Pickup({navigation}){
             url:`${api.localUrl}${api.userPickup}${user.id}`,
             headers:{
              Authorization:' Bearer ' + authUser.token,
+             'Cache-Control': 'no-cache',
            }
           }
           console.log(userPickupObject);
@@ -68,15 +80,18 @@ export default function Pickup({navigation}){
         <View style={{backgroundColor:'#fff',paddingBottom:40}}>
         <View style={{flexDirection:'row',justifyContent:'center',padding:15,borderBottomWidth:1,borderBottomColor:`${AppColor.third}`}}><Icon name="boxes" size={15} color={AppColor.third} /><Text style={{fontWeight:'bold',textAlign:'center',fontSize:15,marginLeft:5}}>Pickups</Text></View>
         <ScrollView
-         refreshControl={<RefreshControl refreshing={appDetails.refresh}/>}
-         onRefresh={onRefresh}
+         refreshControl={<RefreshControl refreshing={appDetails.refresh} onRefresh={()=>onRefresh()}/>}
+         
         style={{height:Dimensions.get('screen').height/1.29}}>
-         {userPickup?(<PickupComp catIcon="boxes"  name="Food Stuffs" parcel="Empty" pickStatus="Unassigned"  func={()=>{console.log("Check")}}/>
-    ):console.log("No pickup found!")}
+         {userPickup?userPickup.map((e,i)=>{
+     return   <PickupComp key={i} catIcon="boxes"  name={e.description} parcel={e.pmlParcels.lenght?e.pmlParcels.lenght.toString():'Empty'} pickStatus={e.status}  func={()=>{showPickup(e)}}/>
+ 
+         })
+          :console.log("No pickup found!")}
         </ScrollView>
         {appDetails.load&&(<LoaderComp size={25} color={AppColor.third}/>)}
         <CustomFab iconName="plus" fabFunc={()=>navigate("Select Category")}/> 
-
+      <Custombtm displayComp={()=><ViewPickup pickup={appDetails.pickup}/>} cod={true} copm={true} btmRef={btmRef} height={500}/>
        </View>
     )
 }

@@ -75,11 +75,13 @@ export const apiRequest=(requestObject,load,succFunc,errorFun,getPayload)=>{
              // console.log(response);
               succFunc(response.data.message);
               if(response.data.payload.lenght!=0){
+                load(false);
                   // payload isn't null
                   //console.log(response.data.payload);
                  // console.log("danny")
               //   getPayload(response.data.payload);
               }
+              load(false);
             //  console.log(response.data.message);
             
           }
