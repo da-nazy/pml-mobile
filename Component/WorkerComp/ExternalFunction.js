@@ -161,18 +161,18 @@ export const addParcelHead=(e,func)=>{
     <Text style={{fontWeight:'bold',fontSize:15,alignSelf:"center"}}>{e}</Text></View><TouchableOpacity onPress={()=>func()} style={{marginRight:8,justifyContent:'center'}}>{IconComp('plus',{fontWeight:'bold',marginRight:5},18,AppColor.third)}</TouchableOpacity></View>
   ) 
 }
-  
+  //m?m.id:
 
-export const parcelIdComp = (item,i,remFunc,icon) => {
+export const parcelIdComp = (item,i,remFunc,icon,m) => {
  
   return(
        <View style={style.parcelIdComp} key={i}>
-      <TouchableOpacity onPress={()=>remFunc(item)} style={{ width: "10%", justifyContent: "center" }}>
+      <TouchableOpacity onPress={()=>remFunc(m?m.id:item)} style={{ width: "10%", justifyContent: "center" }}>
         {IconComp(icon, { alignSelf: "center" }, 15, AppColor.third)}
       </TouchableOpacity>
     <Text style={{ width: "66%", alignSelf: "center" }}>{item}</Text>
-    <TouchableOpacity onPress={()=>console.log(item)} style={{ width: "10%", justifyContent: "center" }}>
-      {IconComp("eye", { alignSelf: "center" }, 15, AppColor.third)}
+    <TouchableOpacity onPress={()=>m?console.log(m.id):console.log(item)} style={{ width: "10%", justifyContent: "center" }}>
+      {IconComp("eye", { alignSelf:"center"}, 15, AppColor.third)}
     </TouchableOpacity>
   </View>
   )

@@ -1,10 +1,15 @@
-import React,{useState} from 'react';
+import React,{useState,useContext} from 'react';
 import {View,StyleSheet, TouchableOpacity,ScrollView,Text,Alert} from 'react-native';
 import { IconComp,head,parcelIdComp,addParcelHead} from '../WorkerComp/ExternalFunction';
 import { AppColor } from '../WorkerComp/AppColor';
 import InputComp from '../WorkerComp/InputComp';
 import LoaderComp from '../WorkerComp/LoaderComp';
+import {api,apiRequest} from '../WorkerComp/Api';
+import { UserContext } from '../DataProvider/UserContext';
 export default function ViewPickup({pickup}){
+    const usercontext=useContext(UserContext);
+    const{user,authUser}=usercontext;
+
     const [parcel,setParcel]=useState(null);
     const[appDetails,setAppDetails]=useState({
         edit:false,
@@ -15,7 +20,7 @@ export default function ViewPickup({pickup}){
       Alert.alert("Caution",`Remove parcel with id ${e} from pickup?`,[
         {
         text:'Yes',
-        onPress:()=>console.log("okay pressed"),
+        onPress:()=>removeParcel(e),
       },
       {
         text:'Cancel',
@@ -36,17 +41,41 @@ export default function ViewPickup({pickup}){
         }
       ])
     }
-    
-    const succFunc=(e)=>{
-   console.log(e);
+      const removeParcelPayload=(e)=>{
+       console.log(e);
+      }
+    const removeParcel=(c)=>{
+      var removeParcelObject={
+        method:"put",
+       url:`${api.localUrl}${api.removeParcelFromPickup}${pickup.id}`,
+       headers:{
+        Authorization:' Bearer ' + authUser.token,
+        'Cache-Control': 'no-cache',
+      },
+      data:{
+     pmlParcel:`${c}`
+      },
+
+     }
+     console.log(removeParcelObject);
+   apiRequest(removeParcelObject,(e)=>setAppDetails({...appDetails,load:e}),(e)=>succFunc(e),(e)=>failFunc(e),(e)=>removeParcelPayload(e));
+
     }
 
-    const failFunc=()=>{
+    const succFunc=(e)=>{
+     console.log(e);
+    }
+
+    const failFunc=(e)=>{
       console.log(e);
     }
 
     const getUserParcelPayload=(e)=>{
-    console.log(e);
+    if(e.data.payload.length!=0){
+    setParcel(e.data.payload);
+    }else{
+      Alert.alert("Empty Parcel","No parcels created yet!");
+    }
     }
 
     const getUserParcels=()=>{
@@ -55,6 +84,7 @@ export default function ViewPickup({pickup}){
           url:`${api.localUrl}${api.userParcels}${user.id}`,
           headers:{
            Authorization:' Bearer ' + authUser.token,
+           'Cache-Control': 'no-cache',
          }
         }
         console.log(userParcelObect);
@@ -75,7 +105,7 @@ export default function ViewPickup({pickup}){
                 }}
               > 
               <View style={{flexDirection:'row'}}>
-                {IconComp("box",{width:70,height:70,textAlign:"center"},50,AppColor.third)}
+                {IconComp("boxes",{width:70,height:70,textAlign:"center"},50,AppColor.third)}
             
                    </View>
               </View>
@@ -184,7 +214,7 @@ export default function ViewPickup({pickup}){
         />  
       </View>
       <View style={{marginTop:10}}>
-        {head("Pickup Parcels")}
+        {head("Parcels In Pickup")}
         {pickup.pmlParcels?pickup.pmlParcels.map((e,i)=>{
           return(
             parcelIdComp(e,i,(e)=>removeParcelFromPickup(e),"trash")
@@ -192,15 +222,18 @@ export default function ViewPickup({pickup}){
         }):null}
       </View>
       <View style={{marginTop:10}}>
-        {addParcelHead("Add parcel",()=>console.log("Get User Parcel"))}
-        {  parcelIdComp("20","220",(e)=>addParcelToPickup(e),"plus")
-       }
+        {addParcelHead("Add Parcel To Pickup",()=>getUserParcels())}
+        {parcel&&parcel.map((m,i)=>{
+        return(
+          parcelIdComp(m.name,i,(e)=>addParcelToPickup(e),"plus",m)
+          )
+       })}
       </View>
       
       </View>
-      <View style={{borderWidth:1,height:80,flexDirection:'row',justifyContent:'space-evenly'}}>
-          <TouchableOpacity style={{borderWidth:1,width:'35%',height:40,borderRadius:5,justifyContent:'center'}}><Text>DELETE</Text></TouchableOpacity>
-          <TouchableOpacity style={{borderWidth:1,width:'35%',height:40,borderRadius:5,justifyContent:'center'}}><Text>PAY</Text></TouchableOpacity>     
+      <View style={{height:80,flexDirection:'row',justifyContent:'space-evenly',padding:5}}>
+          <TouchableOpacity style={style.acBtn}><Text style={style.actBtnText}>DELETE</Text></TouchableOpacity>
+          <TouchableOpacity style={style.acBtn}><Text style={style.actBtnText}>PAY</Text></TouchableOpacity>     
       </View>
 
             </ScrollView>
@@ -215,5 +248,25 @@ const style=StyleSheet.create({
     marginTop:15,
     width:'100%',
    },
+   actBtnText:{
+    textAlign:'center',
+    fontWeight:'bold',
+    color:'#fff'
+   },
+  acBtn:{
+    width:'35%',
+    height:40,
+    borderRadius:5,
+    justifyContent:'center',
+    backgroundColor:`${AppColor.third}`,
+    shadowColor: "#000",
+    shadowOffset: {
+	  width: 0,
+	  height: 2,
+},
+shadowOpacity: 0.25,
+shadowRadius: 3.84,
 
+elevation: 5,
+  }
 })

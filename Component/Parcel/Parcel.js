@@ -59,7 +59,7 @@ export default function Parcel({navigation}){
   const getUserParcel=()=>{
     console.log("log");
      var parcelObject={
-       method:'',
+       method:'get',
        url:`${api.localUrl}${api.userParcels}${user.id}&paymentStatus=PENDING`,
        headers:{
         Authorization:' Bearer ' + authUser.token,

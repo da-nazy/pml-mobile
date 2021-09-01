@@ -40,6 +40,8 @@ export const api={
     createPickup:'api/pml/pml-pickups/public',
     userPickup:'api/pml/pml-pickups?createdBy=',
     viewParcel:'',
+    removeParcelFromPickup:'api/pml/pml-pickups/parcel/REMOVE/',
+    addParcelToPickup:'api/pml-pickups/parcel/ADD/',
     deleteParcel:'api/pml/pml-parcels/',
     createParcel:'api/pml/pml-parcels/public',
     getCategory:'api/pml/categories',

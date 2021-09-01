@@ -15,6 +15,7 @@ import SelectCat from "../Pickup/SelectCat";
 import PickupLocationMap from "../Map/PickupLocationMap";
 import PickLocation from "../Map/PickLocation";
 import Details from "../WorkerComp/Details";
+import Profile from "../Profile/Profile";
 const Drawer = createDrawerNavigator();
 export default function Dashboard() {
   /**
@@ -53,6 +54,11 @@ export default function Dashboard() {
       <Drawer.Screen
         name="Ship"
         component={Ship}
+        options={{ headerShown: false }}
+      />
+      <Drawer.Screen
+        name="Profile"
+        component={Profile}
         options={{ headerShown: false }}
       />
       <Drawer.Screen
