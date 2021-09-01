@@ -161,11 +161,30 @@ export const addParcelHead=(e,func)=>{
     <Text style={{fontWeight:'bold',fontSize:15,alignSelf:"center"}}>{e}</Text></View><TouchableOpacity onPress={()=>func()} style={{marginRight:8,justifyContent:'center'}}>{IconComp('plus',{fontWeight:'bold',marginRight:5},18,AppColor.third)}</TouchableOpacity></View>
   ) 
 }
+  
+
+export const parcelIdComp = (item,i,remFunc,icon) => {
+ 
+  return(
+       <View style={style.parcelIdComp} key={i}>
+      <TouchableOpacity onPress={()=>remFunc(item)} style={{ width: "10%", justifyContent: "center" }}>
+        {IconComp(icon, { alignSelf: "center" }, 15, AppColor.third)}
+      </TouchableOpacity>
+    <Text style={{ width: "66%", alignSelf: "center" }}>{item}</Text>
+    <TouchableOpacity onPress={()=>console.log(item)} style={{ width: "10%", justifyContent: "center" }}>
+      {IconComp("eye", { alignSelf: "center" }, 15, AppColor.third)}
+    </TouchableOpacity>
+  </View>
+  )
+
+
+};
 export const parcelComp = (item) => {
  
     return(
          <View style={style.parcelComp}>
-      <Text style={{ width: "66%", alignSelf: "center" }}>{item.name}</Text>
+           
+      <Text style={{ width: "66%", alignSelf: "center" }}>{item}</Text>
       <TouchableOpacity onPress={()=>console.log(item)} style={{ width: "10%", justifyContent: "center" }}>
         {IconComp("eye", { alignSelf: "center" }, 15, AppColor.third)}
       </TouchableOpacity>
@@ -194,6 +213,23 @@ export const modalView=(setView,mdbStyle,mdStyle)=>{
   )
 }
 const style = StyleSheet.create({
+  parcelIdComp: {
+    height:35,
+    paddingLeft:5,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    margin: 5,
+    borderRadius: 2,
+    backgroundColor: "#fff",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.22,
+    shadowRadius: 2.22,
+    elevation: 3,
+  },
   parcelComp: {
     paddingLeft:5,
     flexDirection: "row",
