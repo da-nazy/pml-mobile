@@ -76,7 +76,8 @@ export default function Details({navigation}) {
     const getUserParcelPayload=(e)=>{
       console.log(e)
       if(e.data.payload.length!==0){
-        setUserParcels(e.data.payload);
+        console.log(e.data.payload);
+      setUserParcels(e.data.payload);
       }else{
         setUserParcels("Empty Parcel");
       }

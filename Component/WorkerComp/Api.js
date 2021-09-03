@@ -41,13 +41,13 @@ export const api={
     userPickup:'api/pml/pml-pickups?createdBy=',
     viewParcel:'',
     removeParcelFromPickup:'api/pml/pml-pickups/parcel/REMOVE/',
-    addParcelToPickup:'api/pml-pickups/parcel/ADD/',
+    addParcelToPickup:'api/pml/pml-pickups/parcel/ADD/',
     deleteParcel:'api/pml/pml-parcels/',
     createParcel:'api/pml/pml-parcels/public',
     getCategory:'api/pml/categories',
     getState:'api/erp/states',
     recoverPassword:'api/crm/customers/otp',
-    localUrl:'http://172.16.17.227/',
+    localUrl:'http://172.16.17.30/',
     remoteUrl:'',  
     googleReversGeoCodeUrl:'https://maps.googleapis.com/maps/api/geocode/json?latlng=',
     googleApiKey:'AIzaSyCE41gWBv1AfHzJNsyvCQe6FIPpYHLKcrs',
@@ -100,7 +100,7 @@ export const apiRequest=(requestObject,load,succFunc,errorFun,getPayload)=>{
          // errorFun(error.response.data.message);
          // console.log(error.response.data);
          // typeof keyword is used to check the datatype
-       //  console.log(error.response);
+        console.log(error.response);
          if(typeof error.response!=='undefined'){
             
             if(error.response.data.message){

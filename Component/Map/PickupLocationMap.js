@@ -74,6 +74,7 @@ export default function PickupLocationMap({ navigation }) {
 
   // console.log(userLoc,senderLoc);
   const pickOperation = (e) => {
+    console.log(e)
     setuserPickupDetails({ ...userPickupDetails, locType: e });
     if (coordinates.latitude) {
       setUserLoc(
@@ -120,7 +121,7 @@ export default function PickupLocationMap({ navigation }) {
   });
 
   const payload = (e) => {
-    // console.log(e.data.results[0].formatted_address);
+    console.log(e.data.results[0].formatted_address);
     if (e.data.results[0].formatted_address) {
       // setPickupAddress({...pickupAddress,address:e.data.results[0].formatted_address})
       setCoordinates(
@@ -135,10 +136,17 @@ export default function PickupLocationMap({ navigation }) {
     currentLoc: false,
   });
 
-  locations((e, c) => setcoord(e, c));
+  
+    locations((e, c) => setcoord(e, c));
+ 
 
   const setcoord = (e, c) => {
-    //console.log(e,c);
+    console.log(e,c);
+    if(e&&c){
+
+    }else{
+      console.log("error");
+    }
     if (!coordinates.longitude > 0) {
       setCoordinates(
         { ...coordinates, latitude: e, longitude: c },
@@ -175,7 +183,11 @@ export default function PickupLocationMap({ navigation }) {
 
   useEffect(() => {
     if (!coordinates.address) {
-      reverseGeoCode(coordinates.latitude, coordinates.longitude);
+      if(!coordinates.latitude==0){
+        reverseGeoCode(coordinates.latitude, coordinates.longitude);
+      }
+     
+      //check if lat&lng is 0
     }
   }, [coordinates]);
   return (

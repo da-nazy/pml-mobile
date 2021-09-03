@@ -60,7 +60,7 @@ export default function Parcel({navigation}){
     console.log("log");
      var parcelObject={
        method:'get',
-       url:`${api.localUrl}${api.userParcels}${user.id}&paymentStatus=PENDING`,
+       url:`${api.localUrl}${api.userParcels}${user.id}&paymentStatus=PENDING&pmlPickup=null`,
        headers:{
         Authorization:' Bearer ' + authUser.token,
        }

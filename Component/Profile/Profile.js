@@ -7,8 +7,8 @@ import { UserContext } from "../DataProvider/UserContext";
 export default function Profile({navigation}) {
   const usercontext=useContext(UserContext);
   const {navigate}=navigation;
-  const {userProfile}=usercontext;
-  console.log(userProfile);
+  const {user}=usercontext;
+  console.log(user);
 
   const [profile, setProfile]=useState({
     image: null,
@@ -17,22 +17,22 @@ export default function Profile({navigation}) {
   });
 
   const[firstName,setFirstName]=useState({
-    firstName: userProfile.surname,
+    firstName: user.surname,
     fnError: false,
   })
  
   const[lastName,setLastName]=useState({
-    lastName: userProfile.otherName,
+    lastName: user.otherName,
     lnError: false,
   })
 
   const[emailAddress,setEmailAddress]=useState({
-   emailAddress:userProfile.email,
+   emailAddress:user.email,
    emError: false,
   })
 
   const[phoneNumber,setPhoneNumber]=useState({
-    phoneNumber:userProfile.phone,
+    phoneNumber:user.phone,
     pnError: false,
   })
 
@@ -111,7 +111,7 @@ export default function Profile({navigation}) {
           </TouchableOpacity>)}
         </View>
         <View style={{flexDirection:'row',marginTop:40}}> 
-        <TouchableOpacity onPress={()=>navigate('Reset Password')}><Text style={{ textDecorationLine: "underline" ,marginRight:10,marginLeft:10,color:`${AppColor.blue}`}}>
+        <TouchableOpacity onPress={()=>navigate('Reset Password')}><Text style={{ textDecorationLine: "underline" ,marginRight:10,marginLeft:10,color:`${AppColor.third}`}}>
             Change Password{" "}
           </Text></TouchableOpacity>
           <TouchableOpacity onPress={()=>setProfile({...profile,edit:!profile.edit})}><Icon color="#000" size={15} name="edit" /></TouchableOpacity>

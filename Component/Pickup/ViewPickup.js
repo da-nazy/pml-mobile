@@ -33,17 +33,40 @@ export default function ViewPickup({pickup}){
       Alert.alert("Add Parcel",`Add Parcel with code ${e} to Pickup?`,[
         {
           text:'Yes',
-          onPress:()=>console.log("Okay Pressed"),
+          onPress:()=>addParcel(e),
         },
         {
           text:'Cancle',
-          onPress:()=>console.log("Cancle clicked"),
+          onPress:()=>console.log("Cancel"),
         }
       ])
     }
       const removeParcelPayload=(e)=>{
        console.log(e);
       }
+
+      const addParcelPayload=(e)=>{
+        console.log(e)
+      }
+
+      const addParcel=(c)=>{
+        var addParcelObject={
+          method:"put",
+         url:`${api.localUrl}${api.addParcelToPickup}${pickup.id}`,
+         headers:{
+          Authorization:' Bearer ' + authUser.token,
+          'Cache-Control': 'no-cache',
+        },
+        data:{
+       pmlParcel:`${c}`
+        },
+  
+       }
+       console.log(addParcelObject);
+     apiRequest(addParcelObject,(e)=>setAppDetails({...appDetails,load:e}),(e)=>succFunc(e),(e)=>failFunc(e),(e)=>addParcelPayload(e));
+  
+      }
+
     const removeParcel=(c)=>{
       var removeParcelObject={
         method:"put",
@@ -74,14 +97,25 @@ export default function ViewPickup({pickup}){
     if(e.data.payload.length!=0){
     setParcel(e.data.payload);
     }else{
-      Alert.alert("Empty Parcel","No parcels created yet!");
+      Alert.alert("Empty Parcel","No parcels created yet!",[
+        { 
+          text:"Create Parcel",
+          onPress:()=>console.log("Create Parcel"),
+
+        },
+        {
+          text:"Cancel",
+          onPress:()=>console.log("Cancel"),
+
+        }
+      ]);
     }
     }
 
     const getUserParcels=()=>{
       var userParcelObect={
            method:"get",
-          url:`${api.localUrl}${api.userParcels}${user.id}`,
+          url:`${api.localUrl}${api.userParcels}${user.id}&pmlPickup=null`,
           headers:{
            Authorization:' Bearer ' + authUser.token,
            'Cache-Control': 'no-cache',

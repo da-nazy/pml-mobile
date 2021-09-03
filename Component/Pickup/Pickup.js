@@ -35,7 +35,7 @@ export default function Pickup({navigation}){
        console.log(e);
       }
 
-      const failFunc=()=>{
+      const failFunc=(e)=>{
           console.log(e)
       }
      
