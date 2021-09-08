@@ -42,11 +42,15 @@ export default function ViewPickup({pickup}){
       ])
     }
       const removeParcelPayload=(e)=>{
-       console.log(e);
+       console.log(e.data.message);
       }
 
       const addParcelPayload=(e)=>{
         console.log(e)
+      }
+      
+      const viewParcel=()=>{
+        
       }
 
       const addParcel=(c)=>{
@@ -90,7 +94,8 @@ export default function ViewPickup({pickup}){
     }
 
     const failFunc=(e)=>{
-      console.log(e);
+      //console.log(e);
+      Alert.alert("Error",e)
     }
 
     const getUserParcelPayload=(e)=>{

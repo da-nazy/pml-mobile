@@ -29,6 +29,380 @@ export const pinColor={
   color16:'plum',
   color17:'indigo',
 }
+export const ngStates=[
+  {
+     id: "5851bc91860d8b5a70000022",
+    name: "Kebbi State",
+    __v: 0,
+    country: "ng",
+    createdAt: "2019-02-06T19:08:18.373Z",
+    updatedAt: "2019-02-06T19:08:18.373Z",
+    createdBy: "5a51bc91860d8b5ba0000001",
+    deleted: false
+},
+{
+    id: "5851bc91860d8b5a70000009",
+    name: "Cross River State",
+    __v: 0,
+    country: "ng",
+    createdAt: "2019-02-06T19:08:18.372Z",
+    updatedAt: "2019-02-06T19:08:18.372Z",
+    createdBy: "5a51bc91860d8b5ba0000001",
+    deleted: false
+},
+{
+    id: "5851bc91860d8b5a70000023",
+    name: "Kogi State",
+    __v: 0,
+    country: "ng",
+    createdAt: "2019-02-06T19:08:18.374Z",
+    updatedAt: "2019-02-06T19:08:18.374Z",
+    createdBy: "5a51bc91860d8b5ba0000001",
+    deleted: false
+},
+{
+    id: "5851bc91860d8b5a70000030",
+    name: "Osun State",
+    __v: 0,
+    country: "ng",
+    createdAt: "2019-02-06T19:08:18.375Z",
+    updatedAt: "2019-02-06T19:08:18.375Z",
+    createdBy: "5a51bc91860d8b5ba0000001",
+    deleted: false
+},
+{
+    id: "5851bc91860d8b5a70000007",
+    name: "Benue State",
+    __v: 0,
+    country: "ng",
+    createdAt: "2019-02-06T19:08:18.372Z",
+    updatedAt: "2019-02-06T19:08:18.372Z",
+    createdBy: "5a51bc91860d8b5ba0000001",
+    deleted: false
+},
+{
+    id: "5851bc91860d8b5a70000021",
+    name: "Katsina State",
+    __v: 0,
+    country: "ng",
+    createdAt: "2019-02-06T19:08:18.373Z",
+    updatedAt: "2019-02-06T19:08:18.373Z",
+    createdBy: "5a51bc91860d8b5ba0000001",
+    deleted: false
+},
+{
+    id: "5851bc91860d8b5a70000001",
+    name: "Abia State",
+    __v: 0,
+    country: "ng",
+    createdAt: "2019-02-06T19:08:18.365Z",
+    updatedAt: "2019-02-10T01:36:36.582Z",
+    createdBy: "5a51bc91860d8b5ba0000001",
+    updatedBy: "5a51bc91860d8b5ba0000001",
+    deleted: false
+},
+{
+    id: "5851bc91860d8b5a70000003",
+    name: "Akwa Ibom State",
+    __v: 0,
+    country: "ng",
+    createdAt: "2019-02-06T19:08:18.368Z",
+    updatedAt: "2019-02-06T19:08:18.368Z",
+    createdBy: "5a51bc91860d8b5ba0000001",
+    deleted: false
+},
+{
+    id: "5851bc91860d8b5a70000002",
+    name: "Adamawa State",
+    __v: 0,
+    country: "ng",
+    createdAt: "2019-02-06T19:08:18.368Z",
+    updatedAt: "2019-02-06T19:08:18.368Z",
+    createdBy: "5a51bc91860d8b5ba0000001",
+    deleted: false
+},
+{
+    id: "5851bc91860d8b5a70000008",
+    name: "Borno State",
+    __v: 0,
+    country: "ng",
+    createdAt: "2019-02-06T19:08:18.372Z",
+    updatedAt: "2019-07-10T06:34:26.831Z",
+    createdBy: "5a51bc91860d8b5ba0000001",
+    updatedBy: "5a51bc91860d8b5ba0000001",
+    deleted: false
+},
+{
+    id: "5851bc91860d8b5a70000033",
+    name: "Rivers State",
+    __v: 0,
+    country: "ng",
+    createdAt: "2019-02-06T19:08:18.375Z",
+    updatedAt: "2019-02-06T19:08:18.375Z",
+    createdBy: "5a51bc91860d8b5ba0000001",
+    deleted: false
+},
+{
+    id: "5851bc91860d8b5a70000011",
+    name: "Ebonyi State",
+    __v: 0,
+    country: "ng",
+    createdAt: "2019-02-06T19:08:18.372Z",
+    updatedAt: "2019-02-06T19:08:18.372Z",
+    createdBy: "5a51bc91860d8b5ba0000001",
+    deleted: false
+},
+{
+    id: "5851bc91860d8b5a70000027",
+    name: "Niger State",
+    __v: 0,
+    country: "ng",
+    createdAt: "2019-02-06T19:08:18.374Z",
+    updatedAt: "2019-02-06T19:08:18.374Z",
+    createdBy: "5a51bc91860d8b5ba0000001",
+    deleted: false
+},
+{
+    id: "5851bc91860d8b5a70000037",
+    name: "Zamfara State",
+    __v: 0,
+    country: "ng",
+    createdAt: "2019-02-06T19:08:18.376Z",
+    updatedAt: "2019-02-06T19:08:18.376Z",
+    createdBy: "5a51bc91860d8b5ba0000001",
+    deleted: false
+},
+{
+    id: "5851bc91860d8b5a70000005",
+    name: "Bauchi State",
+    __v: 0,
+    country: "ng",
+    createdAt: "2019-02-06T19:08:18.369Z",
+    updatedAt: "2019-02-06T19:08:18.369Z",
+    createdBy: "5a51bc91860d8b5ba0000001",
+    deleted: false
+},
+{
+    id: "5851bc91860d8b5a70000016",
+    name: "Gombe State",
+    __v: 0,
+    country: "ng",
+    createdAt: "2019-02-06T19:08:18.373Z",
+    updatedAt: "2019-02-06T19:08:18.373Z",
+    createdBy: "5a51bc91860d8b5ba0000001",
+    deleted: false
+},
+{
+    id: "5851bc91860d8b5a70000029",
+    name: "Ondo State",
+    __v: 0,
+    country: "ng",
+    createdAt: "2019-02-06T19:08:18.375Z",
+    updatedAt: "2019-02-06T19:08:18.375Z",
+    createdBy: "5a51bc91860d8b5ba0000001",
+    deleted: false
+},
+{
+    id: "5851bc91860d8b5a70000019",
+    name: "Kaduna State",
+    __v: 0,
+    country: "ng",
+    createdAt: "2019-02-06T19:08:18.373Z",
+    updatedAt: "2019-02-06T19:08:18.373Z",
+    createdBy: "5a51bc91860d8b5ba0000001",
+    deleted: false
+},
+{
+    id: "5851bc91860d8b5a70000031",
+    name: "Oyo State",
+    __v: 0,
+    country: "ng",
+    createdAt: "2019-02-06T19:08:18.375Z",
+    updatedAt: "2019-02-06T19:08:18.375Z",
+    createdBy: "5a51bc91860d8b5ba0000001",
+    deleted: false
+},
+{
+    id: "5851bc91860d8b5a70000035",
+    name: "Taraba State",
+    __v: 0,
+    country: "ng",
+    createdAt: "2019-02-06T19:08:18.376Z",
+    updatedAt: "2019-02-06T19:08:18.376Z",
+    createdBy: "5a51bc91860d8b5ba0000001",
+    deleted: false
+},
+{
+    id: "5851bc91860d8b5a70000028",
+    name: "Ogun State",
+    __v: 0,
+    country: "ng",
+    createdAt: "2019-02-06T19:08:18.374Z",
+    updatedAt: "2019-02-06T19:08:18.374Z",
+    createdBy: "5a51bc91860d8b5ba0000001",
+    deleted: false
+},
+{
+    id: "5851bc91860d8b5a70000006",
+    name: "Bayelsa State",
+    __v: 0,
+    country: "ng",
+    createdAt: "2019-02-06T19:08:18.372Z",
+    updatedAt: "2019-02-06T19:08:18.372Z",
+    createdBy: "5a51bc91860d8b5ba0000001",
+    deleted: false
+},
+{
+    id: "5851bc91860d8b5a70000036",
+    name: "Yobe State",
+    __v: 0,
+    country: "ng",
+    createdAt: "2019-02-06T19:08:18.376Z",
+    updatedAt: "2019-02-06T19:08:18.376Z",
+    createdBy: "5a51bc91860d8b5ba0000001",
+    deleted: false
+},
+{
+    id: "5851bc91860d8b5a70000012",
+    name: "Edo State",
+    __v: 0,
+    country: "ng",
+    createdAt: "2019-02-06T19:08:18.372Z",
+    updatedAt: "2019-02-06T19:08:18.372Z",
+    createdBy: "5a51bc91860d8b5ba0000001",
+    deleted: false
+},
+{
+    id: "5851bc91860d8b5a70000004",
+    name: "Anambra State",
+    __v: 0,
+    country: "ng",
+    createdAt: "2019-02-06T19:08:18.368Z",
+    updatedAt: "2019-02-06T19:08:18.368Z",
+    createdBy: "5a51bc91860d8b5ba0000001",
+    deleted: false
+},
+{
+    id: "5851bc91860d8b5a70000032",
+    name: "Plateau State",
+    __v: 0,
+    country: "ng",
+    createdAt: "2019-02-06T19:08:18.375Z",
+    updatedAt: "2019-02-06T19:08:18.375Z",
+    createdBy: "5a51bc91860d8b5ba0000001",
+    deleted: false
+},
+{
+    id: "5851bc91860d8b5a70000014",
+    name: "Enugu State",
+    __v: 0,
+    country: "ng",
+    createdAt: "2019-02-06T19:08:18.373Z",
+    updatedAt: "2019-02-06T19:08:18.373Z",
+    createdBy: "5a51bc91860d8b5ba0000001",
+    deleted: false
+},
+{
+    id: "5851bc91860d8b5a70000024",
+    name: "Kwara State",
+    __v: 0,
+    country: "ng",
+    createdAt: "2019-02-06T19:08:18.374Z",
+    updatedAt: "2019-02-06T19:08:18.374Z",
+    createdBy: "5a51bc91860d8b5ba0000001",
+    deleted: false
+},
+{
+    id: "5851bc91860d8b5a70000020",
+    name: "Kano State",
+    __v: 0,
+    country: "ng",
+    createdAt: "2019-02-06T19:08:18.373Z",
+    updatedAt: "2019-02-06T19:08:18.373Z",
+    createdBy: "5a51bc91860d8b5ba0000001",
+    deleted: false
+},
+{
+    id: "5851bc91860d8b5a70000026",
+    name: "Nasarawa State",
+    __v: 0,
+    country: "ng",
+    createdAt: "2019-02-06T19:08:18.374Z",
+    updatedAt: "2019-02-06T19:08:18.374Z",
+    createdBy: "5a51bc91860d8b5ba0000001",
+    deleted: false
+},
+{
+    id: "5851bc91860d8b5a70000017",
+    name: "Imo State",
+    __v: 0,
+    country: "ng",
+    createdAt: "2019-02-06T19:08:18.373Z",
+    updatedAt: "2019-02-06T19:08:18.373Z",
+  createdBy: "5a51bc91860d8b5ba0000001",
+    deleted: false
+},
+{
+    id: "5851bc91860d8b5a70000018",
+    name: "Jigawa State",
+    __v: 0,
+    country: "ng",
+    createdAt: "2019-02-06T19:08:18.373Z",
+    updatedAt: "2019-02-06T19:08:18.373Z",
+    createdBy: "5a51bc91860d8b5ba0000001",
+    deleted: false
+},
+{
+    id: "5851bc91860d8b5a70000025",
+  name: "Lagos State",
+   __v: 0,
+  country: "ng",
+    createdAt: "2019-02-06T19:08:18.374Z",
+    updatedAt: "2019-02-06T19:08:18.374Z",
+    createdBy: "5a51bc91860d8b5ba0000001",
+    deleted: false
+},
+{
+    id: "5851bc91860d8b5a70000010",
+    name: "Delta State",
+    __v: 0,
+    country: "ng",
+    createdAt: "2019-02-06T19:08:18.372Z",
+    updatedAt: "2019-02-06T19:08:18.372Z",
+    createdBy: "5a51bc91860d8b5ba0000001",
+    deleted: false
+},
+{
+    id: "5851bc91860d8b5a70000013",
+    name: "Ekiti State",
+    __v: 0,
+    country: "ng",
+    createdAt: "2019-02-06T19:08:18.373Z",
+    updatedAt: "2019-02-06T19:08:18.373Z",
+    createdBy: "5a51bc91860d8b5ba0000001",
+    deleted: false
+},
+{
+    id: "5851bc91860d8b5a70000015",
+    name: "FCT",
+    __v: 0,
+    country: "ng",
+    createdAt: "2019-02-06T19:08:18.373Z",
+    updatedAt: "2019-02-06T19:08:18.373Z",
+    createdBy: "5a51bc91860d8b5ba0000001",
+    deleted: false
+},
+{
+    id: "5851bc91860d8b5a70000034",
+    name: "Sokoto State",
+    __v: 0,
+    country: "ng",
+    createdAt: "2019-02-06T19:08:18.376Z",
+    updatedAt: "2019-02-06T19:08:18.376Z",
+    createdBy: "5a51bc91860d8b5ba0000001",
+    deleted: false
+}
+]
 
 export const api={
     login:'api/crm/customers/Login',
@@ -51,7 +425,8 @@ export const api={
     remoteUrl:'',  
     googleReversGeoCodeUrl:'https://maps.googleapis.com/maps/api/geocode/json?latlng=',
     googleApiKey:'AIzaSyCE41gWBv1AfHzJNsyvCQe6FIPpYHLKcrs',
-    estimatedBilling:'api/pml/pml-parcels/estimate-billing'
+    estimatedBilling:'api/pml/pml-parcels/estimate-billing',
+    userWallet:'api/ewallet/accounts/me'
 }
 
 //https://maps.googleapis.com/maps/api/geocode/json?latlng=6.4637031,7.5515096&key=AIzaSyCE41gWBv1AfHzJNsyvCQe6FIPpYHLKcrs

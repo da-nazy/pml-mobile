@@ -15,6 +15,8 @@ export const locations=(setCoordinate)=>{
       const test=(e)=>{
      console.log("okay"+e);
       }
+      var watchID;
+
       const setLoc=(lat,lng)=>{
         console.log(lat,lng)
       if(lat!==0&&lng!==0){
@@ -23,6 +25,7 @@ export const locations=(setCoordinate)=>{
         console.log("error");
       }
       }
+      
        const getLocation=()=>{
         Location.installWebGeolocationPolyfill();
         navigator.geolocation.getCurrentPosition(
@@ -31,16 +34,18 @@ export const locations=(setCoordinate)=>{
             const currentLongitude = JSON.stringify(position.coords.longitude);
             //getting the Longitude from the location json
             const currentLatitude = JSON.stringify(position.coords.latitude);
-            console.log(currentLongitude,currentLatitude);
+            //console.log(currentLongitude,currentLatitude);
            setLoc(currentLatitude,currentLongitude);
             //Setting state Latitude to re re-render the Longitude Text
           },
           error => console.log(error.message),
-          { enableHighAccuracy:false, timeout: 20000, maximumAge: 1000 }
+          { accuracy:1, timeout: 20000, maximumAge: 1000 }
         );
+
         watchID = navigator.geolocation.watchPosition(position => {
           //Will give you the location on location change
-          console.log(position);
+          //console.log(position);
+
           const currentLongitude = JSON.stringify(position.coords.longitude);
           //getting the Longitude from the location json
           const currentLatitude = JSON.stringify(position.coords.latitude);
@@ -49,13 +54,24 @@ export const locations=(setCoordinate)=>{
          setLoc(currentLatitude,currentLongitude);
           //Setting state Latitude to re re-render the Longitude Text
         },(error)=>{
-           console.log(error);
-        });
+           console.log(error.message);
+        })
        }
     useEffect(()=>{
-     getLocation();
-     let loc = Location.getCurrentPositionAsync({accuracy:Location.Accuracy.Lowest});
-     console.log(loc,"danny");
+     
+
+    try{
+      getLocation();
+    let loc = Location.getCurrentPositionAsync({accuracy:1});
+    loc.then(()=>{
+    // console.log(loc,"danny");
+    // console.log(loc._W.coords)
+     setLoc(loc._W.coords.latitude,loc._W.coords.longitude)
+    })
+   
+   }catch(error){
+     console.log(error.mressage);
+   }
     })
          useEffect(()=>{
             navigator.geolocation.clearWatch(watchID);

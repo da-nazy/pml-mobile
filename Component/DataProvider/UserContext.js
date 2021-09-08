@@ -20,7 +20,7 @@ export default UserProvider=props=>{
         type:2,
         
     })
-
+     const [userWallet,setUserWallet]=useState(null);
     // locType:1 for user 2: for sender
     // operation should be null pickup or parcel
 
@@ -36,7 +36,7 @@ export default UserProvider=props=>{
 
     return(
         <UserContext.Provider value={{
-          user,setUser,authUser,setAuthUser,userPickupDetails,setuserPickupDetails,senderLoc,setSenderLoc,userLoc,setUserLoc
+          userWallet,setUserWallet,user,setUser,authUser,setAuthUser,userPickupDetails,setuserPickupDetails,senderLoc,setSenderLoc,userLoc,setUserLoc
         }}>
             {props.children}
         </UserContext.Provider>

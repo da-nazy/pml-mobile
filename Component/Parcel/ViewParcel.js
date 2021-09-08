@@ -3,7 +3,7 @@ import { View,Text, ScrollView,StyleSheet, TouchableOpacity,Alert} from 'react-n
 import { AppColor } from '../WorkerComp/AppColor';
 import InputComp from '../WorkerComp/InputComp';
 import { packaging ,IconComp} from '../WorkerComp/ExternalFunction';
-import {api,apiRequest} from '../WorkerComp/Api';
+import {api,apiRequest,ngStates} from '../WorkerComp/Api';
 import { Picker } from "@react-native-community/picker";
 import LoaderComp from '../WorkerComp/LoaderComp';
 import { UserContext } from '../DataProvider/UserContext';
@@ -13,7 +13,8 @@ export default function ViewParcel({parcel}){
     console.log(parcel);
     // should only update pickup not added to a parcel
 
-    
+ 
+
     const viewComp=(name,description)=>{
         return(
             <View style={{margin:5}}>
@@ -30,10 +31,18 @@ export default function ViewParcel({parcel}){
       </View>
         )
     }
+
     const[costPayable,setCostPayable]=useState({
       cost:'',
       costError:false,
     })
+    const[ngState,setNgState]=useState(null);
+    
+    const[parcelState,setParcelState]=useState({
+      stateFrom:parcel.stateFrom.name?parcel.stateFrom.name:null,
+      stateTo:parcel.stateTo.name?parcel.stateTo.name:null,
+    })
+
     const [appDetails,setAppDetails]=useState({
       edit:false,
       userValid:'',
@@ -506,6 +515,7 @@ export default function ViewParcel({parcel}){
             </Picker>
           </View>
 
+
          <View style={{flexDirection:'row'}}> 
          <View style={{ borderWidth: 1, borderRadius: 2,borderColor:`${appDetails.edit?'#000':'#bbb'}`,marginTop:10 ,width:appDetails.edit?'90%':'100%'}}>
             <Picker
@@ -519,6 +529,53 @@ export default function ViewParcel({parcel}){
               <Picker.Item label="Category " value="" />
               {category.category &&
                 category.category.map((e, i) => {
+                  return <Picker.Item key={i} label={e.name} value={e.id} />;
+                })}
+            </Picker>      
+          </View>
+          {appDetails.edit&&(<TouchableOpacity onPress={()=>isUserValid()} style={{ justifyContent: "center", width: "10%" }}>
+            {IconComp("sync-alt", { textAlign: "center" }, 15, AppColor.third)}
+          </TouchableOpacity>)}
+
+         </View>
+         <View style={{flexDirection:'row'}}> 
+         <View style={{ borderWidth: 1, borderRadius: 2,borderColor:`${appDetails.edit?'#000':'#bbb'}`,marginTop:10 ,width:appDetails.edit?'90%':'100%'}}>
+            <Picker
+            
+              enabled={false}
+              selectedValue={parcelState.stateFrom}
+              onValueChange={(itemValue, itemIndex) =>
+                //  setCategory({ ...category, stateId: itemValue })
+                setCategory({ ...category, catId: itemValue })
+              }
+              style={{ borderWidth: 1, width: "100%",color:`${appDetails.edit?'#000':'#bbb'}`}}
+            >
+              <Picker.Item label="StateFrom " value="" />
+              {ngStates &&
+                ngStates.map((e, i) => {
+                  return <Picker.Item key={i} label={e.name} value={e.id} />;
+                })}
+            </Picker>      
+          </View>
+          {appDetails.edit&&(<TouchableOpacity onPress={()=>isUserValid()} style={{ justifyContent: "center", width: "10%" }}>
+            {IconComp("sync-alt", { textAlign: "center" }, 15, AppColor.third)}
+          </TouchableOpacity>)}
+
+         </View>
+         <View style={{flexDirection:'row'}}> 
+         <View style={{ borderWidth: 1, borderRadius: 2,borderColor:`${appDetails.edit?'#000':'#bbb'}`,marginTop:10 ,width:appDetails.edit?'90%':'100%'}}>
+            <Picker
+            enabled={false}
+              selectedValue={category.catId}
+              onValueChange={(itemValue, itemIndex) =>
+                //  setCategory({ ...category, stateId: itemValue })
+                setCategory({ ...category, catId: itemValue })
+              }
+              style={{ borderWidth: 1, width: "100%",color:`${appDetails.edit?'#000':'#bbb'}` }}
+            >
+              <Picker.Item label="stateTo " value="" />
+              {ngStates &&
+                ngStates.map((e, i) => {
                   return <Picker.Item key={i} label={e.name} value={e.id} />;
                 })}
             </Picker>      

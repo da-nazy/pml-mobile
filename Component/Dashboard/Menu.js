@@ -4,9 +4,10 @@ import { AppColor } from '../WorkerComp/AppColor';
 import menu_bg from '../Assets/menu_bg.png';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import {UserContext} from '../DataProvider/UserContext';
+import {api,apiRequest} from '../WorkerComp/Api';
 export default function Menu({navigation}){
   const usercontext=useContext(UserContext);
-  const {user}=usercontext;
+  const {user,userWallet,setUserWallet,authUser}=usercontext;
   const {navigate}=navigation;
   
   const[appDetails,setAppDetails]=useState({
@@ -20,8 +21,13 @@ export default function Menu({navigation}){
   }
   },[user])
 
+  useEffect(()=>{
+    getUserWallet();
+  },[])
+
     const [wallet,setWallet]=useState({
         walletLodaded:true,
+        amount:'',
     })
     const [menuItem,setMenuItem]=useState([
       {
@@ -75,6 +81,34 @@ export default function Menu({navigation}){
         id: 4,
       },
     ])
+
+    const failReq=(e)=>{
+      console.log(e);
+    }
+    const succReq=(e)=>{
+      console.log(e);
+    }
+     const userWalletPayload=(e)=>{
+     console.log(e.data.payload[0].balance);
+     if(e.data.payload[0].balance){
+      setUserWallet(e.data.payload[0],setWallet({...wallet,amount:e.data.payload[0].balance}))
+     
+     }else{
+       console.log("error");
+     }
+    }
+    const getUserWallet=()=>{
+      var walletObject={
+        method:'get',
+        url:`${api.localUrl}${api.userWallet}`,
+        headers:{
+          Authorization:' Bearer ' + authUser.token,
+          'Cache-Control': 'no-cache',
+         }
+      }
+      console.log(walletObject);
+      apiRequest(walletObject,(e)=>setWallet({...wallet,walletLodaded:!e}),(e)=>succReq(e),(e)=>failReq(e),(e)=>userWalletPayload(e));
+    }
     return (
 
         <View style={{height:Dimensions.get('screen').height}}>
@@ -169,7 +203,7 @@ export default function Menu({navigation}){
                 </View>
                 {wallet.walletLodaded ? (
                   <Text style={{ alignSelf: "center", fontWeight: "bold" }}>
-                    {"\u20A6"} 0.0
+                    {"\u20A6"}{wallet.amount?wallet.amount:0.0} 
                   </Text>
                 ) : (
                   <ActivityIndicator size="small" color={AppColor.third} />

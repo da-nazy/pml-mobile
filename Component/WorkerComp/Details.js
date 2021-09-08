@@ -286,7 +286,7 @@ export default function Details({navigation}) {
          vehicleType:userPickupDetails.pickupType,
          description:pickupDesc.description,
          sender:user.id,
-         pmlParcels:selectedParcel,
+        // pmlParcels:selectedParcel,
          recipient:appDetails.receiverObjectId,
          locationFrom:{"coordinates":[userLoc.lat,userLoc.lng],"address":userLoc.address},
          locationTo:{"coordinates":[senderLoc.lat,senderLoc.lng],"address":senderLoc.address}
