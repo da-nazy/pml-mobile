@@ -8,8 +8,8 @@ import {api,apiRequest} from '../WorkerComp/Api';
 import { UserContext } from '../DataProvider/UserContext';
 export default function ViewPickup({pickup}){
     const usercontext=useContext(UserContext);
-    const{user,authUser}=usercontext;
-
+    const{user,authUser,userWallet}=usercontext;
+    console.log(userWallet);
     const [parcel,setParcel]=useState(null);
     const[appDetails,setAppDetails]=useState({
         edit:false,
@@ -116,6 +116,40 @@ export default function ViewPickup({pickup}){
       ]);
     }
     }
+
+    const pickUpPayment=()=>{
+      Alert.alert("Pickup Payment:",`Total cost of payment is `,[
+        {
+          text:"Continue",
+          onPress:()=>console.log("Continue")
+      },
+      {
+        text:"Cancle",
+        onPress:()=>console.log("Cancel")
+      }
+    ])
+    }
+    
+    const makePayement=()=>{
+      var paymentobject={
+        method:'post',
+        url:`${api.localUrl}${api.makePayment}`,
+        headers:{
+         Authorization:' Bearer ' + authUser.token,
+         'Cache-Control': 'no-cache',
+       },
+       data:{
+           pin:"",
+           amount:"",
+           walletFrom:"",
+           walletTo:"",
+           otpCheck:"",
+           trxref:"",
+           type: sameWallet ? 'U' : 'T',
+         }
+       
+      }
+  }
 
     const getUserParcels=()=>{
       var userParcelObect={
