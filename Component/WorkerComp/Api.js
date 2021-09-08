@@ -426,7 +426,8 @@ export const api={
     googleReversGeoCodeUrl:'https://maps.googleapis.com/maps/api/geocode/json?latlng=',
     googleApiKey:'AIzaSyCE41gWBv1AfHzJNsyvCQe6FIPpYHLKcrs',
     estimatedBilling:'api/pml/pml-parcels/estimate-billing',
-    userWallet:'api/ewallet/accounts/me'
+    userWallet:'api/ewallet/accounts/me',
+    makePayment:'api/ewallet/transfers'
 }
 
 //https://maps.googleapis.com/maps/api/geocode/json?latlng=6.4637031,7.5515096&key=AIzaSyCE41gWBv1AfHzJNsyvCQe6FIPpYHLKcrs

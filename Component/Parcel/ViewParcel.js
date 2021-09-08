@@ -9,7 +9,7 @@ import LoaderComp from '../WorkerComp/LoaderComp';
 import { UserContext } from '../DataProvider/UserContext';
 export default function ViewParcel({parcel}){
   const usercontext=useContext(UserContext);
-  const {authUser,user}=usercontext;
+  const {authUser,user,userWallet}=usercontext;
     console.log(parcel);
     // should only update pickup not added to a parcel
 
@@ -42,6 +42,27 @@ export default function ViewParcel({parcel}){
       stateFrom:parcel.stateFrom.name?parcel.stateFrom.name:null,
       stateTo:parcel.stateTo.name?parcel.stateTo.name:null,
     })
+
+ const makePayement=()=>{
+     var paymentobject={
+       method:'post',
+       url:`${api.localUrl}${api.makePayment}`,
+       headers:{
+        Authorization:' Bearer ' + authUser.token,
+        'Cache-Control': 'no-cache',
+      },
+      data:{
+          pin:"",
+          amount:"",
+          walletFrom: selectedWallet.wallet,
+          walletTo: verifiedWallet.wallet,
+          otpCheck: isChecked,
+          trxref: `gen-${uuid()}`,
+          type: sameWallet ? 'U' : 'T',
+        }
+      
+     }
+ }
 
     const [appDetails,setAppDetails]=useState({
       edit:false,
@@ -105,7 +126,7 @@ export default function ViewParcel({parcel}){
     })
 
     const getCategory=()=>{
-
+     
     }
 
     const isUserValid=()=>{
