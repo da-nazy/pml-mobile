@@ -65,7 +65,7 @@ export default function Pickup({navigation}){
     const getUserPickup=()=>{
         var userPickupObject={
             method:"get",
-            url:`${api.localUrl}${api.userPickup}${user.id}`,
+            url:`${api.localUrl}${api.userPickup}${user.id}&paymentStatus=PENDING&pmlPickup=null&populate=stateFrom,stateTo`,
             headers:{
              Authorization:' Bearer ' + authUser.token,
              'Cache-Control': 'no-cache',

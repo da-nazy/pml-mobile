@@ -1,16 +1,25 @@
 import React,{useState,useContext} from 'react';
 import {View,StyleSheet, TouchableOpacity,ScrollView,Text,Alert} from 'react-native';
 import { IconComp,head,parcelIdComp,addParcelHead} from '../WorkerComp/ExternalFunction';
+import { Picker } from "@react-native-community/picker";
 import { AppColor } from '../WorkerComp/AppColor';
 import InputComp from '../WorkerComp/InputComp';
 import LoaderComp from '../WorkerComp/LoaderComp';
-import {api,apiRequest} from '../WorkerComp/Api';
+import {api,apiRequest,ngStates,symbols} from '../WorkerComp/Api';
 import { UserContext } from '../DataProvider/UserContext';
+import { TextInput } from 'react-native-paper';
 export default function ViewPickup({pickup}){
     const usercontext=useContext(UserContext);
     const{user,authUser,userWallet}=usercontext;
-    console.log(userWallet);
+    // console.log(userWallet);
     const [parcel,setParcel]=useState(null);
+    const[stateFrom,setStateFrom]=useState(null);
+    const[stateTo,setStateTo]=useState(null);
+    const[walletPin,setWalletPin]=useState({
+      pin:'',
+      pinSecure:true,
+      pinError:false,
+    });
     const[appDetails,setAppDetails]=useState({
         edit:false,
         load:false,
@@ -97,7 +106,22 @@ export default function ViewPickup({pickup}){
       //console.log(e);
       Alert.alert("Error",e)
     }
-
+   
+    const makePaymentPayload=(e)=>{
+     console.log(e);
+    }
+    const pinCheck=()=>{
+      
+       if(!walletPin.pin){
+         setWalletPin({...walletPin,pinError:true});
+         console.log("check1")
+       }
+       else{
+        console.log("check")
+        setWalletPin({...walletPin,pinError:false},makePayement());
+        
+       }
+    }
     const getUserParcelPayload=(e)=>{
     if(e.data.payload.length!=0){
     setParcel(e.data.payload);
@@ -118,20 +142,45 @@ export default function ViewPickup({pickup}){
     }
 
     const pickUpPayment=()=>{
-      Alert.alert("Pickup Payment:",`Total cost of payment is `,[
+     // console.log(pickup.amount)
+      try{
+        if(pickup.amount.toString()){
+         // console.log(Number.parseFloat(pickup.amount));
+          Number.parseFloat(pickup.amount)==0?Alert.alert("Message","No parcel in the pickup!"):
+          
+      Alert.alert("Pickup Payment:",`The Pickup Cost is: ${symbols.naira}${pickup?pickup.amount:'0'} `,[
         {
-          text:"Continue",
-          onPress:()=>console.log("Continue")
+          text:"Proceed",
+          onPress:()=>pinCheck(),
       },
       {
         text:"Cancle",
         onPress:()=>console.log("Cancel")
       }
-    ])
+    ]);
+        }else{
+          console.log("nothing");
+        }
+
+      }catch(error){
+        console.log(error.message);
+      }
+
     }
-    
+
+     const confirmPayment=()=>{
+       var confirmPaymentObject={
+         method:'get',
+         url:`${api.localUrl}${api.verifyPayment}`,
+         headers:{
+          Authorization:' Bearer ' + authUser.token,
+          'Cache-Control': 'no-cache',
+        }
+       }
+     }
+
     const makePayement=()=>{
-      var paymentobject={
+      var paymentObject={
         method:'post',
         url:`${api.localUrl}${api.makePayment}`,
         headers:{
@@ -139,22 +188,25 @@ export default function ViewPickup({pickup}){
          'Cache-Control': 'no-cache',
        },
        data:{
-           pin:"",
-           amount:"",
-           walletFrom:"",
-           walletTo:"",
-           otpCheck:"",
-           trxref:"",
-           type: sameWallet ? 'U' : 'T',
+        trxref:pickup.trxref?pickup.trxref:'',
+        walletFrom:userWallet.wallet?userWallet.wallet:'',
+        walletTo:api.pmlWallet,
+        narration:"Customer Pickup",
+        pin:walletPin.pin,
+        type:"L",
+        amount:pickup.amount?pickup.amount:'',
          }
        
       }
+      console.log(paymentObject);
+      apiRequest(paymentObject,(e)=>setAppDetails({...appDetails,load:e}),(e)=>succFunc(e),(e)=>failFunc(e),(e)=>makePaymentPayload(e));
+  
   }
 
     const getUserParcels=()=>{
       var userParcelObect={
            method:"get",
-          url:`${api.localUrl}${api.userParcels}${user.id}&pmlPickup=null`,
+          url:`${api.localUrl}${api.userParcels}${user.id}&pmlPickup=null&populate=stateFrom,stateTo`,
           headers:{
            Authorization:' Bearer ' + authUser.token,
            'Cache-Control': 'no-cache',
@@ -286,6 +338,61 @@ export default function ViewPickup({pickup}){
           disabled={!appDetails.edit}
         />  
       </View>
+
+      
+
+      <View style={{ borderWidth: 1, borderRadius: 2,borderColor:`${appDetails.edit?'#000':'#bbb'}`,marginTop:10 ,width:appDetails.edit?'90%':'100%'}}>
+            <Picker
+            
+              enabled={appDetails.edit}
+              selectedValue={stateFrom}
+              onValueChange={(itemValue, itemIndex) =>
+                //  setCategory({ ...category, stateId: itemValue })
+                setStateFrom(itemValue)
+              }
+              style={{ borderWidth: 1, width: "100%",color:`${appDetails.edit?'#000':'#bbb'}`}}
+            >
+              <Picker.Item label={appDetails.edit?"StateFrom":pickup.stateFrom.name} value="" />
+              {ngStates &&
+                ngStates.map((e, i) => {
+                  return <Picker.Item key={i} label={e.name} value={e.id} />;
+                })}
+            </Picker>      
+         </View>
+
+       <View style={{ borderWidth: 1, borderRadius: 2,borderColor:`${appDetails.edit?'#000':'#bbb'}`,marginTop:10 ,width:appDetails.edit?'90%':'100%'}}>
+            <Picker
+            
+              enabled={appDetails.edit}
+              selectedValue={stateTo?stateTo:pickup.stateTo}
+              onValueChange={(itemValue, itemIndex) =>
+                //  setCategory({ ...category, stateId: itemValue })
+                setStateTo(itemValue)
+              }
+              style={{ borderWidth: 1, width: "100%",color:`${appDetails.edit?'#000':'#bbb'}`}}
+            >
+              <Picker.Item label={appDetails.edit?"StateTo":pickup.stateTo.name} value="" />
+              {ngStates &&
+                ngStates.map((e, i) => {
+                  return <Picker.Item key={i} label={e.name} value={e.id} />;
+                })}
+            </Picker>      
+         </View>
+
+      <View style={{marginTop:5}}>
+        <InputComp
+          mode="outlined"
+          right={null}
+          label="Wallet Pin:"
+          placeholder="Input value"
+          style={style.name}
+          secureText={walletPin.pinSecure}
+          setText={(e)=>setWalletPin({...walletPin,pin:e})}
+          error={walletPin.pinError}
+          right={<TextInput.Icon name="eye"  onPress={()=>setWalletPin({...walletPin,pinSecure:!walletPin.pinSecure})}/>}
+        />  
+      </View>
+
       <View style={{marginTop:10}}>
         {head("Parcels In Pickup")}
         {pickup.pmlParcels?pickup.pmlParcels.map((e,i)=>{
@@ -306,7 +413,7 @@ export default function ViewPickup({pickup}){
       </View>
       <View style={{height:80,flexDirection:'row',justifyContent:'space-evenly',padding:5}}>
           <TouchableOpacity style={style.acBtn}><Text style={style.actBtnText}>DELETE</Text></TouchableOpacity>
-          <TouchableOpacity style={style.acBtn}><Text style={style.actBtnText}>PAY</Text></TouchableOpacity>     
+          <TouchableOpacity onPress={()=>pickUpPayment()} style={style.acBtn}><Text style={style.actBtnText}>PAY</Text></TouchableOpacity>     
       </View>
 
             </ScrollView>

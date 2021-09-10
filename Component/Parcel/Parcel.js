@@ -63,6 +63,7 @@ export default function Parcel({navigation}){
        url:`${api.localUrl}${api.userParcels}${user.id}&paymentStatus=PENDING&pmlPickup=null&populate=stateFrom,stateTo`,
        headers:{
         Authorization:' Bearer ' + authUser.token,
+        'Cache-Control': 'no-cache',
        }
      }
      console.log(parcelObject);

@@ -404,6 +404,10 @@ export const ngStates=[
 }
 ]
 
+export const symbols={
+    naira:"\u20A6",
+}
+
 export const api={
     login:'api/crm/customers/Login',
     register:'api/crm/customers',
@@ -421,13 +425,15 @@ export const api={
     getCategory:'api/pml/categories',
     getState:'api/erp/states',
     recoverPassword:'api/crm/customers/otp',
-    localUrl:'http://172.16.17.30/',
+    localUrl:'http://192.168.43.122/',
     remoteUrl:'',  
     googleReversGeoCodeUrl:'https://maps.googleapis.com/maps/api/geocode/json?latlng=',
     googleApiKey:'AIzaSyCE41gWBv1AfHzJNsyvCQe6FIPpYHLKcrs',
     estimatedBilling:'api/pml/pml-parcels/estimate-billing',
     userWallet:'api/ewallet/accounts/me',
-    makePayment:'api/ewallet/transfers'
+    makePayment:'api/ewallet/transfers',
+    verifyPayment:'api/pml/pml-pickups/verify',
+    pmlWallet:'1234567894',
 }
 
 //https://maps.googleapis.com/maps/api/geocode/json?latlng=6.4637031,7.5515096&key=AIzaSyCE41gWBv1AfHzJNsyvCQe6FIPpYHLKcrs

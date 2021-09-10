@@ -10,7 +10,8 @@
   },
   "name": "pmlGo",
   "android": {
-    "permissions": ["ACCESS_BACKGROUND_LOCATION"]
+    "permissions": [
+      "ACCESS_BACKGROUND_LOCATION"
+    ]
   }
-
 }

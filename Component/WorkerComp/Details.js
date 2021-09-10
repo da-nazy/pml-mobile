@@ -287,6 +287,10 @@ export default function Details({navigation}) {
          description:pickupDesc.description,
          sender:user.id,
         // pmlParcels:selectedParcel,
+        //  paymentGateway  GATEWAY
+        //  WALLET: "WALLET",
+        //  }
+         // },
          recipient:appDetails.receiverObjectId,
          locationFrom:{"coordinates":[userLoc.lat,userLoc.lng],"address":userLoc.address},
          locationTo:{"coordinates":[senderLoc.lat,senderLoc.lng],"address":senderLoc.address}

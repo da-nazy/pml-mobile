@@ -44,6 +44,8 @@ export default function ViewParcel({parcel}){
     })
 
 
+     const[stateFrom,setStateFrom]=useState(null);
+     const [stateTo,setStateTo]=useState(null);
 
     const [appDetails,setAppDetails]=useState({
       edit:false,
@@ -503,6 +505,7 @@ export default function ViewParcel({parcel}){
 
       <View style={{ marginTop:10, borderWidth: 1, borderRadius: 2,borderColor:`${appDetails.edit?'#000':'#bbb'}`,marginBottom:10 }}>
             <Picker
+            enabled={appDetails.edit}
               selectedValue={packageId.packageId}
               onValueChange={(itemValue, itemIndex) =>
                 setPackageId({ ...packageId, packageId: itemValue })
@@ -521,6 +524,7 @@ export default function ViewParcel({parcel}){
          <View style={{flexDirection:'row'}}> 
          <View style={{ borderWidth: 1, borderRadius: 2,borderColor:`${appDetails.edit?'#000':'#bbb'}`,marginTop:10 ,width:appDetails.edit?'90%':'100%'}}>
             <Picker
+              enabled={appDetails.edit}
               selectedValue={category.catId}
               onValueChange={(itemValue, itemIndex) =>
                 //  setCategory({ ...category, stateId: itemValue })
@@ -541,50 +545,46 @@ export default function ViewParcel({parcel}){
 
          </View>
          <View style={{flexDirection:'row'}}> 
-         <View style={{ borderWidth: 1, borderRadius: 2,borderColor:`${appDetails.edit?'#000':'#bbb'}`,marginTop:10 ,width:appDetails.edit?'90%':'100%'}}>
+         <View style={{ borderWidth: 1, borderRadius: 2,borderColor:`${appDetails.edit?'#000':'#bbb'}`,marginTop:10 ,width:'100%'}}>
             <Picker
             
-              enabled={false}
+              enabled={appDetails.edit}
               selectedValue={parcelState.stateFrom}
               onValueChange={(itemValue, itemIndex) =>
                 //  setCategory({ ...category, stateId: itemValue })
-                setCategory({ ...category, catId: itemValue })
+                setStateFrom(itemValue)
               }
               style={{ borderWidth: 1, width: "100%",color:`${appDetails.edit?'#000':'#bbb'}`}}
             >
-              <Picker.Item label="StateFrom " value="" />
+              <Picker.Item label={appDetails.edit?"StateFrom":parcel.stateFrom.name} value="" />
               {ngStates &&
                 ngStates.map((e, i) => {
                   return <Picker.Item key={i} label={e.name} value={e.id} />;
                 })}
             </Picker>      
-          </View>
-          {appDetails.edit&&(<TouchableOpacity onPress={()=>isUserValid()} style={{ justifyContent: "center", width: "10%" }}>
-            {IconComp("sync-alt", { textAlign: "center" }, 15, AppColor.third)}
-          </TouchableOpacity>)}
+         </View>
+          
 
          </View>
          <View style={{flexDirection:'row'}}> 
-         <View style={{ borderWidth: 1, borderRadius: 2,borderColor:`${appDetails.edit?'#000':'#bbb'}`,marginTop:10 ,width:appDetails.edit?'90%':'100%'}}>
+         <View style={{ borderWidth: 1, borderRadius: 2,borderColor:`${appDetails.edit?'#000':'#bbb'}`,marginTop:10 ,width:'100%'}}>
             <Picker
-            enabled={false}
+               enabled={appDetails.edit}
               selectedValue={category.catId}
               onValueChange={(itemValue, itemIndex) =>
                 //  setCategory({ ...category, stateId: itemValue })
-                setCategory({ ...category, catId: itemValue })
+                 setStateTo(itemValue)
               }
               style={{ borderWidth: 1, width: "100%",color:`${appDetails.edit?'#000':'#bbb'}` }}
             >
-              <Picker.Item label="stateTo " value="" />
+              <Picker.Item label={appDetails.edit?"StateTo":parcel.stateTo.name} value="" />
               {ngStates &&
                 ngStates.map((e, i) => {
                   return <Picker.Item key={i} label={e.name} value={e.id} />;
                 })}
             </Picker>      
           </View>
-          {appDetails.edit&&(<TouchableOpacity onPress={()=>isUserValid()} style={{ justifyContent: "center", width: "10%" }}>
-            {IconComp("sync-alt", { textAlign: "center" }, 15, AppColor.third)}
-          </TouchableOpacity>)}
+     
 
          </View>
     
