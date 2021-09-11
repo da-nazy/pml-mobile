@@ -15,7 +15,7 @@ import { AppColor } from "./AppColor";
 import { IconComp,noParcel,parcelComp,validateEmail,validatePhone} from "./ExternalFunction";
 import { Picker } from "@react-native-community/picker";
 import SelectableFlatlist, { STATE } from 'react-native-selectable-flatlist';
-import { api,apiRequest} from "./Api";
+import { api,apiRequest,ngStates} from "./Api";
 import { UserContext } from "../DataProvider/UserContext";
 import LoaderComp from "./LoaderComp";
 export default function Details({navigation}) {
@@ -54,7 +54,7 @@ export default function Details({navigation}) {
      stateName:'',
   })
 
-  const [ngState,setNgState]=useState(null);
+
 
   useEffect(() => {
     // Should avoid virtualized list  the log list error
@@ -85,11 +85,7 @@ export default function Details({navigation}) {
     
 
     }
-  const getStatePayload=(e)=>{
-    console.log(e);
-   setNgState(e.data.payload);
-   // console.log(ngState);
-  }
+ 
     const[item,setItems]=useState([
         {
           id:1,
@@ -138,27 +134,8 @@ export default function Details({navigation}) {
          }
      
       }
-     const  getStateList=()=>{
-        if(!ngState){
-          getState();
-        }else{
-          console.log("State already gotten")
-        }
-     } 
-    
-    const getState=()=>{
-       // state request object
-       var stateObject={
-         method:"get",
-         url:`${api.localUrl}${api.getState}`,
-         headers:{
-          Authorization:' Bearer ' + authUser.token,
-        }
-       }
-       console.log(stateObject);
-       apiRequest(stateObject,(e)=>setAppDetails({...appDetails,load:e}),(e)=>succFunc(e),(e)=>failFunc(e),(e)=>getStatePayload(e));
- 
-    }
+   
+  
      
     const getUserParcels=()=>{
      var userParcelObect={
@@ -335,18 +312,16 @@ export default function Details({navigation}) {
         <InputComp label="vehicle Type" mode="outlined" editable={false} value={userPickupDetails.pickupType} />
         <InputComp label="Description" mode="outlined" setText={(e)=>setPickupDesc({...pickupDesc,description:e})} error={pickupDesc.descError} />
         <View style={{ flexDirection: "row", margin: 10,justifyContent:"center" }}>
-          <TouchableOpacity style={{ width: "10%" ,justifyContent:'center'}} onPress={()=>getStateList()}>
-            {IconComp("sync-alt", {justifyContent:'center',alignSelf:'center'}, 15, AppColor.third)}
-          </TouchableOpacity>
+          
           <Picker
             selectedValue={stateFrom.stateId}
             onValueChange={(itemValue, itemIndex) =>
               setStateFrom({...stateFrom,stateId:itemValue})
             }
-            style={{ borderWidth: 1, width: "80%" }}
+            style={{ borderWidth: 1, width: "100%" }}
           >
               <Picker.Item label="State From " value="" />
-            {ngState&&(ngState.map((e,i)=>{
+            {ngStates&&(ngStates.map((e,i)=>{
               return(
                 <Picker.Item key={i} label={e.name} value={e.id} />
               )
@@ -382,18 +357,16 @@ export default function Details({navigation}) {
           </TouchableOpacity>
         </View>
         <View style={{ flexDirection: "row", margin: 10 ,justifyContent:'space-evenly'}}>
-          <TouchableOpacity style={{ width: "10%",justifyContent:'center' }}>
-            {IconComp("sync-alt", null, 15, AppColor.third)}
-          </TouchableOpacity>
+          
           <Picker
             selectedValue={stateTo.stateId}
             onValueChange={(itemValue, itemIndex) =>
               setStateTo({...stateTo,stateId:itemValue})
             }
-            style={{ borderWidth: 1, width: "80%" }}
+            style={{ borderWidth: 1, width: "100%" }}
           >
             <Picker.Item label="State To " value="" />
-            {ngState&&(ngState.map((e,i)=>{
+            {ngStates&&(ngStates.map((e,i)=>{
               return(
                 <Picker.Item key={i} label={e.name} value={e.id} />
               )

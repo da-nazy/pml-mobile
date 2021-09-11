@@ -61,7 +61,10 @@ export default function Pickup({navigation}){
       // eslint-disable-next-line
       ,[userPickup])
      
-
+    const onPickupChange=()=>{
+      btmRef.current.close();
+      setUserPickup(null);
+    }
     const getUserPickup=()=>{
         var userPickupObject={
             method:"get",
@@ -91,7 +94,7 @@ export default function Pickup({navigation}){
         </ScrollView>
         {appDetails.load&&(<LoaderComp size={25} color={AppColor.third}/>)}
         <CustomFab iconName="plus" fabFunc={()=>navigate("Select Category")}/> 
-      <Custombtm displayComp={()=><ViewPickup pickup={appDetails.pickup}/>} cod={true} copm={true} btmRef={btmRef} height={500}/>
+      <Custombtm displayComp={()=><ViewPickup pickup={appDetails.pickup}/>} onPickupChange={()=>onPickupChange()} cod={true} copm={true} btmRef={btmRef} height={500}/>
        </View>
     )
 }

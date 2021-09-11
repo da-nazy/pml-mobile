@@ -8,7 +8,7 @@ import LoaderComp from '../WorkerComp/LoaderComp';
 import {api,apiRequest,ngStates,symbols} from '../WorkerComp/Api';
 import { UserContext } from '../DataProvider/UserContext';
 import { TextInput } from 'react-native-paper';
-export default function ViewPickup({pickup}){
+export default function ViewPickup({pickup,onPickupChange}){
     const usercontext=useContext(UserContext);
     const{user,authUser,userWallet}=usercontext;
     // console.log(userWallet);
@@ -52,10 +52,12 @@ export default function ViewPickup({pickup}){
     }
       const removeParcelPayload=(e)=>{
        console.log(e.data.message);
+       onPickupChange();
       }
 
       const addParcelPayload=(e)=>{
         console.log(e)
+        onPickupChange();
       }
       
       const viewParcel=()=>{
@@ -109,7 +111,24 @@ export default function ViewPickup({pickup}){
    
     const makePaymentPayload=(e)=>{
      console.log(e);
+     if(e.data.payload.status==='SUCCESS'){
+      Alert.alert("Message","Transaction Successfull",[{
+        text:'Ok',
+        onPress:()=>confirmPayment()
+      }])
+     }
+     
     }
+
+    const confirmPaymentPayload=(e)=>{
+      console.log(e);
+      if(e.data.success){
+        Alert.alert("Success","Payment Verified");
+        ()=>onPickupChange();
+
+      }
+    }
+
     const pinCheck=()=>{
       
        if(!walletPin.pin){
@@ -140,7 +159,7 @@ export default function ViewPickup({pickup}){
       ]);
     }
     }
-
+   
     const pickUpPayment=()=>{
      // console.log(pickup.amount)
       try{
@@ -171,12 +190,15 @@ export default function ViewPickup({pickup}){
      const confirmPayment=()=>{
        var confirmPaymentObject={
          method:'get',
-         url:`${api.localUrl}${api.verifyPayment}`,
+         url:`${api.localUrl}${api.verifyPayment}/${pickup.code?pickup.code:""}`,
          headers:{
           Authorization:' Bearer ' + authUser.token,
           'Cache-Control': 'no-cache',
         }
        }
+       console.log(confirmPaymentObject);
+       apiRequest(confirmPaymentObject,(e)=>setAppDetails({...appDetails,load:e}),(e)=>succFunc(e),(e)=>failFunc(e),(e)=>confirmPaymentPayload(e));
+   
      }
 
     const makePayement=()=>{

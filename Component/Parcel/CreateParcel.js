@@ -17,7 +17,7 @@ import { Picker } from "@react-native-community/picker";
 import { UserContext } from "../DataProvider/UserContext";
 import { IconComp, packaging,validatePhone,wait} from "../WorkerComp/ExternalFunction";
 import DateTimePicker from "@react-native-community/datetimepicker";
-import { api, apiRequest } from "../WorkerComp/Api";
+import { api, apiRequest,ngStates} from "../WorkerComp/Api";
 import LoaderComp from "../WorkerComp/LoaderComp";
 import axios from 'axios';
 export default function CreateParcel({navigation}) {
@@ -34,7 +34,6 @@ export default function CreateParcel({navigation}) {
     setuserPickupDetails,
   } = usercontext;
 
-  const [ngState, setNgState] = useState(null);
   const [dateshow, setDateShow] = useState(false);
   const [appDate, setAppDate] = useState(new Date(1598051730000));
   const[estimateBill,setEstimateBill]=useState({
@@ -109,11 +108,7 @@ export default function CreateParcel({navigation}) {
   const failFunc = (e) => {
     Alert.alert("Error", e);
   };
-  const getStatePayload = (e) => {
-    console.log(e);
-    setNgState(e.data.payload);
-  };
-  
+
   const userCheckPayload=(e)=>{
     console.log(e.data.payload.id);
     if(e.data.payload.length!==0){
@@ -482,36 +477,14 @@ export default function CreateParcel({navigation}) {
       // date To
     }
   };
-  useEffect(() => {
-    if (!ngState) {
-      getState();
-    }
-  }, [ngState]);
-
+ 
   useEffect(() => {
     if (!category) {
       getCategory();
     }
   }, [category]);
 
-  const getState = () => {
-    // state request object
-    var stateObject = {
-      method: "get",
-      url: `${api.localUrl}${api.getState}`,
-      headers: {
-        Authorization: " Bearer " + authUser.token,
-      },
-    };
-    console.log(stateObject);
-    apiRequest(
-      stateObject,
-      (e) => setAppDetails({ ...appDetails, load: e }),
-      (e) => succFunc(e),
-      (e) => failFunc(e),
-      (e) => getStatePayload(e)
-    );
-  };
+ 
   const getCategory = () => {
     // state request object
     var stateObject = {
@@ -615,8 +588,8 @@ export default function CreateParcel({navigation}) {
               style={{ borderWidth: 1, width: "100%" }}
             >
               <Picker.Item label="State From " value="" />
-              {ngState &&
-                ngState.map((e, i) => {
+              {ngStates &&
+                ngStates.map((e, i) => {
                   return <Picker.Item key={i} label={e.name} value={e.id} />;
                 })}
             </Picker>
@@ -631,8 +604,8 @@ export default function CreateParcel({navigation}) {
               style={{ borderWidth: 1, width: "100%" }}
             >
               <Picker.Item label="State To" value="" />
-              {ngState &&
-                ngState.map((e, i) => {
+              {ngStates &&
+                ngStates.map((e, i) => {
                   return <Picker.Item key={i} label={e.name} value={e.id} />;
                 })}
             </Picker>

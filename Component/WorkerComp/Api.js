@@ -426,7 +426,7 @@ export const api={
     getState:'api/erp/states',
     recoverPassword:'api/crm/customers/otp',
     localUrl:'http://192.168.43.122/',
-    remoteUrl:'',  
+    remoteUrl:'https://api.pmt.com.ng/',
     googleReversGeoCodeUrl:'https://maps.googleapis.com/maps/api/geocode/json?latlng=',
     googleApiKey:'AIzaSyCE41gWBv1AfHzJNsyvCQe6FIPpYHLKcrs',
     estimatedBilling:'api/pml/pml-parcels/estimate-billing',
