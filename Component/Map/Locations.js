@@ -2,10 +2,12 @@ import React,{useEffect,useContext,useState} from 'react';
 //import react in our code.
 import * as Location from 'expo-location';
 import { UserContext } from '../DataProvider/UserContext';
+import { LogBox } from 'react-native';
 export const locations=(setCoordinate)=>{
   const usercontext=useContext(UserContext);
   const{userLoc,setUserLoc}=usercontext;
-
+  LogBox.ignoreAllLogs(true);
+  console.disableYellowBox = true;
     /**
      *currentLongitude: 'unknown', //Initial Longitude
        currentLatitude: 'unknown'
@@ -38,7 +40,14 @@ export const locations=(setCoordinate)=>{
            setLoc(currentLatitude,currentLongitude);
             //Setting state Latitude to re re-render the Longitude Text
           },
-          error => console.log(error.message),
+          error => {
+            if (error.message == "Location provider is unavailable. Make sure that location services are enabled."){
+              // call the function again function
+              getLocation()
+              }
+            }
+          ,
+          
           { accuracy:1, timeout: 20000, maximumAge: 1000 }
         );
 
@@ -54,7 +63,11 @@ export const locations=(setCoordinate)=>{
          setLoc(currentLatitude,currentLongitude);
           //Setting state Latitude to re re-render the Longitude Text
         },(error)=>{
-           console.log(error.message);
+          if (error.message == "Location provider is unavailable. Make sure that location services are enabled."){
+            // call the function again function
+            getLocation()
+            }
+           //console.log(error.message);
         })
        }
     useEffect(()=>{
@@ -70,7 +83,7 @@ export const locations=(setCoordinate)=>{
     })
    
    }catch(error){
-     console.log(error.mressage);
+    console.log(error.message);
    }
     })
          useEffect(()=>{

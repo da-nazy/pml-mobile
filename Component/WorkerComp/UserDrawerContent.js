@@ -39,7 +39,7 @@ export const  UserDrawerContent=(props)=>{
       {
         icon:'wallet',
         name:'Wallet',
-        func:()=>props.navigation.navigate('Transaction'),
+        func:()=>props.navigation.navigate('Wallet'),
       },
       {
         icon: "sign-out-alt",

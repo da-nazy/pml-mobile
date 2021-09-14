@@ -16,6 +16,7 @@ import PickupLocationMap from "../Map/PickupLocationMap";
 import PickLocation from "../Map/PickLocation";
 import Details from "../WorkerComp/Details";
 import Profile from "../Profile/Profile";
+import Wallet from "../Wallet/Wallet";
 const Drawer = createDrawerNavigator();
 export default function Dashboard() {
   /**
@@ -104,6 +105,12 @@ export default function Dashboard() {
       <Drawer.Screen
         name="Details"
         component={Details}
+        options={{ headerShown: false }}
+      />
+
+      <Drawer.Screen
+        name="Wallet"
+        component={Wallet}
         options={{ headerShown: false }}
       />
       

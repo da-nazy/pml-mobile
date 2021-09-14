@@ -22,8 +22,11 @@ export default function Menu({navigation}){
   },[user])
 
   useEffect(()=>{
-    getUserWallet();
-  },[])
+    
+    if(!userWallet){
+      getUserWallet();
+    }
+  },[userWallet])
 
     const [wallet,setWallet]=useState({
         walletLodaded:true,
@@ -66,7 +69,7 @@ export default function Menu({navigation}){
         callAction: "Customer Transactions",
         // To pass pickup param
         func: () => {
-         navigate('Transaction');
+         navigate('Wallet');
         },
         id: 4,
       },
@@ -210,6 +213,7 @@ export default function Menu({navigation}){
                 )}
               </View>
               <TouchableOpacity
+                 onPress={()=>navigate('Wallet')}
                 style={{
                   borderColor: `${AppColor.third}`,
                   backgroundColor: `${AppColor.third}`,
