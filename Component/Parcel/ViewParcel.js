@@ -7,7 +7,7 @@ import {api,apiRequest,ngStates} from '../WorkerComp/Api';
 import { Picker } from "@react-native-community/picker";
 import LoaderComp from '../WorkerComp/LoaderComp';
 import { UserContext } from '../DataProvider/UserContext';
-export default function ViewParcel({parcel}){
+export default function ViewParcel({parcel,onParcelChange}){
   const usercontext=useContext(UserContext);
   const {authUser,user,userWallet}=usercontext;
     //console.log(userWallet);
@@ -120,9 +120,13 @@ export default function ViewParcel({parcel}){
     }
 
     const succFunc=(e)=>{
-      console.log(e.data.message);
+      
+      if(e){
+        console.log(e);
+      }
      // Alert.alert("Success",e.data.message);
     }
+
     const failFunc=(e)=>{
       Alert.alert("Error",e);
     }
@@ -157,15 +161,16 @@ export default function ViewParcel({parcel}){
           Authorization:' Bearer ' + authUser.token,
         }
       }
-
       console.log(deleteParcelObject);
       apiRequest(deleteParcelObject,(e)=>setAppDetails({...appDetails,load:e}),(e)=>succFunc(e),(e)=>failFunc(e),(e)=>deleteParcelPayload(e));
  
  }
- const deleteParcelPayload=(e)=>{
-  console.log(e);
- // Alert.alert("Success",e.data.message);
-}
+
+
+   const deleteParcelPayload=(e)=>{
+   console.log(e.data.success);
+   // Alert.alert("Success",e.data.message);
+   }
 
     const deleteParcel=()=>{
       console.log(parcel.id);

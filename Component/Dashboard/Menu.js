@@ -19,6 +19,7 @@ export default function Menu({navigation}){
   if(user){
     setAppDetails({...appDetails,name:user.surname});
   }
+  
   },[user])
 
   useEffect(()=>{
@@ -26,6 +27,10 @@ export default function Menu({navigation}){
     if(!userWallet){
       getUserWallet();
     }
+     return()=>{
+      // console.log("Testing");
+      //getUserWallet();
+     }
   },[userWallet])
 
     const [wallet,setWallet]=useState({
@@ -92,10 +97,13 @@ export default function Menu({navigation}){
       console.log(e);
     }
      const userWalletPayload=(e)=>{
-     console.log(e.data.payload[0].balance);
-     if(e.data.payload[0].balance){
-      setUserWallet(e.data.payload[0],setWallet({...wallet,amount:e.data.payload[0].balance}))
+     //console.log(e.data.payload[0].balance);
+     if(e.data.payload.length!==0){
+      if(e.data.payload[0].balance){
+        setUserWallet(e.data.payload[0],setWallet({...wallet,amount:e.data.payload[0].balance}))
      
+      }
+
      }else{
        console.log("error");
      }

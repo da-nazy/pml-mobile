@@ -122,7 +122,7 @@ export default function CreateParcel({navigation}) {
   const onRefresh=useCallback(()=>{
    setAppDetails({...appDetails,refresh:true});
    getCategory();
-   getState();
+  
   wait(200).then(()=>setAppDetails({...appDetails,refresh:false}))
   })
   const getCategoryPayload = (e) => {

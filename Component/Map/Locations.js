@@ -7,16 +7,14 @@ export const locations=(setCoordinate)=>{
   const usercontext=useContext(UserContext);
   const{userLoc,setUserLoc}=usercontext;
   LogBox.ignoreAllLogs(true);
-  console.disableYellowBox = true;
+ 
     /**
      *currentLongitude: 'unknown', //Initial Longitude
        currentLatitude: 'unknown'
      */
    // const [currentLongitude,setCurrentLongitude]=useState("");
    // const [currentLatitude,setCurrentLatitude]=useState("");
-      const test=(e)=>{
-     console.log("okay"+e);
-      }
+   
       var watchID;
 
       const setLoc=(lat,lng)=>{
@@ -75,11 +73,14 @@ export const locations=(setCoordinate)=>{
 
     try{
       getLocation();
-    let loc = Location.getCurrentPositionAsync({accuracy:1});
-    loc.then(()=>{
+    let loc = Location.getCurrentPositionAsync({accuracy:1}).then(()=>{
     // console.log(loc,"danny");
     // console.log(loc._W.coords)
-     setLoc(loc._W.coords.latitude,loc._W.coords.longitude)
+   if(loc._W.coords){
+       setLoc(loc._W.coords.latitude,loc._W.coords.longitude)
+   }
+    }).catch(function (error){
+      console.log(error);
     })
    
    }catch(error){

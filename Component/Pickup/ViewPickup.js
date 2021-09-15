@@ -159,7 +159,31 @@ export default function ViewPickup({pickup,onPickupChange}){
       ]);
     }
     }
-   
+    const removePickup=()=>{
+       var deleteParcelObject={
+        method:'PATCH',
+        url:`${api.localUrl}${api.deleteParcel}${id?id:parcel.id}`,
+        headers:{
+          Authorization:' Bearer ' + authUser.token,
+        }
+      }
+      console.log(deleteParcelObject);
+      apiRequest(deleteParcelObject,(e)=>setAppDetails({...appDetails,load:e}),(e)=>succFunc(e),(e)=>failFunc(e),(e)=>deleteParcelPayload(e));
+ 
+    }
+
+     const isRemovePickup=()=>{
+       Alert.alert("Are you sure that you want delete the pickup",[
+         {
+           text:"Proceed",
+           onPress:removePickup(),
+         },
+         {
+           text:"Cancel",
+           onPress:consle.log("Cancel Pickup")
+         }
+       ])
+     }
     const pickUpPayment=()=>{
      // console.log(pickup.amount)
       try{

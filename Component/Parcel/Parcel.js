@@ -20,6 +20,7 @@ export default function Parcel({navigation}){
     refresh:false,
     load:false,
     singleParcel:'',
+    ref:null,
   })
 
   const succFunc=(e)=>{
@@ -28,19 +29,28 @@ export default function Parcel({navigation}){
   const failFunc=(e)=>{
     console.log(e);
   }
+    
+
   const userparcelPayload=(e)=>{
     console.log(e);
     setUserParcel(e.data.payload);
   }
 
  
+  
+
 
   const {navigate}=navigation;
 
   const wait=(timeout)=>{
     return new Promise(resolve=>setTimeout(resolve,timeout));
   }
-   
+
+   const onParcelChange=()=>{
+     btmRef.current.close();
+     setUserParcel(null);
+    }
+
   const onRefresh=useCallback(()=>{
 
     setAppDetails({...appDetails,refresh:true});
@@ -84,18 +94,15 @@ export default function Parcel({navigation}){
          <RefreshControl refreshing={appDetails.refresh}
          onRefresh={()=>onRefresh()}
          />}
-        
-
           style={{height:Dimensions.get('screen').height/1.3}}>
-      
         {userParcel&&userParcel.map((e,i)=>{
           return(
             <ParcelComp  key={i} name={e.name} catIcon="box" func={()=>viewParcel(e)}/>)
         })}
      </ScrollView>
      <CustomFab iconName="plus" fabFunc={()=>setuserPickupDetails({...userPickupDetails,operation:'parcel'},navigate('location'))}/>
-   {appDetails.load&&<LoaderComp size={25} color={AppColor.third}/>}
-     <Custombtm displayComp={()=><ViewParcel parcel={appDetails.singleParcel}/>} cod={true} copm={true} btmRef={btmRef} height={550}/>
+     {appDetails.load&&<LoaderComp size={25} color={AppColor.third}/>}
+     <Custombtm displayComp={()=><ViewParcel parcel={appDetails.singleParcel} onParcelChange={()=>onParcelChange()} />} cod={true} copm={true} btmRef={btmRef} height={550}/>
     </View>
     )
 }
