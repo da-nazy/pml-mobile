@@ -170,6 +170,12 @@ export default function ViewParcel({parcel,onParcelChange}){
    const deleteParcelPayload=(e)=>{
    console.log(e.data.success);
    // Alert.alert("Success",e.data.message);
+   if(e.data.success){
+     Alert.alert("Success",` Parcel has been removed ${e.data.message}`,[{
+       text:"Okay",
+       onPress:()=>{onParcelChange()}
+     }])
+   }
    }
 
     const deleteParcel=()=>{
@@ -596,16 +602,17 @@ export default function ViewParcel({parcel,onParcelChange}){
 
                 {/** Edit Delete */}
                 <View style={{flexDirection:'row',margin:15,justifyContent:"space-evenly",marginBottom:25}}>
-                  <TouchableOpacity onPress={()=>editUser()} style={style.actionBtn}>
+                  {appDetails.edit&&<TouchableOpacity onPress={()=>editUser()} style={style.actionBtn}>
                     <Text style={style.actionBtnText}>Edit</Text>
-                  </TouchableOpacity>
+                  </TouchableOpacity>}
                   <TouchableOpacity onPress={()=>deleteParcel()} style={style.actionBtn}>
                     <Text style={style.actionBtnText}>Delete</Text>
                   </TouchableOpacity>
                 </View>
                 </View>)}
-                {appDetails.load&&<LoaderComp size={25} color={AppColor.third}/>}
+                
             </ScrollView>
+            {appDetails.load&&<LoaderComp size={30} color={AppColor.third}/>}
             </View>
     )
 }

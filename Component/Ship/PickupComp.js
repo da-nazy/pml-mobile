@@ -25,6 +25,20 @@ export default function PickupComp({catIcon,name,func,parcel,pickStatus}) {
         
        </View>
        
+       <View style={{flexDirection:'row'}}>
+           <Text style={{fontWeight:'700',marginRight:2}}>Date:</Text><Text>
+        {parcel}
+        </Text>
+        
+       </View>
+
+       <View style={{flexDirection:'row'}}>
+           <Text style={{fontWeight:'700',marginRight:2}}>Amount:</Text><Text>
+        {parcel}
+        </Text>
+       </View>
+       
+
        </View>
       
         

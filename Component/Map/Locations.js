@@ -76,9 +76,7 @@ export const locations=(setCoordinate)=>{
     let loc = Location.getCurrentPositionAsync({accuracy:1}).then(()=>{
     // console.log(loc,"danny");
     // console.log(loc._W.coords)
-   if(loc._W.coords){
-       setLoc(loc._W.coords.latitude,loc._W.coords.longitude)
-   }
+    setLoc(loc._W.coords.latitude,loc._W.coords.longitude)
     }).catch(function (error){
       console.log(error);
     })

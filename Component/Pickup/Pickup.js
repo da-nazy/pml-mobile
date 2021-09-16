@@ -54,17 +54,17 @@ export default function Pickup({navigation}){
         if(!userPickup){
             getUserPickup();
         }   
-
-       
       }
-      
       // eslint-disable-next-line
       ,[userPickup])
      
-    const onPickupChange=()=>{
+   
+    const pickupChange=()=>{
+     // console.log("close pickup")
+     setUserPickup(null);
       btmRef.current.close();
-      setUserPickup(null);
     }
+
     const getUserPickup=()=>{
         var userPickupObject={
             method:"get",
@@ -87,14 +87,14 @@ export default function Pickup({navigation}){
          
         style={{height:Dimensions.get('screen').height/1.29}}>
          {userPickup?userPickup.map((e,i)=>{
-     return   <PickupComp key={i} catIcon="boxes"  name={e.description} parcel={e.pmlParcels.lenght?e.pmlParcels.lenght.toString():'Empty'} pickStatus={e.status}  func={()=>{showPickup(e)}}/>
+     return   <PickupComp key={i} catIcon="boxes"  name={e.description} parcel={e.pmlParcels.length>0?e.pmlParcels.length.toString():'Empty'} pickStatus={e.status}  func={()=>{showPickup(e)}}/>
  
          })
           :console.log("No pickup found!")}
         </ScrollView>
         {appDetails.load&&(<LoaderComp size={25} color={AppColor.third}/>)}
         <CustomFab iconName="plus" fabFunc={()=>navigate("Select Category")}/> 
-      <Custombtm displayComp={()=><ViewPickup pickup={appDetails.pickup}/>} onPickupChange={()=>onPickupChange()} cod={true} copm={true} btmRef={btmRef} height={500}/>
+      <Custombtm displayComp={()=><ViewPickup pickup={appDetails.pickup} onPickupChange={()=>pickupChange()}/>}  cod={true} copm={true} btmRef={btmRef} height={500}/>
        </View>
     )
 }

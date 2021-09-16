@@ -111,7 +111,7 @@ export default function Profile({navigation}) {
           </TouchableOpacity>)}
         </View>
         <View style={{flexDirection:'row',marginTop:40}}> 
-        <TouchableOpacity onPress={()=>navigate('Reset Password')}><Text style={{ textDecorationLine: "underline" ,marginRight:10,marginLeft:10,color:`${AppColor.third}`}}>
+        <TouchableOpacity onPress={()=>navigate('ResetPassword')}><Text style={{ textDecorationLine: "underline" ,marginRight:10,marginLeft:10,color:`${AppColor.third}`}}>
             Change Password{" "}
           </Text></TouchableOpacity>
           <TouchableOpacity onPress={()=>setProfile({...profile,edit:!profile.edit})}><Icon color="#000" size={15} name="edit" /></TouchableOpacity>

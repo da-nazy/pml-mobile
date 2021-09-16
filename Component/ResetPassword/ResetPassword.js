@@ -48,7 +48,7 @@ export default function ResetPassword({showText,setAlert,load,token,id,fail,succ
       // Should be done normally and without using any props
       var resetObject={
         method:'put',
-        url:`${api.localUrl}${api.userProfile}/${user.id}`,
+        url:`${api.localUrl}${api.editCustomer}/${user.id}`,
         data:{
           password:currentPwd.currentPassword,
         },
@@ -58,7 +58,7 @@ export default function ResetPassword({showText,setAlert,load,token,id,fail,succ
         
       }
       console.log(resetObject);
-      apfRequest(resetObject,(e)=>setResetOp({...resetOp,load:e}),(e)=>onSucc(e),(e)=>onFail(e),(e)=>{console.log(e)});
+      apiRequest(resetObject,(e)=>setResetOp({...resetOp,load:e}),(e)=>onSucc(e),(e)=>onFail(e),(e)=>{console.log(e)});
     
      }
     }

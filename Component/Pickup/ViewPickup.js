@@ -56,8 +56,9 @@ export default function ViewPickup({pickup,onPickupChange}){
       }
 
       const addParcelPayload=(e)=>{
-        console.log(e)
+        console.log(e);
         onPickupChange();
+            
       }
       
       const viewParcel=()=>{
@@ -124,7 +125,7 @@ export default function ViewPickup({pickup,onPickupChange}){
       console.log(e);
       if(e.data.success){
         Alert.alert("Success","Payment Verified");
-        ()=>onPickupChange();
+        ()=>{onPickupChange()}
 
       }
     }
@@ -159,16 +160,35 @@ export default function ViewPickup({pickup,onPickupChange}){
       ]);
     }
     }
+    const deletePickupPayload=(e)=>{
+      if(e.data.success){
+        Alert.alert("Success",`Pickup has been removed ${e.data.message}`,[{
+          text:"Okay",
+          onPress:()=>{onPickupChange()}
+        }])
+      }
+    }
+    
+    const deletePickup=()=>{
+      //Alert.alert("")
+      //check if parcels in the pickup
+      if(pickup.pmlParcels.length>0){
+        Alert.alert("Caution:","You can't delete pickup with parcels");
+      }else{
+        removePickup();
+      }
+    }
+
     const removePickup=()=>{
-       var deleteParcelObject={
+       var deletePickupObject={
         method:'PATCH',
-        url:`${api.localUrl}${api.deleteParcel}${id?id:parcel.id}`,
+        url:`${api.localUrl}${api.deletePickup}${pickup.id?pickup.id:''}`,
         headers:{
           Authorization:' Bearer ' + authUser.token,
         }
       }
-      console.log(deleteParcelObject);
-      apiRequest(deleteParcelObject,(e)=>setAppDetails({...appDetails,load:e}),(e)=>succFunc(e),(e)=>failFunc(e),(e)=>deleteParcelPayload(e));
+      console.log(deletePickupObject);
+      apiRequest(deletePickupObject,(e)=>setAppDetails({...appDetails,load:e}),(e)=>succFunc(e),(e)=>failFunc(e),(e)=>deletePickupPayload(e));
  
     }
 
@@ -458,7 +478,7 @@ export default function ViewPickup({pickup,onPickupChange}){
       
       </View>
       <View style={{height:80,flexDirection:'row',justifyContent:'space-evenly',padding:5}}>
-          <TouchableOpacity style={style.acBtn}><Text style={style.actBtnText}>DELETE</Text></TouchableOpacity>
+          <TouchableOpacity onPress={()=>deletePickup()} style={style.acBtn}><Text style={style.actBtnText}>DELETE</Text></TouchableOpacity>
           <TouchableOpacity onPress={()=>pickUpPayment()} style={style.acBtn}><Text style={style.actBtnText}>PAY</Text></TouchableOpacity>     
       </View>
 

@@ -17,6 +17,7 @@ import PickLocation from "../Map/PickLocation";
 import Details from "../WorkerComp/Details";
 import Profile from "../Profile/Profile";
 import Wallet from "../Wallet/Wallet";
+import ResetPassword from "../ResetPassword/ResetPassword";
 const Drawer = createDrawerNavigator();
 export default function Dashboard() {
   /**
@@ -111,6 +112,11 @@ export default function Dashboard() {
       <Drawer.Screen
         name="Wallet"
         component={Wallet}
+        options={{ headerShown: false }}
+      />
+       <Drawer.Screen
+        name="ResetPassword"
+        component={ResetPassword}
         options={{ headerShown: false }}
       />
       
