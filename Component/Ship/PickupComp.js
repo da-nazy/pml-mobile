@@ -1,40 +1,43 @@
-import React from 'react';
+import React,{useState} from 'react';
 import { View,Text,Dimension,StyleSheet,TouchableOpacity} from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import { AppColor } from '../WorkerComp/AppColor';
-export default function PickupComp({catIcon,name,func,parcel,pickStatus}) {
+import  ParcelComp from '../Ship/ParcelComp';
+export default function PickupComp({catIcon,func,pickup}) {
+  const [parcelDisplay,setParcelDisplay]=useState(false);
     return (
-      <View style={style.pendPick}>
+     <View>
+        <View style={style.pendPick}>
         <Icon name={catIcon} size={20} color={AppColor.third} style={{ margin: 5,width:'10%' }} />
        <View style={{ marginLeft: 10, marginRight: 10 ,width:'60%',borderLeftColor:`${AppColor.third}`,borderLeftWidth:1,paddingLeft:5}}>
        <View style={{flexDirection:'row'}}>
            <Text style={{fontWeight:'700',marginRight:2}}>Name:</Text><Text >
-          {name}
+          {pickup.description}
         </Text>
        </View>
        <View style={{flexDirection:'row'}}>
            <Text style={{fontWeight:'700',marginRight:2}}>PickupStatus:</Text><Text >
-          {pickStatus}
+          {pickup.status}
         </Text>
         
        </View>
         <View style={{flexDirection:'row'}}>
            <Text style={{fontWeight:'700',marginRight:2}}>Parcel:</Text><Text>
-        {parcel}
-        </Text>
+             {pickup.pmlParcels.length}
+           </Text>
         
        </View>
        
        <View style={{flexDirection:'row'}}>
            <Text style={{fontWeight:'700',marginRight:2}}>Date:</Text><Text>
-        {parcel}
+        {pickup.createdAt.split("T")[0]}
         </Text>
         
        </View>
 
        <View style={{flexDirection:'row'}}>
            <Text style={{fontWeight:'700',marginRight:2}}>Amount:</Text><Text>
-        {parcel}
+        {pickup.amount}
         </Text>
        </View>
        
@@ -42,10 +45,19 @@ export default function PickupComp({catIcon,name,func,parcel,pickStatus}) {
        </View>
       
         
-        <TouchableOpacity onPress={()=>func()} style={{width:'10%'}}>
-          <Icon name="ellipsis-v" size={20} color={AppColor.third} />
+        <TouchableOpacity onPress={()=>setParcelDisplay(!parcelDisplay)} style={{width:'10%'}}>
+          <Icon name="eye" size={20} color={parcelDisplay?AppColor.third:"#bbb"} />
         </TouchableOpacity>
       </View>
+     {
+       pickup.pmlParcels&&parcelDisplay&&pickup.pmlParcels.map((e,i)=>{
+    
+         return(
+          <ParcelComp key={i} parcel={e} func={(a)=>console.log(a)}/>
+         )
+       })
+     }
+       </View>
     );
   }
   
@@ -53,11 +65,12 @@ export default function PickupComp({catIcon,name,func,parcel,pickStatus}) {
     pendPick: {
       width:'97%',
       flexDirection: "row",
-      height: 75,
+      height: 95,
       marginTop: 10,
       borderRadius: 5,
       backgroundColor: "#fff",
       margin: 5,
+      padding:5,
       alignItems: "center",
       justifyContent: "center",
       shadowColor: "#000",
