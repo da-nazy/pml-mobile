@@ -418,7 +418,7 @@ export default function ViewPickup({pickup,onPickupChange}){
               }
               style={{ borderWidth: 1, width: "100%",color:`${appDetails.edit?'#000':'#bbb'}`}}
             >
-              <Picker.Item label={appDetails.edit?"StateFrom":pickup.stateFrom.name} value="" />
+              <Picker.Item label={appDetails.edit?"StateFrom":pickup.stateFrom?pickup.stateFrom:null} value="" />
               {ngStates &&
                 ngStates.map((e, i) => {
                   return <Picker.Item key={i} label={e.name} value={e.id} />;
@@ -437,7 +437,7 @@ export default function ViewPickup({pickup,onPickupChange}){
               }
               style={{ borderWidth: 1, width: "100%",color:`${appDetails.edit?'#000':'#bbb'}`}}
             >
-              <Picker.Item label={appDetails.edit?"StateTo":pickup.stateTo.name} value="" />
+              <Picker.Item label={appDetails.edit?"StateTo":`${pickup.stateTo}`} value="" />
               {ngStates &&
                 ngStates.map((e, i) => {
                   return <Picker.Item key={i} label={e.name} value={e.id} />;

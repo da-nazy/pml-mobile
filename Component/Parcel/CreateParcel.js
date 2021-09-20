@@ -305,7 +305,7 @@ export default function CreateParcel({navigation}) {
   };
      
   const billingPayload=(e)=>{
- 
+   console.log(e);
   setEstimateBill({...estimateBill,bill:e.data.payload});
   
   }

@@ -8,6 +8,7 @@ import axios from 'axios';
     firstName: 'Fred',
     lastName: 'Flintstone'
   }
+  
  */
 export const pinColor={
   color1:'red', 
@@ -417,7 +418,6 @@ export const api={
     userParcels:'api/pml/pml-parcels?createdBy=',
     createPickup:'api/pml/pml-pickups/public',
     userPickup:'api/pml/pml-pickups?createdBy=',
-    viewParcel:'',
     removeParcelFromPickup:'api/pml/pml-pickups/parcel/REMOVE/',
     addParcelToPickup:'api/pml/pml-pickups/parcel/ADD/',
     deleteParcel:'api/pml/pml-parcels/',
@@ -426,8 +426,8 @@ export const api={
     getCategory:'api/pml/categories',
     getState:'api/erp/states',
     recoverPassword:'api/crm/customers/otp',
-    // localUrl:' itmain http://172.16.17.30/ online api.pmt.com.ng palm:192.168.43.122',
-    localUrl:'http://172.16.17.30/',
+    // localUrl:' itmain http://172.16.17.30/ online  palm:192.168.43.122',
+    localUrl:'https://api.pmt.com.ng/',
     googleReversGeoCodeUrl:'https://maps.googleapis.com/maps/api/geocode/json?latlng=',
     googleApiKey:'AIzaSyCE41gWBv1AfHzJNsyvCQe6FIPpYHLKcrs',
     estimatedBilling:'api/pml/pml-parcels/estimate-billing',

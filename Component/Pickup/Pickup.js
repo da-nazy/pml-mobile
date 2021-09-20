@@ -15,8 +15,7 @@ export default function Pickup({navigation}){
     const{authUser,user}=usercontext;
     const {navigate}=navigation;
     const [userPickup,setUserPickup]=useState(null);
-
-      const [appDetails,setAppDetails]=useState({
+    const [appDetails,setAppDetails]=useState({
           load:false,
           refresh:false,
           pickup:null,
