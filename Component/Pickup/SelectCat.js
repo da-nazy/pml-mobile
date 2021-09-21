@@ -16,7 +16,7 @@ import { UserContext } from "../DataProvider/UserContext";
 export default function SelectCat({navigation}) {
   const usercontext=useContext(UserContext);
   const {navigate}=navigation;
-  const{userPickupDetails,setuserPickupDetails}=usercontext;
+  const{userPickupDetails,setuserPickupDetails,user}=usercontext;
   
   const setPickupType=(e)=>{
     setuserPickupDetails({...userPickupDetails,pickupType:e,operation:'pickup'});
@@ -78,7 +78,7 @@ export default function SelectCat({navigation}) {
       >
         <View >
           <Text style={{ color: "#fff", fontSize: 18, fontWeight: "bold" }}>
-            Hello Ani,
+            Hello {user?user.surname:'User'},
           </Text>
           <Text style={{ color: "#fff", width: "80%", fontSize: 15 }}>
             {" "}

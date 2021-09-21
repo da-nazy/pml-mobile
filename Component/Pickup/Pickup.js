@@ -12,7 +12,7 @@ import ViewPickup from './ViewPickup';
 export default function Pickup({navigation}){
     const btmRef=useRef(null);
     const usercontext=useContext(UserContext);
-    const{authUser,user}=usercontext;
+    const{authUser,user,setUserWallet}=usercontext;
     const {navigate}=navigation;
     const [userPickup,setUserPickup]=useState(null);
     const [appDetails,setAppDetails]=useState({
@@ -27,7 +27,7 @@ export default function Pickup({navigation}){
    const onRefresh=useCallback(()=>{
       setAppDetails({...appDetails,refresh:true});
       getUserPickup();
-       wait(200).then(()=>setAppDetails({...appDetails,refresh:true}));
+       wait(200).then(()=>setAppDetails({...appDetails,refresh:false}));
    },[]);
 
       const succFunc=(e)=>{
@@ -60,6 +60,7 @@ export default function Pickup({navigation}){
    
     const pickupChange=()=>{
      // console.log("close pickup")
+     setUserWallet(null);
      setUserPickup(null);
       btmRef.current.close();
     }
@@ -89,7 +90,7 @@ export default function Pickup({navigation}){
      return   <PickupComp key={i} catIcon="boxes"  name={e.description} parcel={e.pmlParcels.length>0?e.pmlParcels.length.toString():'Empty'} pickStatus={e.status}  func={()=>{showPickup(e)}}/>
  
          })
-          :console.log("No pickup found!")}
+          :<Text style={{fontWeight:'bold'}}>Swipe To Refresh!</Text>}
         </ScrollView>
         {appDetails.load&&(<LoaderComp size={25} color={AppColor.third}/>)}
         <CustomFab iconName="plus" fabFunc={()=>navigate("Select Category")}/> 

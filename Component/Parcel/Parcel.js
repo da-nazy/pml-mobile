@@ -1,4 +1,4 @@
-import React,{useContext,useCallback,useEffect,useRef} from 'react';
+import React,{useContext,useCallback,useEffect,useRef,useState} from 'react';
 import { View,Text,ScrollView,StyleSheet,Dimensions,RefreshControl, Alert,Modal} from 'react-native';
 import CustomFab from '../WorkerComp/CustomFab';
 import Icon from 'react-native-vector-icons/FontAwesome5';
@@ -6,13 +6,12 @@ import { AppColor } from '../WorkerComp/AppColor';
 import ParcelComp from './ParcelComp';
 import {UserContext} from '../DataProvider/UserContext';
 import { api,apiRequest} from '../WorkerComp/Api';
-import { useState } from 'react/cjs/react.development';
 import LoaderComp from '../WorkerComp/LoaderComp';
 import ViewParcel from './ViewParcel';
 import Custombtm from '../WorkerComp/Custombtm';
 export default function Parcel({navigation}){
   const usercontext=useContext(UserContext);
-  const {userPickupDetails,setuserPickupDetails,authUser,user}=usercontext;
+  const {userPickupDetails,setuserPickupDetails,authUser,user,setUserWallet}=usercontext;
   const [userParcel,setUserParcel]=useState(null);
   const btmRef=useRef(null);
 
@@ -47,6 +46,7 @@ export default function Parcel({navigation}){
   }
 
    const onParcelChange=()=>{
+     setUserWallet(null);
      btmRef.current.close();
      setUserParcel(null);
     }

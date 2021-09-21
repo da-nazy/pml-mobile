@@ -376,7 +376,9 @@ export default function Details({navigation}) {
         </View>
       </View>
 
-      <View style={style.sendCont}>
+     {
+       /**
+        *  <View style={style.sendCont}>
           {addParcelHead("Add Parcels:")}
          <View style={{padding:8}}>
          {userParcels=="Empty Parcel"&&(noParcel())}
@@ -394,10 +396,14 @@ export default function Details({navigation}) {
                          cellItemComponent={(item, otherProps) => parcelComp(item)}
                        />
          </SafeAreaView>}
-         {/*parcelComp(item,(e)=>addRemoveParcel(e),(e)=>checkParcel(e))*/}
+       
      
         </View>
       </View>
+        * 
+        * 
+        */
+     }
       <TouchableOpacity  onPress={()=>createPickup()}
       style={style.contBtn}>
         <Text

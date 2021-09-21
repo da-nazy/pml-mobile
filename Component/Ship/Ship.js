@@ -106,7 +106,7 @@ export default function Ship(){
 
 }
     return(
-        <ScrollView style={{backgroundColor:'#fff',borderWidth:1,height:Dimensions.get('screen').height}}
+        <ScrollView style={{backgroundColor:'#fff',height:Dimensions.get('screen').height}}
         refreshControl={<RefreshControl refreshing={appDetails.refresh} onRefresh={()=>onRefresh()}/>}
          
         >

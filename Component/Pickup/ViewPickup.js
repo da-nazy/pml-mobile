@@ -129,7 +129,22 @@ export default function ViewPickup({pickup,onPickupChange}){
 
       }
     }
-
+   const removePickupCaution=()=>{
+     Alert.alert("Caution:","Are you sure that you want to remove the pickup?",[
+       {
+       text:"Proceed",
+       onPress:()=>{
+         removePickup();
+       }
+     },
+     {
+       text:"Cancle",
+       onPress:()=>{
+         console.log("Don't remove pickup");
+       }
+     }
+    ])
+   }
     const pinCheck=()=>{
       
        if(!walletPin.pin){
@@ -175,7 +190,7 @@ export default function ViewPickup({pickup,onPickupChange}){
       if(pickup.pmlParcels.length>0){
         Alert.alert("Caution:","You can't delete pickup with parcels");
       }else{
-        removePickup();
+        removePickupCaution();
       }
     }
 
@@ -418,7 +433,7 @@ export default function ViewPickup({pickup,onPickupChange}){
               }
               style={{ borderWidth: 1, width: "100%",color:`${appDetails.edit?'#000':'#bbb'}`}}
             >
-              <Picker.Item label={appDetails.edit?"StateFrom":pickup.stateFrom?pickup.stateFrom:null} value="" />
+              <Picker.Item label={appDetails.edit?"StateFrom":pickup.stateFrom&&pickup.stateFrom.name} value="" />
               {ngStates &&
                 ngStates.map((e, i) => {
                   return <Picker.Item key={i} label={e.name} value={e.id} />;
@@ -437,7 +452,7 @@ export default function ViewPickup({pickup,onPickupChange}){
               }
               style={{ borderWidth: 1, width: "100%",color:`${appDetails.edit?'#000':'#bbb'}`}}
             >
-              <Picker.Item label={appDetails.edit?"StateTo":`${pickup.stateTo}`} value="" />
+              <Picker.Item label={appDetails.edit?"StateTo":pickup.stateTo&&pickup.stateTo.name} value="" />
               {ngStates &&
                 ngStates.map((e, i) => {
                   return <Picker.Item key={i} label={e.name} value={e.id} />;

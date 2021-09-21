@@ -15,7 +15,8 @@ import { apiRequest } from "../WorkerComp/Api";
 import { phoneCheck, emailCheck } from "../WorkerComp/AppColor";
 import { Picker } from "@react-native-community/picker";
 import { api } from "../WorkerComp/Api";
-export default function UserRegister() {
+export default function UserRegister({navigation}) {
+  const {navigate}=navigation;
   const [genderSelected, setGenderSelected] = useState({
     gender: null,
     genderError: false,
@@ -71,7 +72,10 @@ export default function UserRegister() {
   });
 
   const requestSuc = (e) => {
-    Alert.alert("Success", e);
+    Alert.alert("Success", e,[{
+      text:"OK",
+      onPress:()=>{navigate('Login')}
+    }]);
   };
   const requestFail = (e) => {
     Alert.alert("Error", e);

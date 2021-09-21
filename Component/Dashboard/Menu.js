@@ -27,11 +27,10 @@ export default function Menu({navigation}){
     if(!userWallet){
       getUserWallet();
     }
-     return()=>{
-      // console.log("Testing");
-      //getUserWallet();
-     }
-  },[userWallet])
+    
+  },
+   // eslint-disable-next-line
+  [userWallet])
 
     const [wallet,setWallet]=useState({
         walletLodaded:true,
@@ -74,7 +73,8 @@ export default function Menu({navigation}){
         callAction: "Customer Transactions",
         // To pass pickup param
         func: () => {
-         navigate('Wallet');
+          setUserWallet(null,navigate('Wallet'))
+          
         },
         id: 4,
       },
@@ -101,9 +101,7 @@ export default function Menu({navigation}){
      if(e.data.payload.length!==0){
       if(e.data.payload[0].balance){
         setUserWallet(e.data.payload[0],setWallet({...wallet,amount:e.data.payload[0].balance}))
-     
       }
-
      }else{
        console.log("error");
      }
@@ -221,7 +219,7 @@ export default function Menu({navigation}){
                 )}
               </View>
               <TouchableOpacity
-                 onPress={()=>navigate('Wallet')}
+                 onPress={()=>setUserWallet(null,navigate('Wallet'))}
                 style={{
                   borderColor: `${AppColor.third}`,
                   backgroundColor: `${AppColor.third}`,
