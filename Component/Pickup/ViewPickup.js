@@ -125,7 +125,7 @@ export default function ViewPickup({pickup,onPickupChange}){
       console.log(e);
       if(e.data.success){
         Alert.alert("Success","Payment Verified");
-        ()=>{onPickupChange()}
+        onPickupChange();
 
       }
     }

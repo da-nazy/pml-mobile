@@ -1,9 +1,17 @@
-import React,{useState} from 'react';
+import React,{useState,useContext,useEffect} from 'react';
 import {View,Text,TouchableOpacity,StyleSheet} from 'react-native';
 import { AppColor } from './AppColor';
 import { DrawerContentScrollView } from "@react-navigation/drawer";
 import Icon from 'react-native-vector-icons/FontAwesome5';
+import {UserContext} from '../DataProvider/UserContext';
 export const  UserDrawerContent=(props)=>{
+     
+  const [appDetails,setAppDetails]=useState({
+    name:'',
+  })
+  const usercontext=useContext(UserContext);
+   const {user}=usercontext;
+
     const [sideBar,setSideBar]=useState([
       
       {
@@ -48,6 +56,13 @@ export const  UserDrawerContent=(props)=>{
         func: () =>props.navigation.navigate('Login'),
       },
     ])
+    useEffect(()=>{
+      if(user){
+        setAppDetails({...appDetails,name:user.name});
+        console.log(user.surname,user.otherName);
+      }
+    },[user])
+
   return(
     <DrawerContentScrollView {...props}>
     <View>
@@ -82,7 +97,7 @@ export const  UserDrawerContent=(props)=>{
            Pml User Account
           </Text>
         </View>
-        <Text style={{ marginTop:10,marginLeft:15}}>Ani Daniel</Text>
+        <Text style={{ marginTop:10,marginLeft:15}}>{user?`${user.surname} ${user.otherName}`:'Ani Daniel'}</Text>
       </View>
       <View style={{ marginTop: 35, marginLeft: 15 }}>
         {sideBar &&

@@ -185,7 +185,7 @@ export const parcelComp = (item) => {
          <View style={style.parcelComp}>
            
       <Text style={{ width: "66%", alignSelf: "center" }}>{item.name}</Text>
-      <TouchableOpacity onPress={()=>console.log(item.id)} style={{ width: "10%", justifyContent: "center" }}>
+      <TouchableOpacity onPress={()=>console.log(item.id)} style={{ width: "10%", justifyContent:"center" }}>
         {IconComp("eye", { alignSelf: "center" }, 15, AppColor.third)}
       </TouchableOpacity>
     </View>
