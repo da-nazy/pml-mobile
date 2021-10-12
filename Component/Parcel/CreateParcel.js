@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext,useCallback } from "react";
+import React, { useState, useEffect, useContext,useCallback,useRef } from "react";
 import {
   View,
   Text,
@@ -19,6 +19,8 @@ import { IconComp, packaging,validatePhone,wait} from "../WorkerComp/ExternalFun
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { api, apiRequest,ngStates} from "../WorkerComp/Api";
 import LoaderComp from "../WorkerComp/LoaderComp";
+import Custombtm from "../WorkerComp/Custombtm";
+import AddItems from "../../Component/Parcel/AddItems";
 import axios from 'axios';
 export default function CreateParcel({navigation}) {
   const{navigate}=navigation;
@@ -33,6 +35,7 @@ export default function CreateParcel({navigation}) {
     setSenderLoc,
     setuserPickupDetails,
   } = usercontext;
+   const addItemRef=useRef(null);
 
   const [dateshow, setDateShow] = useState(false);
   const [appDate, setAppDate] = useState(new Date(1598051730000));
@@ -193,7 +196,7 @@ export default function CreateParcel({navigation}) {
     }
     if (!desc.desc) {
       check = false;
-    
+  
       setDesc({ ...desc, descError: true });
     } else {
       setDesc({ ...desc, descError: false });
@@ -480,7 +483,7 @@ export default function CreateParcel({navigation}) {
  
   useEffect(() => {
     if (!category) {
-      getCategory();
+      //getCategory();
     }
   }, [category]);
 
@@ -519,7 +522,7 @@ export default function CreateParcel({navigation}) {
           justifyContent: "center",
           padding: 15,
           borderBottomWidth: 1,
-          borderBottomColor: `${AppColor.third}`,
+          borderBottomColor: `${AppColor.lightThird}`,
         }}
       >
         <Icon name="box" size={15} color={AppColor.third} />
@@ -621,24 +624,9 @@ export default function CreateParcel({navigation}) {
             marginTop: 10,
           }}
         >
-          <View style={{ width: "49%", borderWidth: 1, borderRadius: 2 }}>
-            <Picker
-              selectedValue={appDetails.categoryId}
-              onValueChange={(itemValue, itemIndex) =>
-                //  setCategory({ ...category, stateId: itemValue })
-                setAppDetails({ ...appDetails, categoryId: itemValue })
-              }
-              style={{ borderWidth: 1, width: "100%" }}
-            >
-              <Picker.Item label="Category " value="" />
-              {category &&
-                category.map((e, i) => {
-                  return <Picker.Item key={i} label={e.name} value={e.id} />;
-                })}
-            </Picker>
-          </View>
+          
 
-          <View style={{ width: "49%", borderWidth: 1, borderRadius: 2 }}>
+          <View style={{ width: "100%", borderWidth: 1, borderRadius: 2 }}>
             <Picker
               selectedValue={appDetails.packageId}
               onValueChange={(itemValue, itemIndex) =>
@@ -655,51 +643,10 @@ export default function CreateParcel({navigation}) {
           </View>
         </View>
         <View style={{ flexDirection: "row" }}>
-          <View style={{ width: "50%", height: 70 }}>
-            <InputComp
-              mode="outlined"
-              right={null}
-              label="Mass:"
-              placeholder="KG"
-              style={style.name}
-              error={mass.massError}
-              secureText={false}
-              setText={(e) => {
-                setMass({ ...mass, mass: e });
-              }}
-            />
-          </View>
-          <View style={{ width: "50%", height: 70 }}>
-            <InputComp
-              mode="outlined"
-              right={null}
-              label="Volume:"
-              placeholder="Item Volume"
-              style={style.name}
-              error={volume.volumeError}
-              secureText={false}
-              setText={(e) => {
-                setVolume({ ...volume, volume: e });
-              }}
-            />
-          </View>
+          
+         
         </View>
-        <View style={{ flexDirection: "row" }}>
-          <View style={{ width: "100%", height: 70 }}>
-            <InputComp
-              mode="outlined"
-              right={null}
-              label="Worth:"
-              placeholder="#"
-              style={style.name}
-              error={worth.worthError}
-              secureText={false}
-              setText={(e) => {
-                setWorth({ ...worth, worth: e });
-              }}
-            />
-          </View>
-       </View>
+       
        <View style={{ flexDirection: "row",justifyContent:'space-between' }}>
           {appDetails.userValid&&<View style={{ width: "10%", justifyContent: "center" }}>
             { IconComp(
@@ -737,21 +684,8 @@ export default function CreateParcel({navigation}) {
         </View>
           
         <View style={{ flexDirection: "row" }}>
-          <View style={{ width: "50%", height: 70 }}>
-            <InputComp
-              mode="outlined"
-              right={null}
-              label="Quantity:"
-              placeholder="Enter Quantity:"
-              style={style.name}
-              error={quantity.quantityError}
-              secureText={false}
-              setText={(e) => {
-                setQuantity({ ...quantity, quantity: e });
-              }}
-            />
-          </View>
-          <View style={{ width: "50%", height: 70 }}>
+         
+          <View style={{ width: "100%", height: 70 }}>
             <InputComp
               mode="outlined"
               right={null}
@@ -808,8 +742,8 @@ export default function CreateParcel({navigation}) {
             <InputComp
               mode="outlined"
               right={null}
-              label="Location From :"
-              placeholder="Enter Location From "
+              label="Pickup Address:"
+              placeholder="Enter pickup Address "
               style={style.name}
               secureText={false}
               value={userLoc.address ? userLoc.address : ""}
@@ -820,8 +754,8 @@ export default function CreateParcel({navigation}) {
             <InputComp
               mode="outlined"
               right={null}
-              label="Location To:"
-              placeholder="Enter Location To"
+              label="Delivery Address:"
+              placeholder="Enter Delivery Address"
               style={style.name}
               value={senderLoc.address ? senderLoc.address : ""}
               secureText={false}
@@ -829,9 +763,36 @@ export default function CreateParcel({navigation}) {
             />
           </View>
         </View>
-        <TouchableOpacity>
-          {IconComp("images", { marginLeft: 10 }, 25, AppColor.third)}
-        </TouchableOpacity>
+        <View style={style.itemCont}>
+          <Text style={{ fontWeight:'bold',height:30,padding:5,paddingLeft:10,borderTopRightRadius:5,borderTopLeftRadius:5,backgroundColor:AppColor.lightThird}}>
+            Delivery Items
+          </Text>
+        <View style={{
+    flexDirection:"row",
+    marginTop:5,marginBottom:5 }}>
+          <View style={{flexDirection:'row',width:'80%',justifyContent:"space-evenly"}}>
+             <Text>Corn Flakes</Text>
+             <Text>50.0kg</Text>
+             <Text>1 pieces(s)</Text>
+          </View>
+          <View style={{flexDirection:'row',width:'20%',justifyContent:'space-evenly'}}>
+            <TouchableOpacity>
+             {IconComp ("edit" ,null,15,AppColor.third)}
+            </TouchableOpacity>
+            <TouchableOpacity>
+             { IconComp ("trash",null,15,AppColor.third)}
+            </TouchableOpacity>
+          </View>
+        </View>
+        </View>
+       
+       <View>
+         <TouchableOpacity stylel={{justifyContent:'center'}} onPress={()=>addItemRef.current.open()}>
+          { IconComp ("plus-circle",{textAlign:'center'},40,AppColor.lightThird)}
+          <Text style={{textAlign:'center'}}>Add more item(s)</Text>
+         </TouchableOpacity>
+       </View>
+        
         <TouchableOpacity onPress={() => registerParcel()} style={style.createBtn}>
           <Text
             style={{
@@ -858,11 +819,27 @@ export default function CreateParcel({navigation}) {
         )}
       </ScrollView>
        {appDetails.load&&<LoaderComp size={25} color={AppColor.third}/>}
+       <Custombtm displayComp={()=><AddItems/>} height={Dimensions.get('screen').height} cod={true} btmRef={addItemRef}/>
     </View>
   );
 }
 
 const style = StyleSheet.create({
+  itemCont:{
+    backgroundColor:'#fff',
+    borderTopRightRadius:5,
+    borderTopLeftRadius:5,
+    marginTop:10,
+    marginBottom:10,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.22,
+    shadowRadius: 2.22,
+    elevation: 3,
+  },
   name: {
     height: 55,
     margin: 2,

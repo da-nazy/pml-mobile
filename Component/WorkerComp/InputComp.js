@@ -1,7 +1,7 @@
 import * as React from 'react';
 import{TextInput} from 'react-native-paper';
 import { AppColor } from './AppColor';
-export default function InputComp({right,mode,label,placeholder,style,error,setText,secureText,editable,pointerEvents,value,disabled}){
+export default function InputComp({right,mode,label,placeholder,style,error,setText,secureText,editable,pointerEvents,value,disabled,keyboardType}){
 
     // mode : flat,outlined
     // label outlined input
@@ -33,6 +33,7 @@ export default function InputComp({right,mode,label,placeholder,style,error,setT
         secureTextEntry={secureText}
         editable={editable}
         pointerEvents={pointerEvents}
+        keyboardType={keyboardType&&keyboardType}
     
      theme={{
          colors: {

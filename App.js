@@ -28,6 +28,11 @@ export default function App() {
    <UserProverider>
      <NavigationContainer>
      <Stack.Navigator>
+     <Stack.Screen
+      name="Dashboard"
+      component={Dashboard}
+      options={{title:false,headerShown:false}}
+      />
       {myScreen()}
       <Stack.Screen
       name="Login"
@@ -44,11 +49,7 @@ export default function App() {
       component={UserRegister}
       options={{title:"Register"}}
       />
-      <Stack.Screen
-      name="Dashboard"
-      component={Dashboard}
-      options={{title:false,headerShown:false}}
-      />
+      
      </Stack.Navigator>
 
    </NavigationContainer>
