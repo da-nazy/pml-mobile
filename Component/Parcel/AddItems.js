@@ -9,7 +9,7 @@ import { Colors } from "react-native/Libraries/NewAppScreen";
 import { api, apiRequest } from "../WorkerComp/Api";
 import { v4 as uuidv4 } from 'uuid';
 import 'react-native-get-random-values';
-export default function AddItems({ token,add,update}) {
+export default function AddItems({ token,add,update,onChange}) {
   const [itemName, setItemName] = useState({
     name: "",
     error: false,
@@ -139,6 +139,7 @@ export default function AddItems({ token,add,update}) {
        
       console.log(itemDetails);
       add(itemDetails);
+      onChange();
     }
   }
   return (

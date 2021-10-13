@@ -451,9 +451,9 @@ export default function CreateParcel({navigation}) {
   }
 
   const addToItem=(e)=>{
-  setItem([{...item,e}]);
+  setItem([...item,{name:e.name,mass:e.mass,worth:e.worth,quantity:e.quantity,volume:e.volume,categoryId:e.categoryId,id:e.id}]);
   }
-
+   
   const onChange = (even, selectedDate) => {
     //
 
@@ -480,6 +480,11 @@ export default function CreateParcel({navigation}) {
       return null;
     }
   };
+  
+  const onItemChange=()=>{
+    addItemRef.current.close();
+
+  }
 
   const selectDate = (op) => {
     // Select Date From and To
@@ -780,29 +785,33 @@ export default function CreateParcel({navigation}) {
           <Text style={{ fontWeight:'bold',height:30,padding:5,paddingLeft:10,borderTopRightRadius:5,borderTopLeftRadius:5,backgroundColor:AppColor.lightThird}}>
             Delivery Items
           </Text>
-        <View style={{
+          {item.map((e,i)=>{
+            console.log(e);
+            return(
+        <View  key={i} style={{
       flexDirection:"row",
        marginTop:5,marginBottom:5 }}>
-          {item.map((e,i)=>{
-            return(
-              <View  key={i} style={{flexDirection:'row',width:'80%',justifyContent:"space-evenly"}}>
+         
+              <View   style={{flexDirection:'row',width:'80%',justifyContent:"space-evenly"}}>
               <Text>{e.name}</Text>
               <Text>{e.mass}kg</Text>
               <Text>{e.quantity}pieces(s)</Text>
            </View>
-            )
-          })}
+          
          
 
           <View style={{flexDirection:'row',width:'20%',justifyContent:'space-evenly'}}>
-            <TouchableOpacity>
+            <TouchableOpacity onPress={()=>console.log(e)}>
              {IconComp ("edit" ,null,15,AppColor.third)}
             </TouchableOpacity>
-            <TouchableOpacity>
+            <TouchableOpacity onPress={()=>console.log(e)}>
              { IconComp ("trash",null,15,AppColor.third)}
             </TouchableOpacity>
           </View>
         </View>
+        )
+      })}
+
         </View>
        
        <View>
@@ -838,7 +847,7 @@ export default function CreateParcel({navigation}) {
         )}
       </ScrollView>
        {appDetails.load&&<LoaderComp size={25} color={AppColor.third}/>}
-       <Custombtm displayComp={()=><AddItems add={(e)=>addToItem(e)}/>} height={Dimensions.get('screen').height} cod={true} btmRef={addItemRef}/>
+       <Custombtm displayComp={()=><AddItems add={(e)=>addToItem(e)} onChange={()=>onItemChange()}/>} height={Dimensions.get('screen').height} cod={true} btmRef={addItemRef}/>
     </View>
   );
 }
