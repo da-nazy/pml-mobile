@@ -143,7 +143,7 @@ export const noParcel = () => {
 };
 
 export const succFunc=(e)=>{
-Alert.Alert("Success",e)
+Alert.alert("Success",e)
 }
 export const failFunc=(e)=>{
 Alert.alert("Error",e);

@@ -36,7 +36,15 @@ export default function CreateParcel({navigation}) {
     setuserPickupDetails,
   } = usercontext;
    const addItemRef=useRef(null);
-
+ const[item,setItem]=useState([{
+   name:'Corn Flakes',
+   mass:'50.0',
+   volume:'200',
+   quantity:'1',
+   worth:'1500',
+   category:'software',
+   id:1,
+ }])
   const [dateshow, setDateShow] = useState(false);
   const [appDate, setAppDate] = useState(new Date(1598051730000));
   const[estimateBill,setEstimateBill]=useState({
@@ -441,6 +449,11 @@ export default function CreateParcel({navigation}) {
       Alert.alert("Error","Empty fields detected");
     }
   }
+
+  const addToItem=(e)=>{
+  setItem([{...item,e}]);
+  }
+
   const onChange = (even, selectedDate) => {
     //
 
@@ -768,13 +781,19 @@ export default function CreateParcel({navigation}) {
             Delivery Items
           </Text>
         <View style={{
-    flexDirection:"row",
-    marginTop:5,marginBottom:5 }}>
-          <View style={{flexDirection:'row',width:'80%',justifyContent:"space-evenly"}}>
-             <Text>Corn Flakes</Text>
-             <Text>50.0kg</Text>
-             <Text>1 pieces(s)</Text>
-          </View>
+      flexDirection:"row",
+       marginTop:5,marginBottom:5 }}>
+          {item.map((e,i)=>{
+            return(
+              <View  key={i} style={{flexDirection:'row',width:'80%',justifyContent:"space-evenly"}}>
+              <Text>{e.name}</Text>
+              <Text>{e.mass}kg</Text>
+              <Text>{e.quantity}pieces(s)</Text>
+           </View>
+            )
+          })}
+         
+
           <View style={{flexDirection:'row',width:'20%',justifyContent:'space-evenly'}}>
             <TouchableOpacity>
              {IconComp ("edit" ,null,15,AppColor.third)}
@@ -819,7 +838,7 @@ export default function CreateParcel({navigation}) {
         )}
       </ScrollView>
        {appDetails.load&&<LoaderComp size={25} color={AppColor.third}/>}
-       <Custombtm displayComp={()=><AddItems/>} height={Dimensions.get('screen').height} cod={true} btmRef={addItemRef}/>
+       <Custombtm displayComp={()=><AddItems add={(e)=>addToItem(e)}/>} height={Dimensions.get('screen').height} cod={true} btmRef={addItemRef}/>
     </View>
   );
 }
