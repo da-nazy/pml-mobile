@@ -36,15 +36,7 @@ export default function CreateParcel({navigation}) {
     setuserPickupDetails,
   } = usercontext;
    const addItemRef=useRef(null);
- const[item,setItem]=useState([{
-   name:'Corn Flakes',
-   mass:'50.0',
-   volume:'200',
-   quantity:'1',
-   worth:'1500',
-   category:'software',
-   id:1,
- }])
+ const[item,setItem]=useState([]);
   const [dateshow, setDateShow] = useState(false);
   const [appDate, setAppDate] = useState(new Date(1598051730000));
   const[estimateBill,setEstimateBill]=useState({
@@ -65,7 +57,8 @@ export default function CreateParcel({navigation}) {
     refresh:false,
 
   });
-  
+  const[currentItem,setCurrentItem]=useState(null);
+
   const [category, setCategory] = useState(null);
 
   const [name, setName] = useState({
@@ -216,9 +209,8 @@ export default function CreateParcel({navigation}) {
     if (!stateTo.stateToId) {
       check = false;
     }
-    if (!appDetails.categoryId) {
-      check = false;
-    }
+   
+    
     if (!appDetails.packageId) {
       check = false;
     }
@@ -332,45 +324,28 @@ export default function CreateParcel({navigation}) {
   }
   const estimateCheck=()=>{
      var check=true;
-     if (!mass.mass) {
-      check = false;
-      setMass({ ...mass, massError: true });
-    } else {
-      if(numberCheck(mass.mass)){
-        setMass({ ...mass, massError: false });
-      }else{
+     if(!expectedDate.date){
         check=false;
-        setMass({ ...mass, massError:true });
-      }
-    }
+        setExpectedDate({...expectedDate,dateError:true});
+     }else{
+      setExpectedDate({...expectedDate,dateError:false});
+     }
+     if(!depatureDate.date){
+       check=false;
+       setDepatureDate({...depatureDate,dateError:true});
+     }else{
+       setDepatureDate({...depatureDate,dateError:false});
+     }
+      
+     if(item.length===0){
+       check=false;
+      // Alert.alert("Error","No item added to the parcel yet");
+     }else{
+     //  console.log("nop")
+     //  console.log(item.length)
+     }
 
-    if (!worth.worth) {
-      check = false;
-      setWorth({ ...worth, worthError: true });
-    } else {
-      if(numberCheck(worth.worth)){
-        setWorth({ ...worth, worthError: false });
-      }else{
-        check=false;
-        setWorth({ ...worth,worthError:true });
-      }
-    }
-
-    if (!volume.volume) {
-      check = false;
-      setVolume({ ...volume, volumeError: true });
-    } else {
-      if(numberCheck(volume.volume)){
-        setVolume({ ...volume, volumeError: false });
-      }else{
-        check=false;
-        setVolume({ ...volume, volumeError:true });
-      }
-    }
-
-    if (!appDetails.categoryId) {
-      check = false;
-    }
+    
     if(!userLoc.lat&&!userLoc.lng&&!userLoc.address){
         check=false;
     }
@@ -383,29 +358,39 @@ export default function CreateParcel({navigation}) {
   }
 
   const getEstimateBilling=()=>{
+   /**
+    *  var fitItem=[];
+    item.map((e)=>{
+      delete e.id;
+      fitItem.push(e);
+    })
+    */
+  
+
     if(estimateCheck()){
      var billingObject={
        method:'post',
        url:`${api.localUrl}${api.estimatedBilling}`,
        data:{
-        mass:Number.parseInt(mass.mass),
-        volume:Number.parseInt(volume.volume),
-        worth:Number.parseInt(worth.worth),
-        category:appDetails.categoryId,
+        items:[],
         locationFrom:{"coordinates":[userLoc.lat,userLoc.lng]},
         locationTo:{"coordinates":[senderLoc.lat,senderLoc.lng]},
-
-       
+        expectedDate:expectedDate.date,
+        departureDate:depatureDate.date,
       },
+     
       headers:{
         Authorization:' Bearer ' + authUser.token,
       } 
      }
-   //  console.log(billingObject);
-
-     apiRequest(billingObject,(e)=>setAppDetails({...appDetails,load:e}),(e)=>succFunc(e),(e)=>failFunc(e),(e)=>billingPayload(e));
+     item.map((e)=>{
+      delete e.id;
+      billingObject.data.items.push(e);
+    })
     
 
+   //  console.log(billingObject)
+     apiRequest(billingObject,(e)=>setAppDetails({...appDetails,load:e}),(e)=>succFunc(e),(e)=>failFunc(e),(e)=>billingPayload(e));
     }else{
       Alert.alert("Error","Empty fields detected for estimated billing");
     }
@@ -421,12 +406,12 @@ export default function CreateParcel({navigation}) {
         'Cache-Control': 'no-cache',
       } ,
          data:{
-          category:appDetails.categoryId,
+        
           packaging:appDetails.packageId,
           name:name.name,
           sender:user.id,
           recipient:appDetails.receiverObjectId,
-          worth:worth.worth,
+          
           description:desc.desc,
           locationTo:{"coordinates":[userLoc.lat,userLoc.lng],"address":userLoc.address},
           locationFrom:{"coordinates":[senderLoc.lat,senderLoc.lng],"address":senderLoc.address}, 
@@ -436,10 +421,8 @@ export default function CreateParcel({navigation}) {
           departureDate:depatureDate.date,
           costPayable:estimateBill.bill,
           paymentGateway:"PAYSTACK",
-          mass:mass.mass,
-          volume:volume.volume,
           identification:id.id,
-          quantity:quantity.quantity,
+        
          }
        }
        console.log(createParcelObject);
@@ -451,9 +434,20 @@ export default function CreateParcel({navigation}) {
   }
 
   const addToItem=(e)=>{
-  setItem([...item,{name:e.name,mass:e.mass,worth:e.worth,quantity:e.quantity,volume:e.volume,categoryId:e.categoryId,id:e.id}]);
+  setItem([...item,{name:e.name,mass:e.mass,worth:e.worth,quantity:e.quantity,volume:e.volume,category:e.category,id:e.id}]);
   }
    
+  const updateItem=(e)=>{
+    // filters out the current object unupdated id
+   //  push the current object to the array
+   // set the array with the updated array
+   
+   var tempItem=item.filter(m=>m.id!=e.id);
+   console.log(tempItem);
+   tempItem.push(e);
+    setItem(tempItem);
+  }
+
   const onChange = (even, selectedDate) => {
     //
 
@@ -482,6 +476,7 @@ export default function CreateParcel({navigation}) {
   };
   
   const onItemChange=()=>{
+   
     addItemRef.current.close();
 
   }
@@ -501,7 +496,7 @@ export default function CreateParcel({navigation}) {
  
   useEffect(() => {
     if (!category) {
-      //getCategory();
+      getCategory();
     }
   }, [category]);
 
@@ -524,6 +519,35 @@ export default function CreateParcel({navigation}) {
       (e) => getCategoryPayload(e)
     );
   };
+  
+  const editItem=(item)=>{
+    setCurrentItem(item);
+    addItemRef.current.open();
+  }
+
+  const deleteItem=(m)=>{
+
+    Alert.alert("Caution","Do you want to remove the item?",[
+      {
+        text:"Cancel",
+        onPress:()=>{console.log("Cancle")}
+      },
+      {
+        text:"Delete",
+        onPress:()=>{
+          setItem((prev)=>{
+            return prev.filter(e=>e.id!=m.id);
+          })
+        }
+      }
+    ])
+  }
+
+  const addItem=()=>{
+    setCurrentItem(null);
+    addItemRef.current.open();
+  }
+
   return (
     <View
       style={{
@@ -642,7 +666,6 @@ export default function CreateParcel({navigation}) {
             marginTop: 10,
           }}
         >
-          
 
           <View style={{ width: "100%", borderWidth: 1, borderRadius: 2 }}>
             <Picker
@@ -785,39 +808,37 @@ export default function CreateParcel({navigation}) {
           <Text style={{ fontWeight:'bold',height:30,padding:5,paddingLeft:10,borderTopRightRadius:5,borderTopLeftRadius:5,backgroundColor:AppColor.lightThird}}>
             Delivery Items
           </Text>
-          {item.map((e,i)=>{
-            console.log(e);
+          {item&&item.map((e,i)=>{
+           
             return(
-        <View  key={i} style={{
-      flexDirection:"row",
-       marginTop:5,marginBottom:5 }}>
-         
-              <View   style={{flexDirection:'row',width:'80%',justifyContent:"space-evenly"}}>
-              <Text>{e.name}</Text>
-              <Text>{e.mass}kg</Text>
+        <View 
+         key={i} 
+        style={{
+         flexDirection:"row",
+          marginTop:5,marginBottom:5 }}>
+              <View   style={{flexDirection:'row',width:'80%',justifyContent:"space-between",paddingLeft:10}}>
+              <Text style={{width:'40%'}}>{e.name}</Text>
+              <Text style={{width:'20%'}}>{e.mass}kg</Text>
               <Text>{e.quantity}pieces(s)</Text>
            </View>
-          
-         
-
-          <View style={{flexDirection:'row',width:'20%',justifyContent:'space-evenly'}}>
-            <TouchableOpacity onPress={()=>console.log(e)}>
+        <View style={{flexDirection:'row',width:'20%',justifyContent:'space-evenly'}}>
+            <TouchableOpacity onPress={()=>editItem(e)}>
              {IconComp ("edit" ,null,15,AppColor.third)}
             </TouchableOpacity>
-            <TouchableOpacity onPress={()=>console.log(e)}>
+            <TouchableOpacity onPress={()=>deleteItem(e)}>
              { IconComp ("trash",null,15,AppColor.third)}
             </TouchableOpacity>
           </View>
         </View>
         )
       })}
-
+     
         </View>
        
        <View>
-         <TouchableOpacity stylel={{justifyContent:'center'}} onPress={()=>addItemRef.current.open()}>
+         <TouchableOpacity stylel={{justifyContent:'center'}} onPress={()=>addItem()}>
           { IconComp ("plus-circle",{textAlign:'center'},40,AppColor.lightThird)}
-          <Text style={{textAlign:'center'}}>Add more item(s)</Text>
+          <Text style={{textAlign:'center'}}>Add item(s)</Text>
          </TouchableOpacity>
        </View>
         
@@ -847,7 +868,7 @@ export default function CreateParcel({navigation}) {
         )}
       </ScrollView>
        {appDetails.load&&<LoaderComp size={25} color={AppColor.third}/>}
-       <Custombtm displayComp={()=><AddItems add={(e)=>addToItem(e)} onChange={()=>onItemChange()}/>} height={Dimensions.get('screen').height} cod={true} btmRef={addItemRef}/>
+       <Custombtm displayComp={()=><AddItems setCat={()=>getCategory()} cat={category} add={(e)=>addToItem(e)} onChange={()=>onItemChange()} item={currentItem} update={(e)=>updateItem(e)}/>} height={Dimensions.get('screen').height} cod={true} btmRef={addItemRef}/>
     </View>
   );
 }

@@ -9,7 +9,7 @@ import { Colors } from "react-native/Libraries/NewAppScreen";
 import { api, apiRequest } from "../WorkerComp/Api";
 import { v4 as uuidv4 } from 'uuid';
 import 'react-native-get-random-values';
-export default function AddItems({ token,add,update,onChange}) {
+export default function AddItems({ token,add,update,onChange,item,cat,setCat}) {
   const [itemName, setItemName] = useState({
     name: "",
     error: false,
@@ -32,7 +32,7 @@ export default function AddItems({ token,add,update,onChange}) {
   });
 
   const [category, setCategory] = useState({
-    categoryId: null,
+    category: null,
     selectedCateory: "",
     value: [
       {
@@ -48,7 +48,7 @@ export default function AddItems({ token,add,update,onChange}) {
     worth: '',
     quantity: '',
     volume: '',
-    categoryId: '',
+    category: '',
   });
   const [appDetails, setAppDetails] = useState({
     load: false,
@@ -96,51 +96,97 @@ export default function AddItems({ token,add,update,onChange}) {
       check = false;
       setItemKg({ ...itemKg, error: true });
     } else {
-      setItemKg({ ...itemKg, error: false });
+      if(itemKg.value<1){
+        check=false;
+        setItemKg({ ...itemKg, error: true });
+      }else{
+        setItemKg({ ...itemKg, error: false });
+      }
+     
     }
 
     if (!itemWorth.value) {
       check = false;
       setItemWorth({ ...itemWorth, error: true });
     } else {
-      setItemWorth({ ...itemWorth, error: false });
+
+      if(itemWorth.value<1){
+        check=false;
+        setItemWorth({ ...itemWorth, error:true});
+      }else{
+        setItemWorth({ ...itemWorth, error: false });
+      }
+     
     }
 
-    if (!itemQuantity.value) {
+    if (!itemQuantity.value){
+      console.log("Okay")
       check = false;
-      setItemQuantity({ ...itemQuantity, error: true });
+      setItemQuantity({...itemQuantity, error:true});
     } else {
-      setItemQuantity({ ...itemQuantity, error: false });
+     
+      if(itemQuantity.value<1){
+        check=false;
+        console.log("Okay2")
+        setItemQuantity({...itemQuantity,error:true});
+      }else{
+        setItemQuantity({ ...itemQuantity, error:false});
+      }
     }
+
 
     if (!itemVolume.value) {
       check = false;
       setItemVolume({ ...itemVolume, error: true });
     } else {
+     if(itemVolume.value<1){
+       check=false;
+       setItemVolume({ ...itemVolume, error:true});
+     }else{
       setItemVolume({ ...itemVolume, error: false });
+     }
     }
-    if (!category.categoryId) {
+
+    if (!category.category) {
       check = false; 
     }
   
     return check;
   };
   const items=()=>{
-    if(itemCheck()){
+    if(item){
+      // Means to update on proceed
       var itemDetails={
-       name:itemName.name,
-       mass:itemKg.value,
-       worth:itemWorth.value,
-       quantity:itemQuantity.value,
-       volume:itemVolume.value,
-       categoryId:category.categoryId,
-       id:uuidv4(),
+       name:itemName.name?itemName.name:item.name,
+       mass:itemKg.value?itemKg.value:item.mass,
+       worth:itemWorth.value?itemWorth.value:item.worth,
+       quantity:itemQuantity.value?itemQuantity.value:item.quantity,
+       volume:itemVolume.value?itemVolume.value:item.volume,
+       category:category.category?category.category:item.category,
+       id:item.id,
       }
-       
+       //console.log("test");
       console.log(itemDetails);
-      add(itemDetails);
+      update(itemDetails);
       onChange();
-    }
+
+      }else if(itemCheck()){
+        var itemDetails={
+          name:itemName.name,
+          mass:itemKg.value,
+          worth:itemWorth.value,
+          quantity:itemQuantity.value,
+          volume:itemVolume.value,
+          category:category.category,
+          id:uuidv4(),
+         }
+          
+         console.log(itemDetails);
+         add(itemDetails);
+         onChange();
+       } else{
+         console.log("wahala");
+       }
   }
   return (
     <View>
@@ -165,14 +211,16 @@ export default function AddItems({ token,add,update,onChange}) {
             error={itemName.error}
             setText={(e) => setItemName({ ...itemName, name: e })}
             style={style.inputComp}
+            value={itemName.name?itemName.name:item&&item.name}
           />
           <InputComp
             mode="outlined"
-            label="Item Weight"
+            label="Item mass(kg)"
             placeholder="Enter Item Kg"
             error={itemKg.error}
             style={style.inputComp}
             keyboardType={"numeric"}
+            value={itemKg.value?itemKg.value:item&&item.mass}
             setText={(e) => setItemKg({ ...itemKg, value: e })}
           />
         </View>
@@ -184,6 +232,7 @@ export default function AddItems({ token,add,update,onChange}) {
             error={itemVolume.error}
             style={style.inputComp}
             keyboardType={"numeric"}
+            value={itemVolume.value?itemVolume.value:item&&item.volume}
             setText={(e) => setItemVolume({ ...itemVolume, value: e })}
           />
         </View>
@@ -192,29 +241,32 @@ export default function AddItems({ token,add,update,onChange}) {
             mode="outlined"
             label="Quantity"
             placeholder="Item quantity"
-            error={itemName.error}
+            error={itemQuantity.error}
             style={{ margin: 10, width: "43%" }}
             keyboardType={"numeric"}
+            value={itemQuantity.value?itemQuantity.value:item&&item.quantity}
             setText={(e) => setItemQuantity({ ...itemQuantity, value: e })}
           />
           <InputComp
             mode="outlined"
             label="Worth"
             placeholder="Item worth"
-            error={itemName.error}
+            error={itemWorth.error}
             style={{ margin: 10, width: "43%" }}
             keyboardType={"numeric"}
+            value={itemWorth.value?itemWorth.value:item&&item.worth}
             setText={(e) => setItemWorth({ ...itemWorth, value: e })}
           />
         </View>
 
         <View style={{ flexDirection: "row", justifyContent: "space-evenly" }}>
-          <TouchableOpacity style={{ alignSelf: "center", width: "15%" }}>
+          {!cat&&<TouchableOpacity style={{ alignSelf: "center", width: "15%" }}>
             {IconComp("sync-alt", null, 15, AppColor.third)}
-          </TouchableOpacity>
+          </TouchableOpacity>}
           <View
             style={{
-              width: "75%",
+              //
+              width:`${cat?"95%":"75%"}`,
               borderWidth: 1,
               borderRadius: 5,
               marginTop: 10,
@@ -222,30 +274,29 @@ export default function AddItems({ token,add,update,onChange}) {
             }}
           >
             <Picker
-              selectedValue={category.categoryId}
+              selectedValue={category.category}
               onValueChange={(itemValue, itemIndex) =>
                 //  setCategory({ ...category, stateId: itemValue })
-                setCategory({...category, categoryId: itemValue })
+                setCategory({...category, category: itemValue })
               }
               style={{ borderWidth: 1 }}
             >
-              <Picker.Item label="Category " value="" />
-              {category.value &&
-                category.value.map((e, i) => {
+              <Picker.Item label={'Category'} value="" />
+              {cat&&cat.map((e, i) => {
                   return <Picker.Item key={i} label={e.name} value={e.id} />;
                 })}
             </Picker>
           </View>
         </View>
 
-        <View>
+       <TouchableOpacity onpress={()=>setCat()}>
           {IconComp(
             "images",
             { marginLeft: 10, marginBottom: 10 },
             25,
             AppColor.third
           )}
-        </View>
+        </TouchableOpacity>
       </View>
       <View
         style={{

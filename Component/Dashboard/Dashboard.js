@@ -30,14 +30,9 @@ export default function Dashboard() {
   */
   return (
     <Drawer.Navigator
-      initialRouteName="Create Parcel"
       drawerContent={(props) => <UserDrawerContent {...props} />}
     >
-      <Drawer.Screen
-    name="Create Parcel"
-    component={CreateParcel}
-    options={{ headerShown: false }}
-     />
+      
       <Drawer.Screen
         name="Menu"
         component={Menu}
@@ -83,7 +78,11 @@ export default function Dashboard() {
         component={Support}
         options={{ headerShown: false }}
       />
-      
+      <Drawer.Screen
+    name="Create Parcel"
+    component={CreateParcel}
+    options={{ headerShown: false }}
+     />
       <Drawer.Screen
         name="Create Pickup"
         component={CreatePickup}
