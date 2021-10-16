@@ -309,7 +309,7 @@ export default function CreateParcel({navigation}) {
      
   const billingPayload=(e)=>{
    console.log(e);
-  setEstimateBill({...estimateBill,bill:e.data.payload});
+  setEstimateBill({...estimateBill,bill:e.data.payload.payable});
   
   }
 
@@ -434,6 +434,7 @@ export default function CreateParcel({navigation}) {
   }
 
   const addToItem=(e)=>{
+    setEstmateBilling(null);
   setItem([...item,{name:e.name,mass:e.mass,worth:e.worth,quantity:e.quantity,volume:e.volume,category:e.category,id:e.id}]);
   }
    
@@ -441,7 +442,8 @@ export default function CreateParcel({navigation}) {
     // filters out the current object unupdated id
    //  push the current object to the array
    // set the array with the updated array
-   
+   setEstmateBilling(null);
+
    var tempItem=item.filter(m=>m.id!=e.id);
    console.log(tempItem);
    tempItem.push(e);
@@ -526,7 +528,7 @@ export default function CreateParcel({navigation}) {
   }
 
   const deleteItem=(m)=>{
-
+     
     Alert.alert("Caution","Do you want to remove the item?",[
       {
         text:"Cancel",
@@ -535,6 +537,7 @@ export default function CreateParcel({navigation}) {
       {
         text:"Delete",
         onPress:()=>{
+          setEstimateBill(null);
           setItem((prev)=>{
             return prev.filter(e=>e.id!=m.id);
           })
