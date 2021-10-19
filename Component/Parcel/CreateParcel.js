@@ -189,8 +189,7 @@ export default function CreateParcel({navigation}) {
   const inputCheck = () => {
     var check = true;
     if (!name.name) {
-      check = false;
-      
+      check = false; 
       setName({ ...name, nameError: true });
     } else {
       setName({ ...name, nameError: false });
@@ -215,56 +214,10 @@ export default function CreateParcel({navigation}) {
       check = false;
     }
 
-    if (!mass.mass) {
-      check = false;
-      setMass({ ...mass, massError: true });
-    } else {
-      if(numberCheck(mass.mass)){
-        setMass({ ...mass, massError: false });
-      }else{
-        check=false;
-        setMass({ ...mass, massError:true });
-      }
-    }
-
-    if (!worth.worth) {
-      check = false;
-      setWorth({ ...worth, worthError: true });
-    } else {
-      if(numberCheck(worth.worth)){
-        setWorth({ ...worth, worthError: false });
-      }else{
-        check=false;
-        setWorth({ ...worth,worthError:true });
-      }
-    }
-
-    if (!volume.volume) {
-      check = false;
-      setVolume({ ...volume, volumeError: true });
-    } else {
-      if(numberCheck(volume.volume)){
-        setVolume({ ...volume, volumeError: false });
-      }else{
-        check=false;
-        setVolume({ ...volume, volumeError:true });
-      }
-    }
-
-    if (!quantity.quantity) {
-      check = false;
-      setQuantity({ ...quantity, quantityError: true });
-    } else {
-      if(numberCheck(quantity.quantity)){
-        setQuantity({ ...quantity, quantityError: false });
-      }else{
-        check=false;
-        setQuantity({ ...quantity, quantityError:true });
-      }
-    }
 
     if (!id.id) {
       check = false;
+      console.log("here")
       setId({ ...id, idError: true });
     } else {
       setId({ ...id, idError: false });
@@ -389,7 +342,7 @@ export default function CreateParcel({navigation}) {
     })
     
 
-   //  console.log(billingObject)
+     console.log(billingObject)
      apiRequest(billingObject,(e)=>setAppDetails({...appDetails,load:e}),(e)=>succFunc(e),(e)=>failFunc(e),(e)=>billingPayload(e));
     }else{
       Alert.alert("Error","Empty fields detected for estimated billing");
@@ -406,12 +359,11 @@ export default function CreateParcel({navigation}) {
         'Cache-Control': 'no-cache',
       } ,
          data:{
-        
           packaging:appDetails.packageId,
           name:name.name,
           sender:user.id,
           recipient:appDetails.receiverObjectId,
-          
+          items:[],
           description:desc.desc,
           locationTo:{"coordinates":[userLoc.lat,userLoc.lng],"address":userLoc.address},
           locationFrom:{"coordinates":[senderLoc.lat,senderLoc.lng],"address":senderLoc.address}, 
@@ -422,9 +374,12 @@ export default function CreateParcel({navigation}) {
           costPayable:estimateBill.bill,
           paymentGateway:"PAYSTACK",
           identification:id.id,
-        
          }
        }
+       item.map((e)=>{
+        delete e.id;
+        createParcelObject.data.items.push(e);
+      })
        console.log(createParcelObject);
        apiRequest(createParcelObject,(e)=>setAppDetails({...appDetails,load:e}),(e)=>succFunc(e),(e)=>failFunc(e),(e)=>createParcelPayload(e));
     
@@ -442,7 +397,7 @@ export default function CreateParcel({navigation}) {
     // filters out the current object unupdated id
    //  push the current object to the array
    // set the array with the updated array
-   setEstimateBill({...estimateBtill,bill:null});
+   setEstimateBill({...estimateBill,bill:null});
 
    var tempItem=item.filter(m=>m.id!=e.id);
    console.log(tempItem);
@@ -812,7 +767,6 @@ export default function CreateParcel({navigation}) {
             Delivery Items
           </Text>
           {item&&item.map((e,i)=>{
-           
             return(
         <View 
          key={i} 

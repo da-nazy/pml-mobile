@@ -426,7 +426,7 @@ export const api={
     getCategory:'api/pml/categories',
     getState:'api/erp/states',
     recoverPassword:'api/crm/customers/otp',
-    // localUrl:' itmain http://172.16.17.30/ online  palm:192.168.43.122',172.16.17.174 ,
+    // localUrl:' itmain http://172.16.17.30/ online api.pmt.com.ng  palm:192.168.43.122',172.16.17.174 ,
     localUrl:'https://api.pmt.com.ng/',
     googleReversGeoCodeUrl:'https://maps.googleapis.com/maps/api/geocode/json?latlng=',
     googleApiKey:'AIzaSyCE41gWBv1AfHzJNsyvCQe6FIPpYHLKcrs',

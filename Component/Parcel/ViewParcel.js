@@ -3,17 +3,16 @@ import { View,Text, ScrollView,StyleSheet, TouchableOpacity,Alert} from 'react-n
 import { AppColor } from '../WorkerComp/AppColor';
 import InputComp from '../WorkerComp/InputComp';
 import { packaging ,IconComp} from '../WorkerComp/ExternalFunction';
-import {api,apiRequest,ngStates} from '../WorkerComp/Api';
+import {api,apiRequest,ngStates,symbols} from '../WorkerComp/Api';
 import { Picker } from "@react-native-community/picker";
 import LoaderComp from '../WorkerComp/LoaderComp';
 import { UserContext } from '../DataProvider/UserContext';
 export default function ViewParcel({parcel,onParcelChange}){
   const usercontext=useContext(UserContext);
   const {authUser,user,userWallet}=usercontext;
-    //console.log(userWallet);
+    console.log(parcel);
     // should only update pickup not added to a parcel
 
- 
 
     const viewComp=(name,description)=>{
         return(
@@ -595,9 +594,22 @@ export default function ViewParcel({parcel,onParcelChange}){
                 })}
             </Picker>      
           </View>
-     
-
-         </View>
+          
+       </View>
+       <View style={{marginTop:10,paddingLeft:5}}>
+            <Text style={{borderBottomWidth:1,borderColor:AppColor.third,color:'#bbb',paddingBottom:5}}>Items In Parcel</Text>
+           {parcel.items&&parcel.items.map((e,i)=>{
+             console.log(e);
+             return(
+              <View style={{flexDirection:'row',justifyContent:'space-between',marginTop:5}}>
+              <Text style={{width:'28%',color:'#bbb'}}>{e.name}</Text>
+              <Text style={{width:'15%',color:'#bbb'}}>{e.mass}kg</Text>
+              <Text style={{width:'15%',color:'#bbb'}}>{symbols.naira}{e.worth}</Text>
+              <Text style={{width:'20%',color:'#bbb'}}>{e.quantity}piece(s)</Text>
+            </View>
+             )
+           })}
+      </View>
     
 
                 {/** Edit Delete */}

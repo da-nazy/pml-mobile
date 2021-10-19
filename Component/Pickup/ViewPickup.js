@@ -261,6 +261,8 @@ export default function ViewPickup({pickup,onPickupChange}){
      }
 
     const makePayement=()=>{
+      console.log(userWallet);
+     if(userWallet){
       var paymentObject={
         method:'post',
         url:`${api.localUrl}${api.makePayment}`,
@@ -270,18 +272,22 @@ export default function ViewPickup({pickup,onPickupChange}){
        },
        data:{
         trxref:pickup.trxref?pickup.trxref:'',
-        walletFrom:userWallet.wallet?userWallet.wallet:'',
+        walletFrom:userWallet&&userWallet.wallet?userWallet.wallet:'',
         walletTo:api.pmlWallet,
         narration:"Customer Pickup",
         pin:walletPin.pin,
         type:"L",
         amount:pickup.amount?pickup.amount:'',
+        
          }
        
       }
       console.log(paymentObject);
       apiRequest(paymentObject,(e)=>setAppDetails({...appDetails,load:e}),(e)=>succFunc(e),(e)=>failFunc(e),(e)=>makePaymentPayload(e));
   
+     }else{
+       Alert.alert("Caution","You don't have an active wallet");
+     }
   }
 
     const getUserParcels=()=>{
