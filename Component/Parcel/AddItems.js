@@ -266,7 +266,7 @@ export default function AddItems({ token,add,update,onChange,item,cat,setCat}) {
           <View
             style={{
               //
-              width:`${cat?"95%":"75%"}`,
+              width:`${cat?"95f%":"75%"}`,
               borderWidth: 1,
               borderRadius: 5,
               marginTop: 10,

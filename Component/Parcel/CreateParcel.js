@@ -40,7 +40,7 @@ export default function CreateParcel({navigation}) {
   const [dateshow, setDateShow] = useState(false);
   const [appDate, setAppDate] = useState(new Date(1598051730000));
   const[estimateBill,setEstimateBill]=useState({
-    bill:'',
+    bill:null,
     error:false,
   })
   const[worth,setWorth]=useState({
@@ -434,7 +434,7 @@ export default function CreateParcel({navigation}) {
   }
 
   const addToItem=(e)=>{
-    setEstmateBilling(null);
+    setEstimateBill({...estimateBill,bill:null});
   setItem([...item,{name:e.name,mass:e.mass,worth:e.worth,quantity:e.quantity,volume:e.volume,category:e.category,id:e.id}]);
   }
    
@@ -442,7 +442,7 @@ export default function CreateParcel({navigation}) {
     // filters out the current object unupdated id
    //  push the current object to the array
    // set the array with the updated array
-   setEstmateBilling(null);
+   setEstimateBill({...estimateBtill,bill:null});
 
    var tempItem=item.filter(m=>m.id!=e.id);
    console.log(tempItem);
@@ -537,7 +537,7 @@ export default function CreateParcel({navigation}) {
       {
         text:"Delete",
         onPress:()=>{
-          setEstimateBill(null);
+          setEstimateBill({...estimateBill,bill:null});
           setItem((prev)=>{
             return prev.filter(e=>e.id!=m.id);
           })
