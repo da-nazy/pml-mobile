@@ -107,11 +107,27 @@ export default function ViewPickup({pickup,onPickupChange}){
 
     const failFunc=(e)=>{
       //console.log(e);
-      Alert.alert("Error",e)
+     // Alert.alert("Error",`${e}danny`)
+    
+
+     if(e.split('dup')[0]){
+      // Alert.alert("Error","The payment is a duplicate");
+    Alert.alert("Caution","Payment has already been made",[
+      {
+        text:"confirm",
+        onPress:confirm(),
+      },
+      {text:"Cancle",
+    onPress:console.log("cancle")
+  }
+    ])
+     }else{
+       console.log(e);
+     }
     }
    
     const makePaymentPayload=(e)=>{
-     console.log(e);
+     console.log(e,"danny");
      if(e.data.payload.status==='SUCCESS'){
       Alert.alert("Message","Transaction Successfull",[{
         text:'Ok',
