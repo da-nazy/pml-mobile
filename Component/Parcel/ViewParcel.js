@@ -601,10 +601,10 @@ export default function ViewParcel({parcel,onParcelChange}){
            {parcel.items&&parcel.items.map((e,i)=>{
              console.log(e);
              return(
-              <View style={{flexDirection:'row',justifyContent:'space-between',marginTop:5}}>
+              <View key={i} style={{flexDirection:'row',justifyContent:'space-between',marginTop:5}}>
               <Text style={{width:'28%',color:'#bbb'}}>{e.name}</Text>
-              <Text style={{width:'15%',color:'#bbb'}}>{e.mass}kg</Text>
-              <Text style={{width:'15%',color:'#bbb'}}>{symbols.naira}{e.worth}</Text>
+              <Text style={{width:'10%',color:'#bbb'}}>{e.mass}kg</Text>
+              <Text style={{width:'23%',color:'#bbb'}}>{symbols.naira}{e.worth}</Text>
               <Text style={{width:'20%',color:'#bbb'}}>{e.quantity}piece(s)</Text>
             </View>
              )

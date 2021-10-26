@@ -31,6 +31,7 @@ export const pinColor={
   color17:'indigo',
 }
 export const ngStates=[
+   
   {
      id: "5851bc91860d8b5a70000022",
     name: "Kebbi State",
@@ -427,7 +428,7 @@ export const api={
     getState:'api/erp/states',
     recoverPassword:'api/crm/customers/otp',
     // localUrl:' itmain http://172.16.17.30/ online api.pmt.com.ng  palm:192.168.43.122',172.16.17.174 ,
-    localUrl:'http://172.16.17.40/',
+    localUrl:'http://172.16.17.27/',
     googleReversGeoCodeUrl:'https://maps.googleapis.com/maps/api/geocode/json?latlng=',
     googleApiKey:'AIzaSyCE41gWBv1AfHzJNsyvCQe6FIPpYHLKcrs',
     estimatedBilling:'api/pml/pml-parcels/estimate-billing',

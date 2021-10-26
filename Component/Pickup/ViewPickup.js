@@ -23,6 +23,7 @@ export default function ViewPickup({pickup,onPickupChange}){
     const[appDetails,setAppDetails]=useState({
         edit:false,
         load:false,
+        confirm:null,
     })
 
     const removeParcelFromPickup=(e)=>{
@@ -37,7 +38,7 @@ export default function ViewPickup({pickup,onPickupChange}){
       }
     ]);
     }
-
+     
     const addParcelToPickup=(e)=>{
       Alert.alert("Add Parcel",`Add Parcel with code ${e} to Pickup?`,[
         {
@@ -112,20 +113,11 @@ export default function ViewPickup({pickup,onPickupChange}){
 
      if(e.split('dup')[0]){
       // Alert.alert("Error","The payment is a duplicate");
-    Alert.alert("Caution","Payment has already been made",[
-      {
-        text:"confirm",
-        onPress:confirm(),
-      },
-      {text:"Cancle",
-    onPress:console.log("cancle")
+        setAppDetails({...appDetails,confirm:true})
+     console.log("testy");
+    
   }
-    ])
-     }else{
-       console.log(e);
-     }
-    }
-   
+}
     const makePaymentPayload=(e)=>{
      console.log(e,"danny");
      if(e.data.payload.status==='SUCCESS'){
@@ -263,6 +255,7 @@ export default function ViewPickup({pickup,onPickupChange}){
     }
 
      const confirmPayment=()=>{
+       setAppDetails({...appDetails,confirm:false})
        var confirmPaymentObject={
          method:'get',
          url:`${api.localUrl}${api.verifyPayment}/${pickup.code?pickup.code:""}`,
@@ -320,6 +313,20 @@ export default function ViewPickup({pickup,onPickupChange}){
   
      }
 
+     if(appDetails.confirm){
+      
+      Alert.alert("Caution","Confirm payment",[
+        {
+          text:'Confirm',
+          onPress:()=>confirmPayment(),
+        },
+        {
+          text:"Cancle",
+          onPress:console.log("Cancle confirmation"),
+        }
+      ])
+  
+    }
     return (
         <View>
             <ScrollView>
@@ -521,6 +528,7 @@ export default function ViewPickup({pickup,onPickupChange}){
 
             </ScrollView>
           {appDetails.load&&(<LoaderComp size={25} color={AppColor.third}/>)}
+       
         </View>
     )
 }
