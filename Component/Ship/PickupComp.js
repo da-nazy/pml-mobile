@@ -3,7 +3,8 @@ import { View,Text,Dimension,StyleSheet,TouchableOpacity} from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import { AppColor } from '../WorkerComp/AppColor';
 import  ParcelComp from '../Ship/ParcelComp';
-export default function PickupComp({catIcon,func,pickup}) {
+import Pickupoperation from './Pickupopeation';
+export default function PickupComp({catIcon,func,pickup,pickOp}) {
   const [parcelDisplay,setParcelDisplay]=useState(false);
     return (
      <View>
@@ -44,10 +45,16 @@ export default function PickupComp({catIcon,func,pickup}) {
 
        </View>
       
-        
-        <TouchableOpacity onPress={()=>setParcelDisplay(!parcelDisplay)} style={{width:'10%'}}>
+      <View style={{width:'10%',height:'100%',justifyContent:'space-evenly',flexDirection:'column'}}>
+      <TouchableOpacity onPress={()=>pickOp()}  style={{alignSelf:'center'}}>
+          <Icon name="telegram-plane" size={20} color={AppColor.third} />
+        </TouchableOpacity>
+
+      <TouchableOpacity onPress={()=>setParcelDisplay(!parcelDisplay)}   style={{alignSelf:'center'}}>
           <Icon name="eye" size={20} color={parcelDisplay?AppColor.third:"#bbb"} />
         </TouchableOpacity>
+      </View>
+
       </View>
      {
        pickup.pmlParcels&&parcelDisplay&&pickup.pmlParcels.map((e,i)=>{

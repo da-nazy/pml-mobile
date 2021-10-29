@@ -409,8 +409,8 @@ export const ngStates=[
 export const symbols={
     naira:"\u20A6",
 }
-
 export const api={
+    pickupStatus:["COLLECTION","DECLINE","CANCEL","DISPATCH","DELIVERY","CONFIRM","ACCEPTED"],
     login:'api/crm/customers/Login',
     register:'api/crm/customers',
     userProfile:'api/crm/customers/me',
@@ -428,7 +428,8 @@ export const api={
     getState:'api/erp/states',
     recoverPassword:'api/crm/customers/otp',
     // localUrl:' itmain http://172.16.17.30/ online api.pmt.com.ng  palm:192.168.43.122',172.16.17.174 ,
-    localUrl:'http://172.16.17.27/',
+   //localUrl:'https://api.pmt.com.ng/',
+   localUrl:'http://172.16.17.39/',
     googleReversGeoCodeUrl:'https://maps.googleapis.com/maps/api/geocode/json?latlng=',
     googleApiKey:'AIzaSyCE41gWBv1AfHzJNsyvCQe6FIPpYHLKcrs',
     estimatedBilling:'api/pml/pml-parcels/estimate-billing',
@@ -436,6 +437,7 @@ export const api={
     makePayment:'api/ewallet/transfers',
     verifyPayment:'api/pml/pml-pickups/verify',
     pmlWallet:'1234567894',
+    pmlPickups:'api/pml/pml-pickups',
 }
 
 //https://maps.googleapis.com/maps/api/geocode/json?latlng=6.4637031,7.5515096&key=AIzaSyCE41gWBv1AfHzJNsyvCQe6FIPpYHLKcrs

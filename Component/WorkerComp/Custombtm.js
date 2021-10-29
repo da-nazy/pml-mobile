@@ -11,6 +11,7 @@ return(
     closeOnPressMask={copm}
     openDuration={12}
     height={height}
+  
     customStyles={{
         wrapper: {
             backgroundColor: "transparent"

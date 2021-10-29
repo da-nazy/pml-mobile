@@ -1,4 +1,4 @@
-import React, { useState,useEffect,useContext,useCallback} from 'react';
+import React, { useState,useEffect,useContext,useCallback,useRef} from 'react';
 import {View,StyleSheet,Text,ScrollView,RefreshControl, Dimensions} from 'react-native';
 import { IconComp } from '../WorkerComp/ExternalFunction';
 import { AppColor } from '../WorkerComp/AppColor';
@@ -6,13 +6,19 @@ import PickupComp from '../Ship/PickupComp';
 import LoaderComp from '../WorkerComp/LoaderComp';
 import {UserContext }from '../DataProvider/UserContext';
 import {api,apiRequest} from '../WorkerComp/Api';
+import Custombtm from '../WorkerComp/Custombtm';
+import Pickupoperation from './Pickupopeation';
 export default function Ship(){
     const usercontext=useContext(UserContext);
     const{user,authUser}=usercontext;
     const [userPickup,setUserPickup]=useState(null);
+          
+     const pickRef= useRef(null);
+
     const[appDetails,setAppDetails]=useState({
         load:false,
         refresh:false,
+        currentPickup:null,
 
     })
   
@@ -20,6 +26,11 @@ export default function Ship(){
      * TODO: sort by date and pickupstatus , swipe refresh
      * 
      */
+    const openPickOperation=(e)=>{
+        setAppDetails({appDetails,currentPickup:e},pickRef.current.open());
+           
+    }
+
     useEffect(()=>{
         getUserPickup()
     },[])
@@ -34,51 +45,7 @@ export default function Ship(){
      wait(200).then(()=>setAppDetails({...appDetails,refresh:false}))
     },[])
 
-    var pickup=[{
-        name:'Aza',
-        pickupStatus:'pending',
-        pmlParcel:[
-           {
-        name:"test",
-        date:"2023",
-        status:"Pending",
-        isPackaged:true,
-        id:1,
-           },
-          {
-            name:"testy",
-            date:"2023",
-            status:"Pending",
-            isPackaged:false,
-            id:2
-           }
-        ],
-        createdAt:"10-10-1990",
-        price:'#2000',
-    },
-    {
-        name:'Aza',
-        pickupStatus:'pending',
-        pmlParcel:[
-           {
-        name:"test",
-        date:"2023",
-        status:"Pending",
-        isPackaged:true,
-        id:1,
-           },
-          {
-            name:"testy",
-            date:"2023",
-            status:"Pending",
-            isPackaged:false,
-            id:2
-           }
-        ],
-        createdAt:"10-10-1990",
-        price:'#2000',
-    }
-]
+    
   const userPickupPayload=(e)=>{
       console.log(e.data.payload);
        if(e.data.payload.length>0){
@@ -113,10 +80,12 @@ export default function Ship(){
         <View style={{flexDirection:'row',justifyContent:'center',padding:15,borderBottomWidth:1,borderBottomColor:`${AppColor.third}`}}>{IconComp("ship",style.iconStyle,25,AppColor.third)}<Text style={{fontWeight:'bold',textAlign:'center',fontSize:15,marginLeft:5}}>Shipments</Text></View>
         
        {userPickup&&userPickup.map((e,i)=>{
-           return  <PickupComp key={i} catIcon="boxes" pickup={e}/>
+           return  <PickupComp key={i} catIcon="boxes" pickup={e} pickOp={()=>openPickOperation(e)}/>
        })}
        {appDetails.load&&<LoaderComp size={25} color={AppColor.third}/>}
 
+       <Custombtm displayComp={()=><Pickupoperation pickup={appDetails.currentPickup}/>}  cod={true} copm={true} btmRef={pickRef} height={780}/>
+   
         </ScrollView>
     )
 }

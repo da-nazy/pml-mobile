@@ -109,13 +109,14 @@ export default function ViewPickup({pickup,onPickupChange}){
     const failFunc=(e)=>{
       //console.log(e);
      // Alert.alert("Error",`${e}danny`)
-    
 
-     if(e.split('dup')[0]){
+     if(e.includes('dup')){
       // Alert.alert("Error","The payment is a duplicate");
-        setAppDetails({...appDetails,confirm:true})
-     console.log("testy");
-    
+        setAppDetails({...appDetails,confirm:true});
+        console.log("testy");
+  }else{
+    //console.log(e);
+    Alert.alert("Error",e);
   }
 }
     const makePaymentPayload=(e)=>{
