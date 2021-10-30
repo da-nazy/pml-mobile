@@ -59,14 +59,15 @@ export default function Pickupoperation({pickup}){
             name:'DISPTACHED',
             accepted:null,
             message:'Have pickup been dispatched?',
-            view:<TouchableOpacity onPress={()=>update(4)} style={{borderWidth:1,height:28,width:70,justifyContent:'center',borderRadius:2,margin:2,backgroundColor:AppColor.third,borderColor:AppColor.third}}><Text style={{textAlign:'center',color:'#fff'}}>REFRESH</Text></TouchableOpacity>
+            view:<TouchableOpacity onPress={()=>checkPickupStatus()} style={{borderWidth:1,height:28,width:70,justifyContent:'center',borderRadius:2,margin:2,backgroundColor:AppColor.third,borderColor:AppColor.third}}><Text style={{textAlign:'center',color:'#fff'}}>REFRESH</Text></TouchableOpacity>
         },
+
         {
             id:5,
             name:'DELIVERED',
             accepted:null,
             message:'Confirm if you have received the pickup?',
-            view:<TouchableOpacity onPress={()=>update(4)} style={{borderWidth:1,height:28,width:70,justifyContent:'center',borderRadius:2,margin:2,backgroundColor:AppColor.third,borderColor:AppColor.third}}><Text style={{textAlign:'center',color:'#fff'}}>YES</Text></TouchableOpacity>
+            view:<TouchableOpacity onPress={()=>deliverPickup()} style={{borderWidth:1,height:28,width:70,justifyContent:'center',borderRadius:2,margin:2,backgroundColor:AppColor.third,borderColor:AppColor.third}}><Text style={{textAlign:'center',color:'#fff'}}>YES</Text></TouchableOpacity>
         }
     ]);
 
@@ -130,6 +131,98 @@ export default function Pickupoperation({pickup}){
                 })
                 break;
 
+            case "DISPATCHED":
+                const dispatchItems=[...data];
+                dispatchItems.map((e,i)=>{
+                    if(e.id===1){
+                        dispatchItems[i].accepted=true;
+                        dispatchItems[i].message="Pickup has been asigned to a dispatcher";
+                        delete dispatchItems[i].view;
+                    }
+                    if(e.id===2){
+                        dispatchItems[i].accepted=true;
+                        dispatchItems[i].message="Pickup has been accepted by a dispatcher";
+                        delete dispatchItems[i].view; 
+                    }
+                    if(e.id===3){
+                        dispatchItems[i].accepted=true;
+                        dispatchItems[i].message="You have confirmed pickup collection";
+                        delete dispatchItems[i].view;
+                    }
+                    if(e.id===4){
+                        dispatchItems[i].accepted=true;
+                        dispatchItems[i].message="Pickup has been dispatched";
+                        delete dispatchItems[i].view;
+                    }
+      
+                    setCurrentPosition(4);
+                    setData(dispatchItems);
+                })
+                break;
+                 case "DELIVERED":
+                    const deliveryItems=[...data];
+                    deliveryItems.map((e,i)=>{
+                        if(e.id===1){
+                            deliveryItems[i].accepted=true;
+                            deliveryItems[i].message="Pickup has been asigned to a dispatcher";
+                            delete deliveryItems[i].view;
+                        }
+                        if(e.id===2){
+                            deliveryItems[i].accepted=true;
+                            deliveryItems[i].message="Pickup has been accepted by a dispatcher";
+                            delete deliveryItems[i].view; 
+                        }
+                        if(e.id===3){
+                            deliveryItems[i].accepted=true;
+                            deliveryItems[i].message="You have confirmed pickup collection";
+                            delete deliveryItems[i].view;
+                        }
+                        if(e.id===4){
+                            deliveryItems[i].accepted=true;
+                            deliveryItems[i].message="Pickup has been dispatched";
+                            delete deliveryItems[i].view;
+                        }
+                        if(e.id===5){
+                            deliveryItems[i].accepted=true;
+                            deliveryItems[i].message="Confirm the delivered pickup";
+                            delete deliveryItems[i].view;
+                        }
+                        setData(deliveryItems);
+                    })
+                     break;
+                     case "CONFIRM":
+                        const confirmItems=[...data];
+                        confirmItems.map((e,i)=>{
+                            if(e.id===1){
+                                confirmItems[i].accepted=true;
+                                confirmItems[i].message="Pickup has been asigned to a dispatcher";
+                                delete confirmItems[i].view;
+                            }
+                            if(e.id===2){
+                                confirmItems[i].accepted=true;
+                                confirmItems[i].message="Pickup has been accepted by a dispatcher";
+                                delete confirmItems[i].view; 
+                            }
+                            if(e.id===3){
+                                confirmItems[i].accepted=true;
+                                confirmItems[i].message="You have confirmed pickup collection";
+                                delete confirmItems[i].view;
+                            }
+                            if(e.id===4){
+                                confirmItems[i].accepted=true;
+                                deliveryItems[i].message="Pickup has been dispatched";
+                                delete deliveryItems[i].view;
+                            }
+                            if(e.id===5){
+                                confirmItems[i].accepted=true;
+                                confirmItems[i].message="Pickup has been delivered to you.";
+                                delete deliveryItems[i].view;
+                            }
+                            setCurrentPosition(5);
+                            setData(deliveryItems);
+                        })
+                         break;
+
         }
     }
 
@@ -140,48 +233,19 @@ export default function Pickupoperation({pickup}){
 
     //question,check
    
-     const acceptOp=(idx)=>{
-     // set Accepted:true
-    //set appDetails.Accepted to true;
-    //Remove the buttons
-    // Change the text to : You have accepted to attend to the pickup.
-      const newItems=[...data];
-      newItems.map((e,i)=>{
-         if(e.id===idx){
-         newItems[i].accepted=true;
-         newItems[i].message="You have accepted to attend to the pickup";
-         delete newItems[i].view;
-         setCurrentPosition(1);
-         setData(newItems);
-        // console.log("upate")
-         }
-      })
-     }
+    
+    const deliverPickup=()=>{
+        Alert.alert("Caution","Have the dispatcher delivered the pickup?",[
+            {
+                text:"Yes",
+                onPress:()=>pickupDelivery()
+            },
+            {
+                text:"Cancel",
 
-     const dispatchOp=(idx)=>{
-         // check if collected
-         // change change accepted to true
-         // Remove the buttons
-         // Change text to : Collected Pickup has been dispatched .
-         console.log(idx);
-         console.log(data[1].accepted,data[1].name);
-         if(!data[1].accepted&&!data[1].name=="COLLECTED"){
-             Alert.alert("Caution","Pickup hasn't been collected yet!");
-         }else{
-             const newItems=[...data];
-             newItems.map((e,i)=>{
-               if(e.id===idx){
-                   newItems[i].accepted=true;
-                   newItems[i].message="Collected pickup has been dispatched.";
-                   delete newItems[i].view;
-                   setCurrentPosition(3);
-                   setData(newItems);
-               }
-             })
-         }
-
-     }
-
+            }
+        ])
+    }
      const collectPickup=()=>{
          Alert.alert("Caution","Have the dispatcher collected the pickup?",[
              {
@@ -194,6 +258,7 @@ export default function Pickupoperation({pickup}){
              }
          ])
      }
+
      const collectPickupPayload=(e)=>{
         console.log(e);
      }
@@ -204,6 +269,24 @@ export default function Pickupoperation({pickup}){
          console.log(e);
      }
 
+     const deliveredPickupPayload=(e)=>{
+           console.log(e);
+     }
+     
+     const pickupDelivery=()=>{
+        var deliverObject={
+         method:'put',
+         url:`${api.localUrl}${api.pmlPickups}/${api.pickupStatus[5]}/${pickup.id}`,
+         headers:{
+            Authorization:' Bearer ' + authUser.token,
+            'Cache-Control': 'no-cache',
+          }
+        }
+
+        console.log(deliverObject);
+       apiRequest(deliverObject,(e)=>setAppDetails({...appDetails,load:e}),(e)=>succFunc(e),(e)=>failFunc(e),(e)=>deliveredPickupPayload(e));
+
+    }
     const pickupCollection=()=>{
         var collectObject={
          method:'put',
