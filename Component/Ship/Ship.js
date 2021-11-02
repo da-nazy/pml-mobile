@@ -32,8 +32,10 @@ export default function Ship(){
     }
 
     useEffect(()=>{
+       if(!userPickup){
         getUserPickup()
-    },[])
+       }
+    },[userPickup])
       
     const wait=(timeOut)=>{
         return new Promise(resolve=>setTimeout(resolve,timeOut));
@@ -45,7 +47,10 @@ export default function Ship(){
      wait(200).then(()=>setAppDetails({...appDetails,refresh:false}))
     },[])
 
-    
+    const statusChange=()=>{
+        btmRef.current.close();
+        setUserPickup(null);
+    }
   const userPickupPayload=(e)=>{
       console.log(e.data.payload);
        if(e.data.payload.length>0){
@@ -84,7 +89,7 @@ export default function Ship(){
        })}
        {appDetails.load&&<LoaderComp size={25} color={AppColor.third}/>}
 
-       <Custombtm displayComp={()=><Pickupoperation pickup={appDetails.currentPickup}/>}  cod={true} copm={true} btmRef={pickRef} height={780}/>
+       <Custombtm displayComp={()=><Pickupoperation pickup={appDetails.currentPickup} statusChange={()=>statusChange()}/>}  cod={true} copm={true} btmRef={pickRef} height={780}/>
    
         </ScrollView>
     )

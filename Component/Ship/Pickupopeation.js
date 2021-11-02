@@ -7,7 +7,7 @@ import { IconComp } from '../WorkerComp/ExternalFunction';
 const {width,height}=Dimensions.get("window");
 import { UserContext } from '../DataProvider/UserContext';
 import LoaderComp from '../WorkerComp/LoaderComp';
-export default function Pickupoperation({pickup}){
+export default function Pickupoperation({pickup,statusChange}){
     const usercontext=useContext(UserContext);
     const{user,authUser}=usercontext;
     console.log(pickup.status);
@@ -183,14 +183,15 @@ export default function Pickupoperation({pickup}){
                             delete deliveryItems[i].view;
                         }
                         if(e.id===5){
-                            deliveryItems[i].accepted=true;
+                            deliveryItems[i].accepted=false;
                             deliveryItems[i].message="Confirm the delivered pickup";
-                            delete deliveryItems[i].view;
+                            deliveryItems[i].view=<TouchableOpacity onPress={()=>confirmPickup()} style={{borderWidth:1,height:28,width:70,justifyContent:'center',borderRadius:2,margin:2,backgroundColor:AppColor.third,borderColor:AppColor.third}}><Text style={{textAlign:'center',color:'#fff'}}>YES</Text></TouchableOpacity>
                         }
+                        setCurrentPosition(5);
                         setData(deliveryItems);
                     })
                      break;
-                     case "CONFIRM":
+                     case "CONFIRMED":
                         const confirmItems=[...data];
                         confirmItems.map((e,i)=>{
                             if(e.id===1){
@@ -210,16 +211,16 @@ export default function Pickupoperation({pickup}){
                             }
                             if(e.id===4){
                                 confirmItems[i].accepted=true;
-                                deliveryItems[i].message="Pickup has been dispatched";
-                                delete deliveryItems[i].view;
+                                confirmItems[i].message="Pickup has been dispatched";
+                                delete confirmItems[i].view;
                             }
                             if(e.id===5){
                                 confirmItems[i].accepted=true;
                                 confirmItems[i].message="Pickup has been delivered to you.";
-                                delete deliveryItems[i].view;
+                                delete confirmItems[i].view;
                             }
                             setCurrentPosition(5);
-                            setData(deliveryItems);
+                            setData(confirmItems);
                         })
                          break;
 
@@ -232,7 +233,19 @@ export default function Pickupoperation({pickup}){
     
 
     //question,check
-   
+     const confirmPickup=()=>{
+         Alert.alert("Caution","Have you received the pickup?",[
+             {
+                 text:"Yes",
+                 onPress:()=>pickupConfirm(),
+             },
+
+             {
+                 text:'Cancel',
+             }
+         ])
+     }
+
     
     const deliverPickup=()=>{
         Alert.alert("Caution","Have the dispatcher delivered the pickup?",[
@@ -267,10 +280,14 @@ export default function Pickupoperation({pickup}){
      }
      const succFunc=(e)=>{
          console.log(e);
+         statusChange();
      }
 
      const deliveredPickupPayload=(e)=>{
            console.log(e);
+     }
+     const confirmPickupPayload=(e)=>{
+         console.log(e);
      }
      
      const pickupDelivery=()=>{
@@ -285,8 +302,23 @@ export default function Pickupoperation({pickup}){
 
         console.log(deliverObject);
        apiRequest(deliverObject,(e)=>setAppDetails({...appDetails,load:e}),(e)=>succFunc(e),(e)=>failFunc(e),(e)=>deliveredPickupPayload(e));
-
     }
+
+    const pickupConfirm=()=>{
+        var confirmObject={
+            method:'put',
+            url:`${api.localUrl}${api.pmlPickups}/${api.pickupStatus[5]}/${pickup.id}`,
+            headers:{
+               Authorization:' Bearer ' + authUser.token,
+               'Cache-Control': 'no-cache',
+             }
+           }
+   
+           console.log(confirmObject);
+          apiRequest(confirmObject,(e)=>setAppDetails({...appDetails,load:e}),(e)=>succFunc(e),(e)=>failFunc(e),(e)=>confirmPickupPayload(e));
+       
+    }
+    
     const pickupCollection=()=>{
         var collectObject={
          method:'put',
@@ -302,26 +334,7 @@ export default function Pickupoperation({pickup}){
 
     }
 
-const update=(idx)=>{
-    // data.map(()=>{})
-    //idx is object id not array index id search for the array index and display
-    const newItems=[...data];
-    console.log(idx);
-   //console.log(newItems[idx]);
-   newItems.map((e,i)=>{
-      if(e.id===idx){
-         // console.log(i);
-        //console.log(newItems[i]);
-          newItems[i].accepted=true;
-        //  delete newItems[i].message;
-        //  delete newItems[i].view;
-          //console.log(newItems[i]);
-          setData(newItems);
-      }
-   })
-   
-    
-}
+
 
 
     const customStyles = {
