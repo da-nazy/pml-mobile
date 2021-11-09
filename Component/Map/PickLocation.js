@@ -1,12 +1,11 @@
-import React,{useState,useRef,useContext}  from 'react';
+import React,{useState,useRef,useContext,useEffect}  from 'react';
 import MapView,{Callout, Marker,Circle} from 'react-native-maps';
 import { StyleSheet, Text, View, Dimensions,StatusBar, TouchableOpacity } from 'react-native';
 import { locations } from './locations';
 import { AppColor } from '../WorkerComp/AppColor';
 import LoaderComp from '../WorkerComp/LoaderComp';
-import {api,apiRequest} from '../WorkerComp/Api';
+import {api,apiRequest, pmlTerminalCord} from '../WorkerComp/Api';
  import { UserContext } from '../DataProvider/UserContext';
-import { useEffect } from 'react/cjs/react.development';
 export default function PickLocation({navigation}) {
   const {navigate}=navigation;
      const usercontext=useContext(UserContext);
@@ -142,6 +141,7 @@ export default function PickLocation({navigation}) {
     }} 
          provider="google"
     >
+
       <Marker coordinate={pin}
      pinColor="plum"
      draggable={true}
@@ -161,6 +161,12 @@ export default function PickLocation({navigation}) {
         </Callout>
       </Marker>
       <Circle center={pin} radius={50}/>
+       {pmlTerminalCord.coord.map((e,i)=>{
+         return <Marker
+         pinColor={pinColor.color15}
+         coordinate={{ latitude: senderLoc.lat, longitude: senderLoc.lng }}
+       />
+       })}
     </MapView>:null}
     {pin.longitude==0?(<LoaderComp size={45} color={AppColor.third} />):searchResult()}
  </View>

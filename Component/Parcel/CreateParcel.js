@@ -394,15 +394,23 @@ export default function CreateParcel({navigation}) {
   }
    
   const updateItem=(e)=>{
-    // filters out the current object unupdated id
-   //  push the current object to the array
-   // set the array with the updated array
+  
    setEstimateBill({...estimateBill,bill:null});
 
-   var tempItem=item.filter(m=>m.id!=e.id);
-   console.log(tempItem);
-   tempItem.push(e);
-    setItem(tempItem);
+  
+    const tempItem=[...item];
+     tempItem.map((m,i)=>{
+       if(m.id===e.id){
+         tempItem[i].name=e.name,
+         tempItem[i].mass=e.mass,
+         tempItem[i].worth=e.worth,
+         tempItem[i].quantity=e.quantity,
+         tempItem[i].volume=e.volume,
+         tempItem[i].category=e.category
+         
+       }
+       setItem(tempItem);
+     })
   }
 
   const onChange = (even, selectedDate) => {
