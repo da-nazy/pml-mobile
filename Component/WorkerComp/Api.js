@@ -409,7 +409,7 @@ export const symbols = {
   naira: "\u20A6",
 };
    
-   DELIVERY_TYPE=[
+ export const  deliveryType=[
     "HOME","TERMINAL"
    ]
 export const api = {

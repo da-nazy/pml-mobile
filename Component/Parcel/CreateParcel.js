@@ -383,7 +383,7 @@ export default function CreateParcel({navigation}) {
           paymentGateway:"PAYSTACK",
           identification:id.id,
           deliveryType:'',
-          vehicleType:'',
+          vehicleType:userPickupDetails.vehicleType,
          }
        }
        item.map((e)=>{
@@ -669,8 +669,8 @@ export default function CreateParcel({navigation}) {
               style={{ borderWidth: 1, width: "100%" }}
             >
               <Picker.Item label="Delivery Type" value="" />
-              <Picker.Item key={i} label={e[0]} value={e[0]}/>
-              <Picker.Item key={i} label={e[1]} value={e[1]}/>
+              <Picker.Item  label={deliveryType[0]} value={deliveryType[0]}/>
+              <Picker.Item  label={deliveryType[1]} value={deliveryType[1]}/>
             </Picker>
           </View>
          </View>
