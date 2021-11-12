@@ -17,7 +17,7 @@ import { Picker } from "@react-native-community/picker";
 import { UserContext } from "../DataProvider/UserContext";
 import { IconComp, packaging,validatePhone,wait} from "../WorkerComp/ExternalFunction";
 import DateTimePicker from "@react-native-community/datetimepicker";
-import { api, apiRequest,ngStates} from "../WorkerComp/Api";
+import { api, apiRequest,ngStates,deliveryType} from "../WorkerComp/Api";
 import LoaderComp from "../WorkerComp/LoaderComp";
 import Custombtm from "../WorkerComp/Custombtm";
 import AddItems from "../../Component/Parcel/AddItems";
@@ -42,6 +42,14 @@ export default function CreateParcel({navigation}) {
   const[estimateBill,setEstimateBill]=useState({
     bill:null,
     error:false,
+  })
+  const [delivery_Type,setDelivery_Type]=useState({
+     name:'',
+     error:'',
+  })
+  const [vehicleType,setVehicleType]=useState({
+       name:'',
+       error:'',
   })
   const[worth,setWorth]=useState({
     worth:'',
@@ -374,6 +382,8 @@ export default function CreateParcel({navigation}) {
           costPayable:estimateBill.bill,
           paymentGateway:"PAYSTACK",
           identification:id.id,
+          deliveryType:'',
+          vehicleType:'',
          }
        }
        item.map((e)=>{
@@ -633,7 +643,8 @@ export default function CreateParcel({navigation}) {
           }}
         >
 
-          <View style={{ width: "100%", borderWidth: 1, borderRadius: 2 }}>
+         <View style={{flexDirection:'column',display:'flex',width:'100%'}}>
+         <View style={{ width: "100%", borderWidth: 1, borderRadius: 2 ,marginBottom:10}}>
             <Picker
               selectedValue={appDetails.packageId}
               onValueChange={(itemValue, itemIndex) =>
@@ -648,6 +659,22 @@ export default function CreateParcel({navigation}) {
                 })}
             </Picker>
           </View>
+
+          <View style={{ width: "100%", borderWidth: 1, borderRadius: 2 }}>
+            <Picker
+              selectedValue={delivery_Type.name}
+              onValueChange={(itemValue, itemIndex) =>
+                setDelivery_Type({...delivery_Type,name:itemValue})
+              }
+              style={{ borderWidth: 1, width: "100%" }}
+            >
+              <Picker.Item label="Delivery Type" value="" />
+              <Picker.Item key={i} label={e[0]} value={e[0]}/>
+              <Picker.Item key={i} label={e[1]} value={e[1]}/>
+            </Picker>
+          </View>
+         </View>
+
         </View>
         <View style={{ flexDirection: "row" }}>
           

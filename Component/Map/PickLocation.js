@@ -4,7 +4,7 @@ import { StyleSheet, Text, View, Dimensions,StatusBar, TouchableOpacity } from '
 import { locations } from './locations';
 import { AppColor } from '../WorkerComp/AppColor';
 import LoaderComp from '../WorkerComp/LoaderComp';
-import {api,apiRequest, pmlTerminalCord} from '../WorkerComp/Api';
+import {api,apiRequest, pmlTerminalCord,pinColor} from '../WorkerComp/Api';
  import { UserContext } from '../DataProvider/UserContext';
 export default function PickLocation({navigation}) {
   const {navigate}=navigation;
@@ -143,7 +143,7 @@ export default function PickLocation({navigation}) {
     >
 
       <Marker coordinate={pin}
-     pinColor="plum"
+     pinColor={pinColor.color17}
      draggable={true}
      onDragStart={(e)=>{
         console.log(userLoc,senderLoc)
@@ -162,9 +162,9 @@ export default function PickLocation({navigation}) {
       </Marker>
       <Circle center={pin} radius={50}/>
        {pmlTerminalCord.coord.map((e,i)=>{
-         return <Marker
+         return <Marker key={i}
          pinColor={pinColor.color15}
-         coordinate={{ latitude: senderLoc.lat, longitude: senderLoc.lng }}
+         coordinate={{ latitude:e[0], longitude:e[1] }}
        />
        })}
     </MapView>:null}

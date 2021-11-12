@@ -100,7 +100,7 @@ export default function Parcel({navigation}){
             <ParcelComp  key={i} name={e.name} catIcon="box" func={()=>viewParcel(e)}/>)
         })}
      </ScrollView>
-     <CustomFab iconName="plus" fabFunc={()=>setuserPickupDetails({...userPickupDetails,operation:'parcel'},navigate('location'))}/>
+     <CustomFab iconName="plus" fabFunc={()=>setuserPickupDetails({...userPickupDetails,operation:'parcel'},navigate('Select Category'))}/>
      {appDetails.load&&<LoaderComp size={25} color={AppColor.third}/>}
      <Custombtm displayComp={()=><ViewParcel parcel={appDetails.singleParcel} onParcelChange={()=>onParcelChange()} />} cod={true} copm={true} btmRef={btmRef} height={550}/>
     </View>
