@@ -447,7 +447,8 @@ export const api = {
   estimatedBilling: "api/pml/pml-parcels/estimate-billing",
   userWallet: "api/ewallet/accounts/me",
   makePayment: "api/ewallet/transfers",
-  verifyPayment: "api/pml/pml-pickups/verify",
+  //verifyPayment: "api/pml/pml-pickups/verify",
+  verifyPayment: "api/pml/pml-parcels/payment",
   pmlWallet: "1234567894",
   pmlPickups: "api/pml/pml-pickups",
 };

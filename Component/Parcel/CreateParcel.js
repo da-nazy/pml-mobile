@@ -382,7 +382,7 @@ export default function CreateParcel({navigation}) {
           costPayable:estimateBill.bill,
           paymentGateway:"PAYSTACK",
           identification:id.id,
-          deliveryType:'',
+          deliveryType:delivery_Type.name,
           vehicleType:userPickupDetails.vehicleType,
          }
        }
