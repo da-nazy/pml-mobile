@@ -231,7 +231,6 @@ export default function ViewParcel({ parcel, onParcelChange }) {
         }
         console.log(paymentObject);
         apiRequest(paymentObject,(e)=>setAppDetails({...appDetails,load:e}),(e)=>succFunc(e),(e)=>failFunc(e),(e)=>makePaymentPayload(e));
-    
       }
 
       const confirmPayment=()=>{
@@ -246,7 +245,6 @@ export default function ViewParcel({ parcel, onParcelChange }) {
         }
         console.log(confirmPaymentObject);
         apiRequest(confirmPaymentObject,(e)=>setAppDetails({...appDetails,load:e}),(e)=>succFunc(e),(e)=>failFunc(e),(e)=>confirmPaymentPayload(e));
-    
       }
 
   const deleteParcel = () => {

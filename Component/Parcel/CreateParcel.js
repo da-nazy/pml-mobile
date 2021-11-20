@@ -264,6 +264,9 @@ export default function CreateParcel({navigation}) {
   if(!senderLoc.lat&&!senderLoc.lng){
     check=false;
   }
+    if(!delivery_Type.name){
+      check=false;
+    }
    
     return check;
   };
@@ -380,7 +383,7 @@ export default function CreateParcel({navigation}) {
           expectedDate:expectedDate.date,
           departureDate:depatureDate.date,
           costPayable:estimateBill.bill,
-          paymentGateway:"PAYSTACK",
+          paymentGateway:"WALLET",
           identification:id.id,
           deliveryType:delivery_Type.name,
           vehicleType:userPickupDetails.vehicleType,
@@ -486,13 +489,7 @@ export default function CreateParcel({navigation}) {
       },
     };
     console.log(stateObject);
-    apiRequest(
-      stateObject,
-      (e) => setAppDetails({ ...appDetails, load: e }),
-      (e) => succFunc(e),
-      (e) => failFunc(e),
-      (e) => getCategoryPayload(e)
-    );
+    apiRequest( stateObject, (e) => setAppDetails({ ...appDetails, load: e }),(e) => succFunc(e), (e) => failFunc(e),(e) => getCategoryPayload(e));
   };
   
   const editItem=(item)=>{
@@ -736,6 +733,23 @@ export default function CreateParcel({navigation}) {
         </View>
 
         <View style={{ flexDirection: "row" }}>
+        <TouchableOpacity
+            onPress={() => selectDate(2)}
+            style={{ width: "50%", height: 70 }}
+          >
+            <InputComp
+              mode="outlined"
+              right={null}
+              label="Depature Date:"
+              placeholder="Enter Item Description"
+              style={style.name}
+              error={depatureDate.dateError}
+              value={depatureDate.date ? depatureDate.date : ""}
+              secureText={false}
+              editable={false}
+            />
+          </TouchableOpacity>
+
           <TouchableOpacity
             onPress={() => selectDate(1)}
             style={style.inputContainer}
@@ -753,22 +767,7 @@ export default function CreateParcel({navigation}) {
             />
           </TouchableOpacity>
 
-          <TouchableOpacity
-            onPress={() => selectDate(2)}
-            style={{ width: "50%", height: 70 }}
-          >
-            <InputComp
-              mode="outlined"
-              right={null}
-              label="Depature Date:"
-              placeholder="Enter Item Description"
-              style={style.name}
-              error={depatureDate.dateError}
-              value={depatureDate.date ? depatureDate.date : ""}
-              secureText={false}
-              editable={false}
-            />
-          </TouchableOpacity>
+          
         </View>
 
         <View style={{ flexDirection: "column" }}>
@@ -860,7 +859,7 @@ export default function CreateParcel({navigation}) {
         )}
       </ScrollView>
        {appDetails.load&&<LoaderComp size={25} color={AppColor.third}/>}
-       <Custombtm displayComp={()=><AddItems setCat={()=>getCategory()} cat={category} add={(e)=>addToItem(e)} onChange={()=>onItemChange()} item={currentItem} update={(e)=>updateItem(e)}/>} height={Dimensions.get('screen').height} cod={true} btmRef={addItemRef}/>
+       <Custombtm displayComp={()=><AddItems setCat={()=>getCategory()} cat={category} add={(e)=>addToItem(e)} onChange={()=>onItemChange()} item={currentItem} update={(e)=>updateItem(e)} />} height={Dimensions.get('screen').height} cod={true} btmRef={addItemRef}/>
     </View>
   );
 }

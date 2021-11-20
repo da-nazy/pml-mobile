@@ -2,7 +2,7 @@ import React, { useState,useEffect,useContext,useCallback,useRef} from 'react';
 import {View,StyleSheet,Text,ScrollView,RefreshControl, Dimensions} from 'react-native';
 import { IconComp } from '../WorkerComp/ExternalFunction';
 import { AppColor } from '../WorkerComp/AppColor';
-import PickupComp from '../Ship/PickupComp';
+import ParcelComp from './ParcelComp';
 import LoaderComp from '../WorkerComp/LoaderComp';
 import {UserContext }from '../DataProvider/UserContext';
 import {api,apiRequest} from '../WorkerComp/Api';
@@ -11,7 +11,7 @@ import Pickupoperation from './Pickupopeation';
 export default function Ship(){
     const usercontext=useContext(UserContext);
     const{user,authUser}=usercontext;
-    const [userPickup,setUserPickup]=useState(null);
+    const [userParcel,setUserParcel]=useState(null);
           
      const pickRef= useRef(null);
 
@@ -32,10 +32,10 @@ export default function Ship(){
     }
 
     useEffect(()=>{
-       if(!userPickup){
+       if(!userParcel){
         getUserPickup()
        }
-    },[userPickup])
+    },[userParcel])
       
     const wait=(timeOut)=>{
         return new Promise(resolve=>setTimeout(resolve,timeOut));
@@ -49,12 +49,12 @@ export default function Ship(){
 
     const statusChange=()=>{
         btmRef.current.close();
-        setUserPickup(null);
+        setUserParcel(null);
     }
-  const userPickupPayload=(e)=>{
+  const userParcelPayload=(e)=>{
       console.log(e.data.payload);
        if(e.data.payload.length>0){
-         setUserPickup(e.data.payload);
+         setUserParcel(e.data.payload);
        }
   }
   const succFunc=(e)=>{
@@ -67,14 +67,14 @@ export default function Ship(){
    const getUserPickup=()=>{
       var pickupObject={
             method:"get",
-            url:`${api.localUrl}${api.userPickup}${user.id}&paymentStatus=SUCCESSFUL&populate=pmlParcels`,
+            url:`${api.localUrl}${api.userParcels}${user.id}&paymentStatus=SUCCESSFUL&populate=items.category`,
             headers:{
              Authorization:' Bearer ' + authUser.token,
              'Cache-Control': 'no-cache',
            }
     }
       console.log(pickupObject);
-      apiRequest(pickupObject,(e)=>setAppDetails({...appDetails,load:e}),(e)=>succFunc(e),(e)=>failFunc(e),(e)=>userPickupPayload(e));
+      apiRequest(pickupObject,(e)=>setAppDetails({...appDetails,load:e}),(e)=>succFunc(e),(e)=>failFunc(e),(e)=>userParcelPayload(e));
 
 }
     return(
@@ -84,8 +84,8 @@ export default function Ship(){
         >
         <View style={{flexDirection:'row',justifyContent:'center',padding:15,borderBottomWidth:1,borderBottomColor:`${AppColor.third}`}}>{IconComp("ship",style.iconStyle,25,AppColor.third)}<Text style={{fontWeight:'bold',textAlign:'center',fontSize:15,marginLeft:5}}>Shipments</Text></View>
         
-       {userPickup&&userPickup.map((e,i)=>{
-           return  <PickupComp key={i} catIcon="boxes" pickup={e} pickOp={()=>openPickOperation(e)}/>
+       {userParcel&&userParcel.map((e,i)=>{
+           return  <ParcelComp key={i} catIcon="boxes" parcel={e} pickOp={()=>openPickOperation(e)}/>
        })}
        {appDetails.load&&<LoaderComp size={25} color={AppColor.third}/>}
 
