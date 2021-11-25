@@ -10,8 +10,7 @@ import LoaderComp from '../WorkerComp/LoaderComp';
 export default function Pickupoperation({pickup,statusChange}){
     const usercontext=useContext(UserContext);
     const{user,authUser}=usercontext;
-    console.log(pickup.status);
-     
+    console.log(pickup.assignment?pickup.assignment.status:'PENDING'); 
     // If pickup is pending do nothing
       
    
@@ -74,7 +73,7 @@ export default function Pickupoperation({pickup,statusChange}){
 
  
     const assignedPickup=()=>{
-        switch(pickup.status){
+        switch(pickup.assignment?pickup.assignment.status:'PENDING'){
             case "ASSIGNED":
                 const newItems=[...data];
                 newItems.map((e,i)=>{
@@ -108,7 +107,7 @@ export default function Pickupoperation({pickup,statusChange}){
                     })
                     break;
 
-            case "COLLECTION":
+            case "RELEASED":
                 const collItems=[...data];
                 collItems.map((e,i)=>{
                     if(e.id===1){
@@ -293,7 +292,10 @@ export default function Pickupoperation({pickup,statusChange}){
      const pickupDelivery=()=>{
         var deliverObject={
          method:'put',
-         url:`${api.localUrl}${api.pmlPickups}/${api.pickupStatus[5]}/${pickup.id}`,
+         url:`${api.localUrl}${api.pickupOperation}/${pickup.assignment&&pickup.assignment.id}`,
+         data:{
+            status:api.pickupStatus[5],
+        },     
          headers:{
             Authorization:' Bearer ' + authUser.token,
             'Cache-Control': 'no-cache',
@@ -307,8 +309,11 @@ export default function Pickupoperation({pickup,statusChange}){
     const pickupConfirm=()=>{
         var confirmObject={
             method:'put',
-            url:`${api.localUrl}${api.pmlPickups}/${api.pickupStatus[5]}/${pickup.id}`,
-            headers:{
+            url:`${api.localUrl}${api.pickupOperation}/${pickup.assignment&&pickup.assignment.id}`,
+            data:{
+               status:api.pickupStatus[5],
+           },     
+             headers:{
                Authorization:' Bearer ' + authUser.token,
                'Cache-Control': 'no-cache',
              }
@@ -322,7 +327,10 @@ export default function Pickupoperation({pickup,statusChange}){
     const pickupCollection=()=>{
         var collectObject={
          method:'put',
-         url:`${api.localUrl}${api.pmlPickups}/${api.pickupStatus[0]}/${pickup.id}`,
+         url:`${api.localUrl}${api.pickupOperation}/${pickup.assignment&&pickup.assignment.id}`,
+         data:{
+            status:api.pickupStatus[0],
+        },     
          headers:{
             Authorization:' Bearer ' + authUser.token,
             'Cache-Control': 'no-cache',
@@ -330,7 +338,7 @@ export default function Pickupoperation({pickup,statusChange}){
         }
 
         console.log(collectObject);
-       apiRequest(collectObject,(e)=>setAppDetails({...appDetails,load:e}),(e)=>succFunc(e),(e)=>failFunc(e),(e)=>collectPickupPayload(e));
+     apiRequest(collectObject,(e)=>setAppDetails({...appDetails,load:e}),(e)=>succFunc(e),(e)=>failFunc(e),(e)=>collectPickupPayload(e));
 
     }
 

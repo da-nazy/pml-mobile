@@ -414,13 +414,14 @@ export const symbols = {
    ]
 export const api = {
   pickupStatus: [
-    "COLLECTION",
+    "RELEASED",
     "DECLINE",
     "CANCEL",
     "DISPATCH",
     "DELIVERED",
     "CONFIRMED",
     "ACCEPTED",
+    
   ],
   login: "api/crm/customers/Login",
   register: "api/crm/customers",
@@ -451,6 +452,7 @@ export const api = {
   verifyPayment: "api/pml/pml-parcels/payment",
   pmlWallet: "1234567894",
   pmlPickups: "api/pml/pml-pickups",
+  pickupOperation: "api/pml/assignments/operation/customer",
 };
 
 //https://maps.googleapis.com/maps/api/geocode/json?latlng=6.4637031,7.5515096&key=AIzaSyCE41gWBv1AfHzJNsyvCQe6FIPpYHLKcrs

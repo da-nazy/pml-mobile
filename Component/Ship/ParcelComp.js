@@ -6,42 +6,26 @@ import  ItemComp from './ItemComp';
 import Pickupoperation from './Pickupopeation';
 export default function ParcelComp({catIcon,func,parcel,pickOp}) {
   const [parcelDisplay,setParcelDisplay]=useState(false);
+  const parcelDesc=(name,value)=>{
+   return(
+    <View style={{flexDirection:'row'}}>
+    <Text style={{fontWeight:'700',marginRight:2}}>{name}</Text><Text >
+    {value}
+ </Text>
+</View>
+   )
+  }
     return (
      <View>
         <View style={style.pendPick}>
         <Icon name={catIcon} size={20} color={AppColor.third} style={{ margin: 5,width:'10%' }} />
        <View style={{ marginLeft: 10, marginRight: 10 ,width:'60%',borderLeftColor:`${AppColor.third}`,borderLeftWidth:1,paddingLeft:5}}>
-       <View style={{flexDirection:'row'}}>
-           <Text style={{fontWeight:'700',marginRight:2}}>Name:</Text><Text >
-          {parcel.description}
-        </Text>
-       </View>
-       <View style={{flexDirection:'row'}}>
-           <Text style={{fontWeight:'700',marginRight:2}}>ParcelStatus:</Text><Text >
-          {parcel.deliveryStatus}
-        </Text>
-        
-       </View>
-        <View style={{flexDirection:'row'}}>
-           <Text style={{fontWeight:'700',marginRight:2}}>Parcel:</Text><Text>
-             {parcel.items.length.toString()}
-           </Text>
-        
-       </View>
-       
-       <View style={{flexDirection:'row'}}>
-           <Text style={{fontWeight:'700',marginRight:2}}>Date:</Text><Text>
-        {parcel.createdAt.split("T")[0]}
-        </Text>
-        
-       </View>
-
-       <View style={{flexDirection:'row'}}>
-           <Text style={{fontWeight:'700',marginRight:2}}>Amount:</Text><Text>
-        {parcel.costPayable}
-        </Text>
-       </View>
-       
+       {parcelDesc("Name:",parcel.description)}
+       {parcelDesc("ParcelStatus:",parcel.deliveryStatus)}
+       {parcelDesc("Parcel:",parcel.items.length.toString())}
+       {parcelDesc("Date:",parcel.createdAt.split("T")[0])}
+       {parcelDesc("Amount:",parcel.costPayable)}
+       {parcelDesc("Assigned:",parcel.assignmentStatus?parcel.assignmentStatus:"PENDING")}
 
        </View>
       
@@ -72,7 +56,7 @@ export default function ParcelComp({catIcon,func,parcel,pickOp}) {
     pendPick: {
       width:'97%',
       flexDirection: "row",
-      height: 95,
+      height: 135,
       marginTop: 10,
       borderRadius: 5,
       backgroundColor: "#fff",
