@@ -7,6 +7,7 @@ import Pickupoperation from './Pickupopeation';
 export default function ParcelComp({catIcon,func,parcel,pickOp}) {
   const [parcelDisplay,setParcelDisplay]=useState(false);
   console.log(parcel.assigment?parcel.assignment.id+"testy":'nothing');
+  console.log(parcel);
   const parcelDesc=(name,value)=>{
    return(
     <View style={{flexDirection:'row'}}>
