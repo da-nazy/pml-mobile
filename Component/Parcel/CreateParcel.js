@@ -89,18 +89,7 @@ export default function CreateParcel({navigation}) {
   const [stateTo, setStateTo] = useState({
     stateToId: "",
   });
-  const [mass, setMass] = useState({
-    mass: "",
-    massError: false,
-  });
-  const [volume, setVolume] = useState({
-    volume: "",
-    volumeError: false,
-  });
-  const [quantity, setQuantity] = useState({
-    quantity: "",
-    quantityError: false,
-  });
+ 
   const [id, setId] = useState({
     id: "",
     idError: false,
@@ -120,7 +109,12 @@ export default function CreateParcel({navigation}) {
   const failFunc = (e) => {
     Alert.alert("Error", e);
   };
-
+     useEffect(()=>{
+       return()=>{
+         setWorth({...worth,worth:''});
+          setCurrentItem(null);
+       }
+     },[])
   const userCheckPayload=(e)=>{
     console.log(e.data.payload.id);
     if(e.data.payload.length!==0){

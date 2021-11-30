@@ -16,9 +16,9 @@ export default function ItemComp({item,func}) {
       <Icon name="box" size={15} color={AppColor.third} style={{ margin: 5,width:'10%' }} />
      <View style={{ marginLeft: 10, marginRight: 10 ,width:'50%'}}>
       {itemDisplay("Name:",item.name&&item.name)}
-      {itemDisplay("Date:",item.category&&item.category.name)}
-      {itemDisplay("Worth",item.worth&&item.worth)}
-      {itemDisplay("Quantity",item.quantity&&item.quantity)}
+      {itemDisplay("Category:",item.category&&item.category.name)}
+      {itemDisplay("Worth:",item.worth&&item.worth)}
+      {itemDisplay("Quantity:",item.quantity&&item.quantity)}
      
      {/**  <View style={{flexDirection:'row'}}>
       <Text style={{fontWeight:'bold'}}>
@@ -42,7 +42,7 @@ const style = StyleSheet.create({
       width:'97%',
   
       flexDirection: "row",
-      height: 100,
+      height: 115,
   
       borderRadius: 5,
       backgroundColor: "#fff",

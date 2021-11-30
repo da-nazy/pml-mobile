@@ -1,5 +1,5 @@
 import React, { useState,useEffect,useContext,useCallback,useRef} from 'react';
-import {View,StyleSheet,Text,ScrollView,RefreshControl, Dimensions} from 'react-native';
+import {View,StyleSheet,Text,ScrollView,RefreshControl, Dimensions, Alert} from 'react-native';
 import { IconComp } from '../WorkerComp/ExternalFunction';
 import { AppColor } from '../WorkerComp/AppColor';
 import ParcelComp from './ParcelComp';
@@ -8,6 +8,7 @@ import {UserContext }from '../DataProvider/UserContext';
 import {api,apiRequest} from '../WorkerComp/Api';
 import Custombtm from '../WorkerComp/Custombtm';
 import Pickupoperation from './Pickupopeation';
+import CTCOperation from './CTCOperation';
 export default function Ship(){
     const usercontext=useContext(UserContext);
     const{user,authUser}=usercontext;
@@ -21,7 +22,8 @@ export default function Ship(){
         currentPickup:null,
 
     })
-  
+    
+    
     /**
      * TODO: sort by date and pickupstatus , swipe refresh
      * 
@@ -77,6 +79,30 @@ export default function Ship(){
       apiRequest(pickupObject,(e)=>setAppDetails({...appDetails,load:e}),(e)=>succFunc(e),(e)=>failFunc(e),(e)=>userParcelPayload(e));
 
 }
+
+     const pickupType=()=>{
+//    console.log(pickup.assignment.type);
+      if(appDetails.currentPickup){
+          if(appDetails.currentPickup.assignment){
+              switch(appDetails.currentPickup.assignment.type){
+                  case 'CC':
+                      console.log("cc Assignment")
+                      return<Pickupoperation pickup={appDetails.currentPickup} statusChange={()=>statusChange()}/>
+                    
+                    default:
+                         console.log("CT or TC")
+                        return(
+                            <CTCOperation pickup={appDetails.currentPickup} statusChange={()=>statusChange()}/>
+                        )
+                        break;
+              }
+          }else{
+              // Assignment hasn't been made
+              return(<View><Text style={{textAlign:'center',fontWeight:'bold'}}>Parcel hasn't been assigned yet!</Text></View>)
+          }
+      }
+     }
+
     return(
         <ScrollView style={{backgroundColor:'#fff',height:Dimensions.get('screen').height}}
         refreshControl={<RefreshControl refreshing={appDetails.refresh} onRefresh={()=>onRefresh()}/>}
@@ -89,7 +115,7 @@ export default function Ship(){
        })}
        {appDetails.load&&<LoaderComp size={25} color={AppColor.third}/>}
 
-       <Custombtm displayComp={()=><Pickupoperation pickup={appDetails.currentPickup} statusChange={()=>statusChange()}/>}  cod={true} copm={true} btmRef={pickRef} height={780}/>
+       <Custombtm displayComp={()=>pickupType()}  cod={true} copm={true} btmRef={pickRef} height={780}/>
    
         </ScrollView>
     )

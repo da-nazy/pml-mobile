@@ -6,6 +6,7 @@ import  ItemComp from './ItemComp';
 import Pickupoperation from './Pickupopeation';
 export default function ParcelComp({catIcon,func,parcel,pickOp}) {
   const [parcelDisplay,setParcelDisplay]=useState(false);
+  console.log(parcel.assigment?parcel.assignment.id+"testy":'nothing');
   const parcelDesc=(name,value)=>{
    return(
     <View style={{flexDirection:'row'}}>
@@ -25,7 +26,7 @@ export default function ParcelComp({catIcon,func,parcel,pickOp}) {
        {parcelDesc("Parcel:",parcel.items.length.toString())}
        {parcelDesc("Date:",parcel.createdAt.split("T")[0])}
        {parcelDesc("Amount:",parcel.costPayable)}
-       {parcelDesc("Assigned:",parcel.assignmentStatus?parcel.assignmentStatus:"PENDING")}
+       {parcelDesc("Assigned:",parcel.assignment?"Asssigned":"Not Assigned")}
 
        </View>
       

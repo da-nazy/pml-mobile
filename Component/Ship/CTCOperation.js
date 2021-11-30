@@ -7,11 +7,11 @@ import { IconComp } from '../WorkerComp/ExternalFunction';
 const {width,height}=Dimensions.get("window");
 import { UserContext } from '../DataProvider/UserContext';
 import LoaderComp from '../WorkerComp/LoaderComp';
-export default function Pickupoperation({pickup,statusChange}){
+export default function CTCOperation({pickup,statusChange}){
     const usercontext=useContext(UserContext);
     const{user,authUser}=usercontext;
-
-    console.log(pickup.assignment?pickup.assignment.status:'PENDING'); 
+   // console.log(pickup.assignment?pickup.assignment.status+"testy":'PENDING'); 
+   console.log(pickup.assignment?pickup.assignment.id+"testy":'PENDING');
     // If pickup is pending do nothing
       
    
@@ -74,6 +74,8 @@ export default function Pickupoperation({pickup,statusChange}){
 
  
     const assignedPickup=()=>{
+        // Check the assignment type
+        
         switch(pickup.assignment?pickup.assignment.status:'PENDING'){
             case "ASSIGNED":
                 const newItems=[...data];
@@ -131,7 +133,7 @@ export default function Pickupoperation({pickup,statusChange}){
                 })
                 break;
 
-            case "DISPATCHED":
+            case "DISPATCHED":case "DELIVERED":case "CONFIRMED":
                 const dispatchItems=[...data];
                 dispatchItems.map((e,i)=>{
                     if(e.id===1){
@@ -152,77 +154,13 @@ export default function Pickupoperation({pickup,statusChange}){
                     if(e.id===4){
                         dispatchItems[i].accepted=true;
                         dispatchItems[i].message="Pickup has been dispatched";
-                        delete dispatchItems[i].view;
+                        
                     }
       
-                    setCurrentPosition(4);
+                    setCurrentPosition(3);
                     setData(dispatchItems);
                 })
-                break;
-                 case "DELIVERED":
-                    const deliveryItems=[...data];
-                    deliveryItems.map((e,i)=>{
-                        if(e.id===1){
-                            deliveryItems[i].accepted=true;
-                            deliveryItems[i].message="Pickup has been asigned to a dispatcher";
-                            delete deliveryItems[i].view;
-                        }
-                        if(e.id===2){
-                            deliveryItems[i].accepted=true;
-                            deliveryItems[i].message="Pickup has been accepted by a dispatcher";
-                            delete deliveryItems[i].view; 
-                        }
-                        if(e.id===3){
-                            deliveryItems[i].accepted=true;
-                            deliveryItems[i].message="You have confirmed pickup collection";
-                            delete deliveryItems[i].view;
-                        }
-                        if(e.id===4){
-                            deliveryItems[i].accepted=true;
-                            deliveryItems[i].message="Pickup has been dispatched";
-                            delete deliveryItems[i].view;
-                        }
-                        if(e.id===5){
-                            deliveryItems[i].accepted=false;
-                            deliveryItems[i].message="Confirm the delivered pickup";
-                            deliveryItems[i].view=<TouchableOpacity onPress={()=>confirmPickup()} style={{borderWidth:1,height:28,width:70,justifyContent:'center',borderRadius:2,margin:2,backgroundColor:AppColor.third,borderColor:AppColor.third}}><Text style={{textAlign:'center',color:'#fff'}}>YES</Text></TouchableOpacity>
-                        }
-                        setCurrentPosition(5);
-                        setData(deliveryItems);
-                    })
-                     break;
-                     case "CONFIRMED":
-                        const confirmItems=[...data];
-                        confirmItems.map((e,i)=>{
-                            if(e.id===1){
-                                confirmItems[i].accepted=true;
-                                confirmItems[i].message="Pickup has been asigned to a dispatcher";
-                                delete confirmItems[i].view;
-                            }
-                            if(e.id===2){
-                                confirmItems[i].accepted=true;
-                                confirmItems[i].message="Pickup has been accepted by a dispatcher";
-                                delete confirmItems[i].view; 
-                            }
-                            if(e.id===3){
-                                confirmItems[i].accepted=true;
-                                confirmItems[i].message="You have confirmed pickup collection";
-                                delete confirmItems[i].view;
-                            }
-                            if(e.id===4){
-                                confirmItems[i].accepted=true;
-                                confirmItems[i].message="Pickup has been dispatched";
-                                delete confirmItems[i].view;
-                            }
-                            if(e.id===5){
-                                confirmItems[i].accepted=true;
-                                confirmItems[i].message="Pickup has been delivered to you.";
-                                delete confirmItems[i].view;
-                            }
-                            setCurrentPosition(5);
-                            setData(confirmItems);
-                        })
-                         break;
+                
 
         }
     }
