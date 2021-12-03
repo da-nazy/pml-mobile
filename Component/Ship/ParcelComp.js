@@ -6,8 +6,7 @@ import  ItemComp from './ItemComp';
 import Pickupoperation from './Pickupopeation';
 export default function ParcelComp({catIcon,func,parcel,pickOp}) {
   const [parcelDisplay,setParcelDisplay]=useState(false);
-  console.log(parcel.assigment?parcel.assignment.id+"testy":'nothing');
-  console.log(parcel);
+ 
   const parcelDesc=(name,value)=>{
    return(
     <View style={{flexDirection:'row'}}>
@@ -23,7 +22,7 @@ export default function ParcelComp({catIcon,func,parcel,pickOp}) {
         <Icon name={catIcon} size={20} color={AppColor.third} style={{ margin: 5,width:'10%' }} />
        <View style={{ marginLeft: 10, marginRight: 10 ,width:'60%',borderLeftColor:`${AppColor.third}`,borderLeftWidth:1,paddingLeft:5}}>
        {parcelDesc("Name:",parcel.description)}
-       {parcelDesc("ParcelStatus:",parcel.deliveryStatus)}
+       {parcelDesc("Delivery Status:",parcel.deliveryStatus)}
        {parcelDesc("Parcel:",parcel.items.length.toString())}
        {parcelDesc("Date:",parcel.createdAt.split("T")[0])}
        {parcelDesc("Amount:",parcel.costPayable)}

@@ -54,7 +54,6 @@ export default function Ship(){
         setUserParcel(null);
     }
   const userParcelPayload=(e)=>{
-      console.log(e.data.payload);
        if(e.data.payload.length>0){
          setUserParcel(e.data.payload);
        }
@@ -75,7 +74,6 @@ export default function Ship(){
              'Cache-Control': 'no-cache',
            }
     }
-      console.log(pickupObject);
       apiRequest(pickupObject,(e)=>setAppDetails({...appDetails,load:e}),(e)=>succFunc(e),(e)=>failFunc(e),(e)=>userParcelPayload(e));
 
 }

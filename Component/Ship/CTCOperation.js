@@ -10,11 +10,7 @@ import LoaderComp from '../WorkerComp/LoaderComp';
 export default function CTCOperation({pickup,statusChange}){
     const usercontext=useContext(UserContext);
     const{user,authUser}=usercontext;
-   // console.log(pickup.assignment?pickup.assignment.status+"testy":'PENDING'); 
-   console.log(pickup.assignment?pickup.assignment.id+"testy":'PENDING');
     // If pickup is pending do nothing
-      
-   
 
   const [appDetails,setAppDetails]=useState({
        load:false,

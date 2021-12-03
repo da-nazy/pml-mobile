@@ -8,7 +8,7 @@ export default function Profile({navigation}) {
   const usercontext=useContext(UserContext);
   const {navigate}=navigation;
   const {user}=usercontext;
-  console.log(user);
+  
 
   const [profile, setProfile]=useState({
     image: null,
@@ -37,14 +37,14 @@ export default function Profile({navigation}) {
   })
 
   const emailValidation=()=>{
-    if(regX.emailFilter.test(emailAddress.emailAddress)){
+    if(regx.emailFilter.test(emailAddress.emailAddress)){
       //   setUser({...user,type:'email'});
            return true;  
   }
    }
 
    const phoneValidation=()=>{
-    if(regX.phoneFilter.test(phoneNumber.phoneNumber)){
+    if(regx.phoneFilter.test(phoneNumber.phoneNumber)){
       //   setUser({...user,type:'email'});
            return true;  
   }

@@ -1,7 +1,6 @@
 import React from "react";
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import { UserDrawerContent } from "../WorkerComp/UserDrawerContent";
-import Pickup from "../Pickup/Pickup";
 import SearchAdress from "../Map/SearchAddress";
 import Menu from "./Menu";
 import Parcel from "../Parcel/Parcel";
@@ -10,7 +9,6 @@ import Transaction from "../Transaction/Transaction";
 import XpressPickup from "../Pickup/XpressPickup";
 import Support from "../Support/Support";
 import CreateParcel from "../Parcel/CreateParcel";
-import CreatePickup from "../Pickup/CreatePickup";
 import SelectCat from "../Pickup/SelectCat";
 import PickupLocationMap from "../Map/PickupLocationMap";
 import PickLocation from "../Map/PickLocation";
@@ -43,11 +41,7 @@ export default function Dashboard() {
         component={SearchAdress}
         options={{ headerShown: false }}
       />
-      <Drawer.Screen
-        name="Pickup"
-        component={Pickup}
-        options={{ headerShown: false }}
-      />
+      
       <Drawer.Screen
         name="Parcel"
         component={Parcel}
@@ -83,11 +77,7 @@ export default function Dashboard() {
     component={CreateParcel}
     options={{ headerShown: false }}
      />
-      <Drawer.Screen
-        name="Create Pickup"
-        component={CreatePickup}
-        options={{ headerShown: false }}
-      />
+     
       <Drawer.Screen
         name="Select Category"
         component={SelectCat}

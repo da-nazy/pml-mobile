@@ -47,16 +47,7 @@ export default function Menu({navigation}){
         },
         id: 1,
       },
-      {
-        icon: "boxes",
-        name: "Pickups",
-        callAction: "Request Pickups",
-        // To pass pickup param
-        func: () => {
-         navigate('Pickup');
-        },
-        id: 2,
-      },
+      
       {
         icon: "ship",
         name: "Ship",
@@ -79,14 +70,14 @@ export default function Menu({navigation}){
         id: 4,
       },
       {
-        icon: "shipping-fast",
-        name: "Xpress Pickup",
-        callAction: "Fast Track Pickup",
+        icon: "map-pin",
+        name: "Track",
+        callAction: "Track Pickup",
         // To pass pickup param
         func: () => {
         navigate('XpressPickup')
         },
-        id: 4,
+        id:5,
       },
     ])
 

@@ -2,7 +2,6 @@ import React,{useContext} from "react";
 import { TouchableOpacity, View, Text, StyleSheet, Alert } from "react-native";
 import Icon from "react-native-vector-icons/FontAwesome5";
 import { AppColor } from "./AppColor";
-import { RadioButton } from "react-native-paper";
 import { UserContext } from "../DataProvider/UserContext";
 export const regX={
   phoneFilter:/^\d{11}$/,
@@ -161,7 +160,6 @@ export const addParcelHead=(e,func)=>{
     <Text style={{fontWeight:'bold',fontSize:15,alignSelf:"center"}}>{e}</Text></View><TouchableOpacity onPress={()=>func()} style={{marginRight:8,justifyContent:'center'}}>{IconComp('plus',{fontWeight:'bold',marginRight:5},18,AppColor.third)}</TouchableOpacity></View>
   ) 
 }
-  //m?m.id:
 
 export const parcelIdComp = (item,i,remFunc,icon,m) => {
  
@@ -266,4 +264,14 @@ const style = StyleSheet.create({
 
 export  const wait=(timeout)=>{
   return new Promise(resolve=>setTimeout(resolve,timeout));
+}
+
+export const sortAlphabet=(sortValue)=>{
+  var sortAlph=sortValue.slice(0);
+  sortAlph.sort(function(a,b) {
+    var x = a.name.toLowerCase();
+    var y = b.name.toLowerCase();
+    return x < y ? -1 : x > y ? 1 : 0;
+  });
+  return sortAlph;
 }

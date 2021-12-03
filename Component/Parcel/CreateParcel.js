@@ -15,7 +15,7 @@ import Icon from "react-native-vector-icons/FontAwesome5";
 import InputComp from "../WorkerComp/InputComp";
 import { Picker } from "@react-native-community/picker";
 import { UserContext } from "../DataProvider/UserContext";
-import { IconComp, packaging,validatePhone,wait} from "../WorkerComp/ExternalFunction";
+import { IconComp, packaging,sortAlphabet,validatePhone,wait} from "../WorkerComp/ExternalFunction";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { api, apiRequest,ngStates,deliveryType} from "../WorkerComp/Api";
 import LoaderComp from "../WorkerComp/LoaderComp";
@@ -132,8 +132,17 @@ export default function CreateParcel({navigation}) {
   wait(200).then(()=>setAppDetails({...appDetails,refresh:false}))
   })
   const getCategoryPayload = (e) => {
-    console.log(e);
-    setCategory(e.data.payload);
+   // console.log(e.data.payload.sort());
+   var arr=[];
+    e.data.payload.map((e,i)=>{
+        //var obj={e.name,e.id}
+
+         arr.push({name:e.name,id:e.id});
+
+    })
+    
+   
+    setCategory(sortAlphabet(arr));
   };
   const[recpientPhoneEmail,setRecipientPhoneEmail]=useState({
     emailPhone:'',

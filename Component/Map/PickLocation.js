@@ -4,13 +4,13 @@ import { StyleSheet, Text, View, Dimensions,StatusBar, TouchableOpacity } from '
 import { locations } from './locations';
 import { AppColor } from '../WorkerComp/AppColor';
 import LoaderComp from '../WorkerComp/LoaderComp';
-import {api,apiRequest, pmlTerminalCord,pinColor} from '../WorkerComp/Api';
+import {api,apiRequest,pinColor} from '../WorkerComp/Api';
  import { UserContext } from '../DataProvider/UserContext';
 export default function PickLocation({navigation}) {
   const {navigate}=navigation;
      const usercontext=useContext(UserContext);
      const {userLoc,setUserLoc,senderLoc,setSenderLoc,userPickupDetails,setuserPickupDetails}=usercontext;
-   
+     const [terminals,setTerminals]=useState(null);
   const [locName,setLocName]=useState({
     name:'Searching......',
     load:false,
@@ -18,8 +18,21 @@ export default function PickLocation({navigation}) {
     lng:null,
   })
 
+  const terminalPayLoad=(e)=>{
+ 
+    var terminal=[];
+    
+    e.data.payload.map((e,i)=>{
+      if(e.subsidiary==='PML'){
+        terminal.push({location:e.location})
+      }
+    })
+    console.log(terminal);
+    setTerminals(terminal,console.log(terminals,"testd"));
+  }
+
   const succFunc=(e)=>{
-    console.log(e);
+  console.log(e)
   }
  
 
@@ -27,6 +40,19 @@ export default function PickLocation({navigation}) {
     console.log(e);
   } 
 
+    const getTerminals=()=>{
+      var requestObject={
+        method:'get',
+        url:`${api.localUrl}${api.pmlTerminal}`,
+        data:{}
+      }
+  
+       apiRequest(requestObject,(e)=>console.log(e),(e)=>succFunc(e),(e)=>errorFunc(e),(e)=>terminalPayLoad(e));
+   
+    }
+     useEffect(()=>{
+      getTerminals();
+     },[0])
   const payLoad=(e)=>{
    // console.log(e);
    // console.log(e.data.results[0].address_components[2].long_name);
@@ -107,22 +133,22 @@ export default function PickLocation({navigation}) {
   
 
     const setCoord=(e,c)=>{
-      console.log("Okay");
+   //   console.log("Okay");
         if(!pin.longitude>0){
       // setPin({...pin,latitude:e,longitude:c},getLocationDetails(e,c));
         if(userPickupDetails.locType==1){
         //  getLocationDetails(e,c)
         setPin({...pin,latitude:e,longitude:c});
       //  setUserLoc({...userLoc,lat:e,lng:c});
-        console.log("Loc1")
+      //  console.log("Loc1")
         }else if(userPickupDetails.locType==2){
         //  getLocationDetails(e,c)
         setPin({...pin,latitude:e,longitude:c});
-          console.log("Loc2")
+        //  console.log("Loc2")
         }else{
-          console.log("okay")
+        //  console.log("okay")
         }
-        console.log(userPickupDetails);
+     //   console.log(userPickupDetails);
         }
     }   
 
@@ -161,12 +187,18 @@ export default function PickLocation({navigation}) {
         </Callout>
       </Marker>
       <Circle center={pin} radius={50}/>
-       {pmlTerminalCord.coord.map((e,i)=>{
-         return <Marker key={i}
-         pinColor={pinColor.color15}
-         coordinate={{ latitude:e[0], longitude:e[1] }}
-       />
+      
+       {terminals&&terminals.map((e,i)=>{
+  return   <Marker key={i}
+          pinColor={pinColor.color15}
+          coordinate={{ latitude:e.location.coordinates[1], longitude:e.location.coordinates[0]}}
+        >
+          <Callout>
+            <Text>{e.location.address}</Text>
+          </Callout>
+        </Marker>
        })}
+       
     </MapView>:null}
     {pin.longitude==0?(<LoaderComp size={45} color={AppColor.third} />):searchResult()}
  </View>

@@ -19,6 +19,7 @@ export default function ViewParcel({ parcel, onParcelChange }) {
   const usercontext = useContext(UserContext);
   const { authUser, user, userWallet } = usercontext;
   console.log(parcel);
+
   // should only update pickup not added to a parcel
 
   const viewComp = (name, description) => {
@@ -114,15 +115,24 @@ export default function ViewParcel({ parcel, onParcelChange }) {
      if(!walletPin.pin){
         setWalletPin({...walletPin,pinError:true});
      }else{
-       setWalletPin({...walletPin,pinError:false},makePayment());
+       setWalletPin({...walletPin,pinError:false});
+       Alert.alert("Make Payment",`Parcel delivery cost is ${symbols.naira}${parcel.costPayable}`,[
+         {
+          text:'Cancle',
+
+         },
+         {
+           text:'Proceed',
+           onPress:()=>makePayment()
+         }
+       ])
        // should pay for parcel right now.
      }
   }
 
 
 
-  const isUserValid = () => {};
-
+ 
 
   const succFunc = (e) => {
     if (e) {
@@ -159,7 +169,7 @@ export default function ViewParcel({ parcel, onParcelChange }) {
     console.log(e);
   };
 
-  const getCost = (e) => {};
+
   const confirmPaymentPayload=(e)=>{
     console.log(e);
     if(e.data.success){
