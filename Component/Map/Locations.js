@@ -18,11 +18,11 @@ export const locations=(setCoordinate)=>{
       var watchID;
 
       const setLoc=(lat,lng)=>{
-        console.log(lat,lng)
+      //  console.log(lat,lng)
       if(lat!==0&&lng!==0){
         setCoordinate(Number.parseFloat(lat),Number.parseFloat(lng));
       }else{
-        console.log("error");
+    //    console.log("error");
       }
       }
       
@@ -57,7 +57,7 @@ export const locations=(setCoordinate)=>{
           //getting the Longitude from the location json
           const currentLatitude = JSON.stringify(position.coords.latitude);
           
-          console.log(currentLatitude);
+         // console.log(currentLatitude);
          setLoc(currentLatitude,currentLongitude);
           //Setting state Latitude to re re-render the Longitude Text
         },(error)=>{
@@ -79,11 +79,11 @@ export const locations=(setCoordinate)=>{
     loc.W.coords?setLoc(loc._W.coords.latitude,loc._W.coords.longitude):console.log("nothing")
     
     }).catch(function (error){
-      console.log(error.message);
+    //  console.log(error.message);
     })
    
    }catch(error){
-    console.log(error.message);
+  //  console.log(error.message,"danny");
    }
     })
          useEffect(()=>{

@@ -13,7 +13,7 @@ import MapViewDirections from "react-native-maps-directions";
 import InputComp from "../WorkerComp/InputComp";
 import Icon from "react-native-vector-icons/FontAwesome5";
 import { AppColor } from "../WorkerComp/AppColor";
-import { locations } from "./locations";
+import {locations} from './locations';
 import LoaderComp from "../WorkerComp/LoaderComp";
 import { apiRequest, api, pinColor } from "../WorkerComp/Api";
 import { UserContext } from "../DataProvider/UserContext";

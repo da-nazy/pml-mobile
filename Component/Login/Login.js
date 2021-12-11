@@ -8,6 +8,7 @@ import { UserContext} from '../DataProvider/UserContext';
 import ResetPassword from '../ResetPassword/ResetPassword';
 import Custombtm from '../WorkerComp/Custombtm';
 import { TextInput } from 'react-native-paper';
+import { storeToken } from '../WorkerComp/ExternalFunction';
 export default function Login({navigation}){
  const btmRef=useRef(null);
  const usercontext=useContext(UserContext);
@@ -117,6 +118,11 @@ const payload=(e)=>{
     if(e.data.payload.token){
         getUser(e.data.payload.token);
         setAppOp({...appOp,token:e.data.payload.token});
+        storeToken(e.data.payload.token).then((check)=>{
+          console.log(check)
+        }).catch((err)=>{
+        console.log(err)
+        })
     }
 }
 
@@ -209,7 +215,7 @@ const payload=(e)=>{
             </View>
             <View>
           <InputComp mode="outlined" secureText={appUser.passwordSecure}  label="Password" placeholder="Input value"  style={style.emailPhone} error={appUser.passwordError} right={<TextInput.Icon name="eye"  onPress={()=>setAppUser({...appUser,passwordSecure:!appUser.passwordSecure})}/>} setText={(e)=>{setAppUser({...appUser,password:e})}}/>
-           {appUser.passwordError&&(<Text style={{marginLeft:25,color:'red'}}>Field Cannot be empty</Text>)}
+           {appUser.passwordError&&(<Text style={{marginLeft:25,color:'red'}}>Empty Password</Text>)}
             </View>
             <View style={{flexDirection:'row',justifyContent:'flex-end'}}>
                 <Text style={{fontWeight:'bold',margin:5}}>OTP?</Text>

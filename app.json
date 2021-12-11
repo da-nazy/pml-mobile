@@ -1,14 +1,17 @@
 {
   "expo": {
-    "name": "pmlGo",
+    "name": "pmlLogistics",
     "slug": "pmlGo",
     "version": "1.0.0",
     "assetBundlePatterns": [
       "**/*"
     ],
-    "description": ""
+    "description": "",
+    "android": {
+      "package": "com.codeblooded.pmlLogistics"
+    }
   },
-  "name": "pmlGo",
+  "name": "pmlLogistics",
   "android": {
     "permissions": [
       "ACCESS_BACKGROUND_LOCATION"

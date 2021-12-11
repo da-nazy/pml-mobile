@@ -1,5 +1,6 @@
 import React,{useContext} from "react";
-import { TouchableOpacity, View, Text, StyleSheet, Alert } from "react-native";
+import { TouchableOpacity, View, Text, StyleSheet, Alert,JSON } from "react-native";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import Icon from "react-native-vector-icons/FontAwesome5";
 import { AppColor } from "./AppColor";
 import { UserContext } from "../DataProvider/UserContext";
@@ -275,3 +276,35 @@ export const sortAlphabet=(sortValue)=>{
   });
   return sortAlph;
 }
+
+export const storeToken =async(value)=>{
+  console.log(value);
+  
+   try{
+   // const jsonValue=JSON.stringify(value);
+   await AsyncStorage.setItem("token",value); 
+       return true;
+ }catch(e){
+     // saving error
+     console.log(e)
+     return false;
+   }
+ }
+
+ export const getToken=async(token)=>{
+
+  try{
+    const value=await AsyncStorage.getItem(token);
+    if(value!=null){
+      // check if the token haven't expired
+      // set the token null
+      return value;
+    }else{
+      // Take user to login Screen
+      return false;
+    }
+  }catch(e){
+    // error reading value
+    return null;
+  }
+ }

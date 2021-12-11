@@ -51,8 +51,10 @@ export default function PickLocation({navigation}) {
    
     }
      useEffect(()=>{
-      getTerminals();
-     },[0])
+       if(!terminals){
+        getTerminals();
+       }
+     },[ ])
   const payLoad=(e)=>{
    // console.log(e);
    // console.log(e.data.results[0].address_components[2].long_name);
