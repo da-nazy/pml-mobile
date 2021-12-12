@@ -121,7 +121,8 @@ export default function PickupLocationMap({ navigation }) {
   });
 
   const payload = (e) => {
-    console.log(e.data.results[0].formatted_address);
+   // console.log(e.data.results[0].formatted_address);
+   console.log(e);
     if (e.data.results[0].formatted_address) {
       // setPickupAddress({...pickupAddress,address:e.data.results[0].formatted_address})
       setCoordinates(

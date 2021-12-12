@@ -14,7 +14,6 @@ import InputComp from "./InputComp";
 import { AppColor } from "./AppColor";
 import { IconComp,noParcel,parcelComp,validateEmail,validatePhone} from "./ExternalFunction";
 import { Picker } from "@react-native-community/picker";
-import SelectableFlatlist, { STATE } from 'react-native-selectable-flatlist';
 import { api,apiRequest,ngStates} from "./Api";
 import { UserContext } from "../DataProvider/UserContext";
 import LoaderComp from "./LoaderComp";

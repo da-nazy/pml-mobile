@@ -61,7 +61,7 @@ const resetPwdSucc=(e)=>{
   btmRef.current.open();
 }
    const userProfilePayload=(e)=>{
-     console.log("danny2");
+    // console.log("danny2");
        setUser(e.data.payload);
        setAppOp({...appOp,userid:e.data.payload.id});
    }
@@ -95,7 +95,7 @@ const userProfileFail=(e)=>{
           }
     
 }
-console.log(userObject);
+//console.log(userObject);
 
 apiRequest(userObject,(e)=>{setAppOp({...appOp,load:e})},(e)=>{userProfileSuc(e)},(e)=>{userProfileFail(e)},(e)=>{userProfilePayload(e)})
 

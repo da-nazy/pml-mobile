@@ -283,11 +283,21 @@ export const storeToken =async(value)=>{
    try{
    // const jsonValue=JSON.stringify(value);
    await AsyncStorage.setItem("token",value); 
+ 
        return true;
  }catch(e){
      // saving error
      console.log(e)
      return false;
+   }
+ }
+ 
+ export const removeToken=async()=>{
+   try{
+     await AsyncStorage.removeItem('token')
+     return true;
+   }catch(e){
+    return false;
    }
  }
 

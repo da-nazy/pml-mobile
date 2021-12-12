@@ -444,7 +444,7 @@ export const api = {
   //localUrl:'http://172.16.17.27/',
   googleReversGeoCodeUrl:
     "https://maps.googleapis.com/maps/api/geocode/json?latlng=",
-  googleApiKey: "AIzaSyCE41gWBv1AfHzJNsyvCQe6FIPpYHLKcrs",
+  googleApiKey: "AIzaSyD1gihWTJzSjIyCT-2zil_tWgGltUZTbMQ",
   estimatedBilling: "api/pml/pml-parcels/estimate-billing",
   userWallet: "api/ewallet/accounts/me",
   makePayment: "api/ewallet/transfers",

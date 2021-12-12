@@ -4,14 +4,23 @@ import { AppColor } from './AppColor';
 import { DrawerContentScrollView } from "@react-navigation/drawer";
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import {UserContext} from '../DataProvider/UserContext';
+import { removeToken} from './ExternalFunction';
 export const  UserDrawerContent=(props)=>{
      
   const [appDetails,setAppDetails]=useState({
     name:'',
   })
   const usercontext=useContext(UserContext);
-   const {user}=usercontext;
+   const {user,authUser,setAuthUser,setUser}=usercontext;
 
+   const logOut=()=>{
+    removeToken().then((check)=>{
+     console.log(check);
+      setAuthUser({...authUser,token:null},setUser(null,props.navigation.navigate('Login')));
+    }).catch((err)=>{
+      console.log(err)
+    })
+    }
     const [sideBar,setSideBar]=useState([
       
       {
@@ -53,7 +62,8 @@ export const  UserDrawerContent=(props)=>{
         icon: "sign-out-alt",
         name: "Logout",
         // need to disable going back
-        func: () =>props.navigation.navigate('Login'),
+        func: () =>logOut()
+        /*props.navigation.navigate('Login'),*/
       },
     ])
     useEffect(()=>{
