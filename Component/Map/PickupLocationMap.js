@@ -225,7 +225,7 @@ export default function PickupLocationMap({ navigation }) {
               mode="outlined"
               editable={false}
               label="Pick-up  Address "
-              placeholder="Searching..."
+              placeholder="Select Pickup address"
               setText={(e) => console.log(e)}
             />
           </TouchableOpacity>
@@ -272,7 +272,7 @@ export default function PickupLocationMap({ navigation }) {
                 latitude: senderLoc.lat,
                 longitude: senderLoc.lng,
               }}
-              apikey="AIzaSyCE41gWBv1AfHzJNsyvCQe6FIPpYHLKcrs" // insert your API Key here
+              apikey={api.googleApiKey} // insert your API Key here
               strokeWidth={3}
               strokeColor={AppColor.third}
             />

@@ -5,6 +5,7 @@ import { DrawerContentScrollView } from "@react-navigation/drawer";
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import {UserContext} from '../DataProvider/UserContext';
 import { removeToken} from './ExternalFunction';
+import { StackActions } from '@react-navigation/native';
 export const  UserDrawerContent=(props)=>{
      
   const [appDetails,setAppDetails]=useState({
@@ -16,7 +17,7 @@ export const  UserDrawerContent=(props)=>{
    const logOut=()=>{
     removeToken().then((check)=>{
      console.log(check);
-      setAuthUser({...authUser,token:null},setUser(null,props.navigation.navigate('Login')));
+      setAuthUser({...authUser,token:null},setUser(null,props.navigation.dispatch(StackActions.replace('Login'))));
     }).catch((err)=>{
       console.log(err)
     })

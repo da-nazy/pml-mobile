@@ -8,7 +8,12 @@
     ],
     "description": "",
     "android": {
-      "package": "com.codeblooded.pmlLogistics"
+      "package": "com.codeblooded.pmlLogistics",
+      "config": {
+        "googleMaps": {
+          "apiKey": "AIzaSyD1gihWTJzSjIyCT-2zil_tWgGltUZTbMQ"
+        }
+      }
     }
   },
   "name": "pmlLogistics",

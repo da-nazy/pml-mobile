@@ -6,6 +6,7 @@ import {apiRequest,api} from '../WorkerComp/Api';
 import LoaderComp from '../WorkerComp/LoaderComp';
 import { UserContext} from '../DataProvider/UserContext';
 import ResetPassword from '../ResetPassword/ResetPassword';
+import { StackActions } from '@react-navigation/native';
 import Custombtm from '../WorkerComp/Custombtm';
 import { TextInput } from 'react-native-paper';
 import { storeToken } from '../WorkerComp/ExternalFunction';
@@ -77,7 +78,8 @@ const userProfileSuc=(e)=>{
        console.log("No otp");
     
        // should login 
-      navigate('Dashboard');
+      //navigate('Dashboard');
+      navigation.dispatch(StackActions.replace('Dashboard'));
    }
 }
 const userProfileFail=(e)=>{
@@ -92,6 +94,8 @@ const userProfileFail=(e)=>{
     url:`${api.localUrl}${api.userProfile}`,
         headers:{
             Authorization:' Bearer ' + e,
+            'Cache-Control': 'no-cache',
+            Pragma: 'no-cache',
           }
     
 }
@@ -217,8 +221,8 @@ const payload=(e)=>{
           <InputComp mode="outlined" secureText={appUser.passwordSecure}  label="Password" placeholder="Input value"  style={style.emailPhone} error={appUser.passwordError} right={<TextInput.Icon name="eye"  onPress={()=>setAppUser({...appUser,passwordSecure:!appUser.passwordSecure})}/>} setText={(e)=>{setAppUser({...appUser,password:e})}}/>
            {appUser.passwordError&&(<Text style={{marginLeft:25,color:'red'}}>Empty Password</Text>)}
             </View>
-            <View style={{flexDirection:'row',justifyContent:'flex-end'}}>
-                <Text style={{fontWeight:'bold',margin:5}}>OTP?</Text>
+            <View style={{flexDirection:'row',justifyContent:'flex-end',alignItems:'center'}}>
+                <Text style={{fontWeight:'bold',margin:5}}>Login With OTP?</Text>
       <Switch 
         style={{marginRight:4}}
         trackColor={{ false: `${AppColor.third}`, true:"#bbbbbb" }}

@@ -215,7 +215,7 @@ export default function UserRegister({navigation}) {
           }}
         />
         {name.nameError ? (
-          <Text style={{ marginLeft: 25, color: "red" }}>Invalid input.</Text>
+          <Text style={{ marginLeft: 25, color: "red" }}>Invalid Surname</Text>
         ) : null}
       </View>
       <View>
@@ -232,23 +232,24 @@ export default function UserRegister({navigation}) {
           }}
         />
         {lastName.lastNameError ? (
-          <Text style={{ marginLeft: 25, color: "red" }}>Invalid input.</Text>
+          <Text style={{ marginLeft: 25, color: "red" }}>Invalid Name.</Text>
         ) : null}
       </View>
      <View>
      <View
         style={{
-          borderWidth: 1,
+          borderWidth:Number.parseInt(`${genderSelected.genderError?2:1}`),
           margin: 10,
           borderRadius: 5,
-          borderColor: "#97A0A6",
+          borderColor:`${genderSelected.genderError?"#CD0A0A":"#97A0A6"}`,
           color: "#97A0A6",
         }}
       >
         <Picker
           mode="dropdown"
           selectedValue={genderSelected.gender}
-          style={{ height:50}}
+          style={{ height:50,borderWidth:1}}
+          
           onValueChange={(itemValue, itemIndex) =>
             setGenderSelected({ ...genderSelected, gender: itemValue })
           }
@@ -259,7 +260,7 @@ export default function UserRegister({navigation}) {
           })}
         </Picker>
       </View>
-     {genderSelected.genderError&&( <Text style={{color:'red',marginLeft:8}}> Invalid gender selected</Text>
+     {genderSelected.genderError&&( <Text style={{color:'red',marginLeft:25}}> Invalid gender selected</Text>
    )}
        </View>
       <View>
@@ -277,7 +278,7 @@ export default function UserRegister({navigation}) {
           }}
         />
         {email.emailError ? (
-          <Text style={{ marginLeft: 25, color: "red" }}>Invalid input.</Text>
+          <Text style={{ marginLeft: 25, color: "red" }}>Invalid Email.</Text>
         ) : null}
       </View>
       <View>
@@ -295,7 +296,7 @@ export default function UserRegister({navigation}) {
           }}
         />
         {phone.phoneError ? (
-          <Text style={{ marginLeft: 25, color: "red" }}>Invalid input.</Text>
+          <Text style={{ marginLeft: 25, color: "red" }}>Invalid Phone Number.</Text>
         ) : null}
       </View>
 
@@ -321,7 +322,7 @@ export default function UserRegister({navigation}) {
           }}
         />
         {password.passwordError ? (
-          <Text style={{ marginLeft: 25, color: "red" }}>Invalid input 8.</Text>
+          <Text style={{ marginLeft: 25, color: "red" }}>Invalid password.</Text>
         ) : null}
       </View>
       <View>
@@ -346,7 +347,7 @@ export default function UserRegister({navigation}) {
           }}
         />
         {repassword.repasswordError ? (
-          <Text style={{ marginLeft: 25, color: "red" }}>Invalid input 8.</Text>
+          <Text style={{ marginLeft: 25, color: "red" }}>Invalid password.</Text>
         ) : null}
       </View>
       <TouchableOpacity onPress={() => makeRequest()} style={style.proc}>

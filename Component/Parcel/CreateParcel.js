@@ -21,9 +21,9 @@ import { api, apiRequest,ngStates,deliveryType} from "../WorkerComp/Api";
 import LoaderComp from "../WorkerComp/LoaderComp";
 import Custombtm from "../WorkerComp/Custombtm";
 import AddItems from "../../Component/Parcel/AddItems";
-import axios from 'axios';
+import { StackActions } from "@react-navigation/native";
 export default function CreateParcel({navigation}) {
-  const{navigate}=navigation;
+ 
   const usercontext = useContext(UserContext);
   const {
     userLoc,
@@ -193,8 +193,14 @@ export default function CreateParcel({navigation}) {
   }
     
   const compParcel=()=>{
-    clearAppState();
-    navigate('Parcel');
+     setAppDetails({...appDetails,load:true});
+      setUserLoc({userLoc, lat:null, lng:null,address:null,type:1});
+      setSenderLoc({senderLoc, lat:null, lng:null,address:null,type:1});
+      setuserPickupDetails({...userPickupDetails, pickupType:'',locType:1,operation:''} );
+      navigation.dispatch(StackActions.replace('Dashboard'));
+                                   
+   // navigate('Parcel');
+   
   }
 
   const inputCheck = () => {

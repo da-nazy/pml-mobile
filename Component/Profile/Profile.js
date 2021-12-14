@@ -1,15 +1,19 @@
-import React, {useState,useContext} from "react";
-import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
+import React, {useState,useContext,useEffect} from "react";
+import { View, Text, TouchableOpacity, StyleSheet, Alert } from "react-native";
 import Icon from "react-native-vector-icons/FontAwesome5";
-import { AppColor,regx} from "../WorkerComp/AppColor";
+import { AppColor,emailCheck,phoneCheck} from "../WorkerComp/AppColor";
 import InputComp from "../WorkerComp/InputComp";
 import { UserContext } from "../DataProvider/UserContext";
+import LoaderComp from "../WorkerComp/LoaderComp";
+import { api,apiRequest} from "../WorkerComp/Api";
 export default function Profile({navigation}) {
   const usercontext=useContext(UserContext);
   const {navigate}=navigation;
-  const {user}=usercontext;
+  const {user,authUser,setUser}=usercontext;
   
-
+  const [appDetails,setAppDetails]=useState({
+    load:false
+  })
   const [profile, setProfile]=useState({
     image: null,
     edit: false,
@@ -17,66 +21,156 @@ export default function Profile({navigation}) {
   });
 
   const[firstName,setFirstName]=useState({
-    firstName: user.surname,
+    name: '',
     fnError: false,
   })
  
   const[lastName,setLastName]=useState({
-    lastName: user.otherName,
+    name:'',
     lnError: false,
   })
 
   const[emailAddress,setEmailAddress]=useState({
-   emailAddress:user.email,
+   address:'',
    emError: false,
   })
 
   const[phoneNumber,setPhoneNumber]=useState({
-    phoneNumber:user.phone,
+    number:'',
     pnError: false,
   })
 
-  const emailValidation=()=>{
-    if(regx.emailFilter.test(emailAddress.emailAddress)){
-      //   setUser({...user,type:'email'});
-           return true;  
+  const updateCleanUp=()=>{
+    setProfile({...profile,edit:false})
+    console.log("test")
   }
-   }
 
-   const phoneValidation=()=>{
-    if(regx.phoneFilter.test(phoneNumber.phoneNumber)){
-      //   setUser({...user,type:'email'});
-           return true;  
-  }
-   }
-
+  useEffect(()=>{
+    return()=>{
+          updateCleanUp()
+    }
+  },[]) 
+  
   const checkInput=()=>{
-    var check=true;
-     if(!firstName.firstName){
-      setFirstName({...firstName,fnError:true});
-      check=false;
-     }else{
-      setFirstName({...firstName,fnError:false});
-     }
-     if(!lastName.lastName){
-       check=false;
-        setLastName({...lastName,lnError:true});
-     }else{
-      setLastName({...lastName,fnError:true});
-     }
-     if(!emailAddress.emailAddress){
-        check=false;
-     }else{
-       // check input type
-         if(!emailValidation()){
+    var check;
+    var updateObject={}
+ 
+      if(firstName.name){
+        updateObject['surname']=firstName.name;
+       check=true;
+      }else{
+        ///delete updateObject['surname']
+      
+      }
+       if(lastName.name){
+         updateObject['otherName']=lastName.name;
+         check=true;
+       }else{
+         // do nothing for now
+       }
+       if(emailAddress.address){
+        if(!emailCheck(emailAddress.address)){
           setEmailAddress({...emailAddress,emError:true});
           check=false;
+        
          }else{
           setEmailAddress({...emailAddress,emError:false});
-        
+          updateObject['email']=emailAddress.address;
+         
          }
-     }
+       }
+
+        if(phoneNumber.number){
+          if(!phoneCheck(phoneNumber.number)){
+            setPhoneNumber({...phoneNumber,pnError:true});
+            check=false;
+          }else{
+            setPhoneNumber({...phoneNumber,pnError:false});
+            updateObject['phone']=phoneNumber.number;
+          }
+        }
+        updateObject['check']=check;
+    
+     return updateObject;
   }
+  const updateProfile=()=>{ 
+    console.log(checkInput())
+
+    if(checkInput().check==="undefined"){
+      Alert.alert("Message","No update made!");
+    
+    }
+    if(checkInput().check===false){
+      console.log("Input error")
+    }
+     if (checkInput().check===true){
+      console.log("Input okay to update")
+       updateCustomer(checkInput());
+    }
+}
+  
+   const updateCustomer=(e)=>{
+     // to remove the check property in e
+     delete e.check;
+
+
+    var updateObject={
+      method:'put',
+      url:`${api.localUrl}${api.editCustomer}/${user.id}`,
+      data:{...e},
+      headers:{
+        Authorization:' Bearer ' +authUser.token,
+        'Cache-Control': 'no-cache',
+              Pragma: 'no-cache',
+      }
+      
+    }
+
+    console.log(updateObject);
+
+    apiRequest(updateObject,(e)=>setAppDetails({...appDetails,load:e}),(e)=>succ(e),(e)=>fail(e),(e)=>{updatePayload(e)});
+  
+   }
+   const succ=(e)=>{
+   console.log(e)
+   }
+   const fail=(e)=>{
+     console.log(e)
+   }
+   const updatePayload=(e)=>{
+  console.log(e.data.payload);
+  if(e.data.success){
+    console.log("Okay")
+    setProfile({...profile,edit:false});
+   // setFirstName({...firstName,name:null});
+   // setLastName({...lastName,name:null});
+   // setEmailAddress({...emailAddress,address:null});
+   // setPhoneNumber({...phoneNumber,number:null});
+   // getProfile();
+  }
+
+   }
+
+   const getProfile=()=>{
+    var userObject={
+      method:'get',
+      url:`${api.localUrl}${api.userProfile}`,
+          headers:{
+              Authorization:' Bearer ' + authUser.token,
+              'Cache-Control': 'no-cache',
+              Pragma: 'no-cache',
+            }
+      
+  }
+ console.log(userObject);
+
+ apiRequest(userObject,(e)=>{setAppDetails({...appDetails,load:e})},(e)=>{succ(e)},(e)=>{fail(e)},(e)=>{userProfilePayload(e)})
+  }
+
+  const userProfilePayload=(e)=>{
+    setUser(e.data.payload);
+   
+   }
 
   return (
     <View style={{margin:15}}>
@@ -120,7 +214,7 @@ export default function Profile({navigation}) {
       <View>
         <InputComp
           inputType="name"
-          value={firstName.firstName}
+          value={firstName.name?firstName.name:user.surname&&user.surname}
           mode="outlined"
           right={null}
           label="First Name"
@@ -130,16 +224,16 @@ export default function Profile({navigation}) {
           secureText={false}
           disabled={!profile.edit}
           setText={(e) => {
-            setProfile({ ...profile, firstName: e });
+          setFirstName({...firstName,name:e})
           }}
         />
         {firstName.fnError ? (
-          <Text style={{ marginLeft: 25, color: "red" }}>Invalid input.</Text>
+          <Text style={{ marginLeft: 25, color: "red" }}>Invalid First Name</Text>
         ) : null}
       </View>
       <View>
         <InputComp
-        value={lastName.lastName}
+        value={lastName.name?lastName.name:user.otherName}
           inputType="name"
           mode="outlined"
           right={null}
@@ -150,16 +244,16 @@ export default function Profile({navigation}) {
           secureText={false}
           disabled={!profile.edit}
           setText={(e) => {
-            setProfile({ ...profile, lastName: e });
+           setLastName({...lastName,name:e});
           }}
         />
         {lastName.lnError ? (
-          <Text style={{ marginLeft: 25, color: "red" }}>Invalid input.</Text>
+          <Text style={{ marginLeft: 25, color: "red" }}>Invalid Last Name</Text>
         ) : null}
       </View>
       <View>
         <InputComp
-        value={emailAddress.emailAddress}
+        value={emailAddress.address?emailAddress.address:user.email}
           inputType="name"
           mode="outlined"
           right={null}
@@ -170,16 +264,16 @@ export default function Profile({navigation}) {
           secureText={false}
           disabled={!profile.edit}
           setText={(e) => {
-            setProfile({ ...profile, eaName: e });
+           setEmailAddress({...emailAddress,address:e})
           }}
         />
         {emailAddress.emError ? (
-          <Text style={{ marginLeft: 25, color: "red" }}>Invalid input.</Text>
+          <Text style={{ marginLeft: 25, color: "red" }}>Invalid Email</Text>
         ) : null}
       </View>
       <View>
         <InputComp
-        value={phoneNumber.phoneNumber}
+        value={phoneNumber.number?phoneNumber.number:user.phone}
           inputType="telephoneNumber"
           mode="outlined"
           right={null}
@@ -190,11 +284,11 @@ export default function Profile({navigation}) {
           secureText={false}
           disabled={!profile.edit}
           setText={(e) => {
-            setProfile({ ...profile, eaName: e });
+          setPhoneNumber({...phoneNumber,number:e});
           }}
         />
         {phoneNumber.pnError ? (
-          <Text style={{ marginLeft: 25, color: "red" }}>Invalid input.</Text>
+          <Text style={{ marginLeft: 25, color: "red" }}>Invalid Phone Number</Text>
         ) : null}
       </View>
       <View style={{flexDirection:'row',marginTop:10}}>
@@ -202,13 +296,15 @@ export default function Profile({navigation}) {
         <Text style={{color:'#000',fontSize:11}}>{profile.id}</Text>
       </View>
       <View style={{flexDirection:'row',marginTop:20,display:'flex',justifyContent:'space-between'}}>
-        {profile.edit&&(<TouchableOpacity style={style.updateBtn}>
-          <Text style={{textAlign:'center',fontSize:15,fontWeight:'bold',color:'#fff',}}>Update</Text>
+        {profile.edit&&(<TouchableOpacity style={style.updateBtn} onPress={()=>updateProfile()}>
+          <Text style={{textAlign:'center',fontSize:15,fontWeight:'bold',color:'#fff'}}>Update</Text>
         </TouchableOpacity>)}
         <TouchableOpacity onPress={()=>navigate('Login')} style={{justifyContent:'center',marginRight:5}} >
           <Text style={{fontWeight:'bold',color:'#bbbbbb'}}>Logout</Text>
         </TouchableOpacity>
       </View>
+      {appDetails.load&&<LoaderComp size={40} color={AppColor.third}/>}
+            
     </View>
   );
 }

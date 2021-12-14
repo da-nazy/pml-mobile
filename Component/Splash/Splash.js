@@ -3,6 +3,7 @@ import React,{useState,useEffect, useContext} from 'react';
 import { View,Text,ImageBackground,StyleSheet, Dimensions,Image} from 'react-native';
 import splash_background from '../Assets/splash_background.jpg';
 import logowhite from '../Assets/logowhite.png';
+import { StackActions } from '@react-navigation/native';
 import LoaderComp from '../WorkerComp/LoaderComp';
 import {AppColor} from '../WorkerComp/AppColor';
 import { getToken } from '../WorkerComp/ExternalFunction';
@@ -39,7 +40,7 @@ export default function Splash({navigation}){
     // check if the payload has expired and send the user to the login section 
    }
  const userProfilePayload=(e)=>{
-  setUser(e.data.payload, navigate('Dashboard'));
+  setUser(e.data.payload, navigation.dispatch(StackActions.replace('Dashboard')));
   
  
  }
@@ -49,15 +50,16 @@ export default function Splash({navigation}){
         url:`${api.localUrl}${api.userProfile}`,
             headers:{
                 Authorization:' Bearer ' + token,
+                'Cache-Control': 'no-cache',
+                Pragma: 'no-cache',
               }
         
     }
    // console.log(userObject);
 
    apiRequest(userObject,(e)=>{setAppOp({...appOp,load:e})},(e)=>{userProfileSuc(e)},(e)=>{userProfileFail(e)},(e)=>{userProfilePayload(e)})
-
-
     }
+
     getToken('token').then((check)=>{
       if(check){
         // token exists
@@ -76,7 +78,7 @@ export default function Splash({navigation}){
       }else{
           console.log(check);
          // setTimeout(()=>navigate('Login'),2000);
-         navigate('Login');
+         navigation.dispatch(StackActions.replace('Login'));
       }
     }).catch((err)=>{
     console.log(err)
