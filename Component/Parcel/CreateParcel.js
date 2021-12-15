@@ -22,6 +22,7 @@ import LoaderComp from "../WorkerComp/LoaderComp";
 import Custombtm from "../WorkerComp/Custombtm";
 import AddItems from "../../Component/Parcel/AddItems";
 import { StackActions } from "@react-navigation/native";
+import UserRegister from '../Register/UserRegister';
 export default function CreateParcel({navigation}) {
  
   const usercontext = useContext(UserContext);
@@ -36,9 +37,11 @@ export default function CreateParcel({navigation}) {
     setuserPickupDetails,
   } = usercontext;
    const addItemRef=useRef(null);
+   const regUser=useRef(null);
  const[item,setItem]=useState([]);
   const [dateshow, setDateShow] = useState(false);
   const [appDate, setAppDate] = useState(new Date(1598051730000));
+  var currentDate=new Date();
   const[estimateBill,setEstimateBill]=useState({
     bill:null,
     error:false,
@@ -121,7 +124,12 @@ export default function CreateParcel({navigation}) {
        setAppDetails({...appDetails,userValid:'check',receiverObjectId:e.data.payload.id});
     }else{
       setAppDetails({...appDetails,userValid:'times'});
-      Alert.alert("USER NOT FOUND","Create user!");
+      Alert.alert("USER NOT FOUND","Create user!",[
+        {
+          onPress:()=>regUser.current.open(),
+          text:'Create',
+        }
+      ]);
     }
   }
 
@@ -134,6 +142,17 @@ export default function CreateParcel({navigation}) {
   console.log(sortAlphabet(ngStates).map((e,i)=>{
     return(e)
   }))
+
+  const sortState=(nStates)=>{
+  var states=[];
+     nStates.map((e,i)=>{
+       states.push({name:e.name,id:e.id});
+     })
+     
+      return sortAlphabet(states);
+  
+  }
+  sortState(ngStates);
   const getCategoryPayload = (e) => {
    // console.log(e.data.payload.sort());
    var arr=[];
@@ -203,7 +222,9 @@ export default function CreateParcel({navigation}) {
    // navigate('Parcel');
    
   }
-
+    const onRegisterUser=()=>{
+      regUser.current.close();
+    }
   const inputCheck = () => {
     var check = true;
     if (!name.name) {
@@ -616,8 +637,7 @@ export default function CreateParcel({navigation}) {
               style={{ borderWidth: 1, width: "100%" }}
             >
               <Picker.Item label="State From " value="" />
-              {ngStates &&
-                ngStates.map((e, i) => {
+              {sortState(ngStates).map((e, i) => {
                   return <Picker.Item key={i} label={e.name} value={e.id} />;
                 })}
             </Picker>
@@ -632,8 +652,7 @@ export default function CreateParcel({navigation}) {
               style={{ borderWidth: 1, width: "100%" }}
             >
               <Picker.Item label="State To" value="" />
-              {ngStates &&
-                ngStates.map((e, i) => {
+              {sortState(ngStates).map((e, i) => {
                   return <Picker.Item key={i} label={e.name} value={e.id} />;
                 })}
             </Picker>
@@ -857,6 +876,8 @@ export default function CreateParcel({navigation}) {
         {dateshow && (
           <DateTimePicker
             testID="dateTimePicker"
+            minimumDate={new Date()}
+            maximumDate={currentDate.setMonth(currentDate.getMonth()+3)}
             value={appDate}
             mode="date"
             is24Hour={true}
@@ -868,6 +889,8 @@ export default function CreateParcel({navigation}) {
       </ScrollView>
        {appDetails.load&&<LoaderComp size={25} color={AppColor.third}/>}
        <Custombtm displayComp={()=><AddItems setCat={()=>getCategory()} cat={category} add={(e)=>addToItem(e)} onChange={()=>onItemChange()} item={currentItem} update={(e)=>updateItem(e)} />} height={Dimensions.get('screen').height} cod={true} btmRef={addItemRef}/>
+       <Custombtm displayComp={()=><UserRegister navigation={navigation} onCreate={()=>onRegisterUser()}/>} height={Dimensions.get('screen').height/1.5} cod={true} btmRef={regUser}/>
+    
     </View>
   );
 }

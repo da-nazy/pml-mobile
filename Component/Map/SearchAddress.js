@@ -4,6 +4,7 @@ import Icon from "react-native-vector-icons/FontAwesome5";
 import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
 import { AppColor } from "../WorkerComp/AppColor";
 import { UserContext } from "../DataProvider/UserContext";
+import {api} from '../WorkerComp/Api';
 export default function SearchAdress({navigation,route}) {
   const {navigate}=navigation;
  const usercontext=useContext(UserContext);
@@ -106,7 +107,7 @@ export default function SearchAdress({navigation,route}) {
           }}
           // renderRightButton={(e) => mapDetails.height==250?<TouchableOpacity  onPress={()=>this.textInput.clear()} style={{padding:10}}><Icon name="times" size={15} color="#000"/></TouchableOpacity>:null}
           query={{
-            key: "AIzaSyCE41gWBv1AfHzJNsyvCQe6FIPpYHLKcrs",
+            key:api.googleApiKey,
             language: "en",
             components: "country:ng",
             types: "establishment",

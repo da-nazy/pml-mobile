@@ -93,7 +93,14 @@ export default function Splash({navigation}){
             >
              
              <View style={{backgroundColor:`${AppColor.third}`,borderWidth:1,borderColor:'#F38640',height:100,width:100,justifyContent:'center',borderRadius:5,alignSelf:'center'}}>
-             <Text style={{color:'#fff',textAlign:'center',fontSize:20}}>PMLGO!</Text>
+             <View style={{width:'100%',display:'flex',justifyContent:'center'}}>
+             <Text style={{ fontSize: 15, fontWeight: "bold", color: "#fff" ,textAlign:'center'}}>
+              PMT
+            </Text>
+            <Text style={{ fontSize: 6, fontWeight: "bold", color: "#fff" ,textAlign:'center'}}>
+              LOGISTICS
+            </Text>
+             </View>
              <Image source={logowhite} style={{height:25,width:20,borderColor:'#000',alignSelf:'flex-end',marginRight:-7}}/>
              </View>
             
