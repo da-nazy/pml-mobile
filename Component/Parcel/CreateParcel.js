@@ -131,6 +131,9 @@ export default function CreateParcel({navigation}) {
   
   wait(200).then(()=>setAppDetails({...appDetails,refresh:false}))
   })
+  console.log(sortAlphabet(ngStates).map((e,i)=>{
+    return(e)
+  }))
   const getCategoryPayload = (e) => {
    // console.log(e.data.payload.sort());
    var arr=[];
@@ -139,9 +142,7 @@ export default function CreateParcel({navigation}) {
 
          arr.push({name:e.name,id:e.id});
 
-    })
-    
-   
+    }) 
     setCategory(sortAlphabet(arr));
   };
   const[recpientPhoneEmail,setRecipientPhoneEmail]=useState({
@@ -567,8 +568,8 @@ export default function CreateParcel({navigation}) {
           onRefresh={()=>onRefresh()}
           />}
       >
-        <View style={{ flexDirection: "row" }}>
-          <View style={style.inputContainer}>
+        <View style={{ flexDirection: "column" }}>
+          <View style={{width:"100%",height:70}}>
             <InputComp
               mode="outlined"
               right={null}
@@ -582,7 +583,7 @@ export default function CreateParcel({navigation}) {
               }}
             />
           </View>
-          <View style={{ width: "50%", height: 70 }}>
+          <View style={{ width: "100%", height: 70 }}>
             <InputComp
               mode="outlined"
               right={null}
@@ -703,25 +704,11 @@ export default function CreateParcel({navigation}) {
             error={recpientPhoneEmail.emailPhoneError}
           />
           <TouchableOpacity onPress={()=>isUserValid()} style={{ justifyContent: "center", width: "10%" }}>
-            {IconComp("sync-alt", { textAlign: "center" }, 15, AppColor.third)}
+            {IconComp("search", { textAlign: "center" }, 15, AppColor.third)}
           </TouchableOpacity>
         </View>
 
-        <View style={{ flexDirection: "row",justifyContent:'space-between' }}>
-          {appDetails.userValid&&<View style={{ width: "10%", justifyContent: "center" }}>
-         
-          </View>}<InputComp
-            label="Estimated Billing "
-            mode="outlined"
-            editable={false}
-            value={estimateBill.bill?estimateBill.bill.toString():''}
-            style={{ width: "80%" ,backgroundColor:'#fff'}}
-            error={estimateBill.error}
-          />
-          <TouchableOpacity onPress={()=>getEstimateBilling()} style={{ justifyContent: "center", width: "10%" }}>
-            {IconComp("sync-alt", { textAlign: "center" }, 15, AppColor.third)}
-          </TouchableOpacity>
-        </View>
+      
           
         <View style={{ flexDirection: "row" }}>
          
@@ -841,7 +828,19 @@ export default function CreateParcel({navigation}) {
           <Text style={{textAlign:'center'}}>Add item(s)</Text>
          </TouchableOpacity>
        </View>
-        
+       <View style={{ flexDirection: "row",justifyContent:'space-between' }}>
+        <InputComp
+            label="Estimated Billing "
+            mode="outlined"
+            editable={false}
+            value={estimateBill.bill?estimateBill.bill.toString():''}
+            style={{ width: "80%" ,backgroundColor:'#fff',height:40}}
+            error={estimateBill.error}
+          />
+          <TouchableOpacity onPress={()=>getEstimateBilling()} style={{ justifyContent: "center", width: "10%" }}>
+            {IconComp("sync-alt", { textAlign: "center" }, 15, AppColor.third)}
+          </TouchableOpacity>
+        </View>
         <TouchableOpacity onPress={() => registerParcel()} style={style.createBtn}>
           <Text
             style={{

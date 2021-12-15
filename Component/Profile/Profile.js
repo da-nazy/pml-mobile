@@ -233,7 +233,7 @@ export default function Profile({navigation}) {
       </View>
       <View>
         <InputComp
-        value={lastName.name?lastName.name:user.otherName}
+        value={lastName.name?lastName.name:user&&user.otherName}
           inputType="name"
           mode="outlined"
           right={null}
@@ -244,7 +244,7 @@ export default function Profile({navigation}) {
           secureText={false}
           disabled={!profile.edit}
           setText={(e) => {
-           setLastName({...lastName,name:e});
+           setLastName({...lastName,name:e});  
           }}
         />
         {lastName.lnError ? (
@@ -253,7 +253,7 @@ export default function Profile({navigation}) {
       </View>
       <View>
         <InputComp
-        value={emailAddress.address?emailAddress.address:user.email}
+        value={emailAddress.address?emailAddress.address:user&&user.email}
           inputType="name"
           mode="outlined"
           right={null}
@@ -273,7 +273,7 @@ export default function Profile({navigation}) {
       </View>
       <View>
         <InputComp
-        value={phoneNumber.number?phoneNumber.number:user.phone}
+        value={phoneNumber.number?phoneNumber.number:user&&user.phone}
           inputType="telephoneNumber"
           mode="outlined"
           right={null}
