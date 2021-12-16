@@ -16,6 +16,7 @@ import Details from "../WorkerComp/Details";
 import Profile from "../Profile/Profile";
 import Wallet from "../Wallet/Wallet";
 import ResetPassword from "../ResetPassword/ResetPassword";
+import Track from "../Tracking/Track";
 const Drawer = createDrawerNavigator();
 export default function Dashboard() {
   /**
@@ -63,10 +64,11 @@ export default function Dashboard() {
         options={{ headerShown: false }}
       />
       <Drawer.Screen
-        name="XpressPickup"
-        component={XpressPickup}
-        options={{ headerShown: false }}
+       name="Track"
+       component={Track}
+       options={{ headerShown: false }}
       />
+    
       <Drawer.Screen
         name="Support"
         component={Support}

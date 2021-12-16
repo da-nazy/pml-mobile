@@ -214,18 +214,18 @@ const payload=(e)=>{
                 <Text style={{textAlign:'center'}}>LOGISTICS</Text>
                 </View>
             <View>
-          <InputComp mode="outlined" right={null}  label="Email or Phone number" placeholder="Input value"  style={style.emailPhone} error={appUser.emailPhoneError} secureText={false} setText={(e)=>{setAppUser({...appUser,emailPhone:e})}}/>
+          <InputComp mode="outlined" right={null}  label="Email or Phone number" placeholder="Input Email/Phone"  style={style.emailPhone} error={appUser.emailPhoneError} secureText={false} setText={(e)=>{setAppUser({...appUser,emailPhone:e})}}/>
            {appUser.emailPhoneError&&(<Text style={{marginLeft:25,color:'red'}}>Invalid input.</Text>)}
             </View>
             <View>
-          <InputComp mode="outlined" secureText={appUser.passwordSecure}  label="Password" placeholder="Input value"  style={style.emailPhone} error={appUser.passwordError} right={<TextInput.Icon name="eye"  onPress={()=>setAppUser({...appUser,passwordSecure:!appUser.passwordSecure})}/>} setText={(e)=>{setAppUser({...appUser,password:e})}}/>
+          <InputComp mode="outlined" secureText={appUser.passwordSecure}  label="Password" placeholder="Input password"  style={style.emailPhone} error={appUser.passwordError} right={<TextInput.Icon name="eye"  onPress={()=>setAppUser({...appUser,passwordSecure:!appUser.passwordSecure})}/>} setText={(e)=>{setAppUser({...appUser,password:e})}}/>
            {appUser.passwordError&&(<Text style={{marginLeft:25,color:'red'}}>Empty Password</Text>)}
             </View>
             <View style={{flexDirection:'row',justifyContent:'flex-end',alignItems:'center'}}>
                 <Text style={{fontWeight:'bold',margin:5}}>Login With OTP?</Text>
       <Switch 
         style={{marginRight:4}}
-        trackColor={{ false: `${AppColor.third}`, true:"#bbbbbb" }}
+        trackColor={{false:"#bbbbbb" , true: `${AppColor.third}`}}
         thumbColor={isOtpEnabled ? `${AppColor.third}` : "#f4f3f4"}
         ios_backgroundColor="#3e3e3e"
         onValueChange={toggleSwitch}

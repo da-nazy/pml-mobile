@@ -63,8 +63,8 @@ export default function Menu({ navigation }) {
 
     {
       icon: "ship",
-      name: "Ship",
-      callAction: "Shipped Items",
+      name: "Shipment",
+      callAction: "Outbound items",
       // To pass pickup param
       func: () => {
         navigate("Ship");
@@ -72,9 +72,9 @@ export default function Menu({ navigation }) {
       id: 3,
     },
     {
-      icon: "wallet",
+      icon: "money-bill-wave",
       name: "Transactions",
-      callAction: "Transaction Details",
+      callAction: "Payment",
       // To pass pickup param
       func: () => {
         // setUserWallet(null,navigate('Wallet'))
@@ -85,10 +85,10 @@ export default function Menu({ navigation }) {
     {
       icon: "map-pin",
       name: "Track",
-      callAction: "Track Pickup",
+      callAction: "ITems on transit",
       // To pass pickup param
       func: () => {
-        navigate("XpressPickup");
+        navigate("Track");
       },
       id: 5,
     },
@@ -145,7 +145,7 @@ export default function Menu({ navigation }) {
             style={{ top: -45, justifyContent: "center", alignItems: "center" }}
           >
             <Text style={{ fontSize: 15, fontWeight: "bold", color: "#fff" }}>
-              PMT
+              PML
             </Text>
             <Text style={{ fontSize: 6, fontWeight: "bold", color: "#fff" }}>
               LOGISTICS

@@ -20,12 +20,10 @@ export default function Splash({navigation}){
     })
    
        useEffect(()=>{
-         console.log("checking")
        if(appOp.token){
          setAuthUser({...authUser,token:appOp.token});
          if(!user){
           getProfile(appOp.token);
-          console.log("chap")
          }
        
        }
@@ -70,13 +68,13 @@ export default function Splash({navigation}){
       //console.log(check);
          if(!appOp.token){
           setAppOp({...appOp,token:check});
-          console.log(check);
+       
          }else{
            console.log("test")
          }
 
       }else{
-          console.log(check);
+       
          // setTimeout(()=>navigate('Login'),2000);
          navigation.dispatch(StackActions.replace('Login'));
       }

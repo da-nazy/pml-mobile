@@ -32,7 +32,7 @@ export const  UserDrawerContent=(props)=>{
       {
         icon:"phone-volume",
         name:"Support",
-        func:()=>props.navigation.navigate('Support')
+        func:()=>props.navigation.navigate('Support'),
       },
       {
         icon:'box',
@@ -40,19 +40,9 @@ export const  UserDrawerContent=(props)=>{
         func:()=>props.navigation.navigate('Parcel'),
       },
       {
-        icon:'box',
-        name:'Quick quotes',
-        func:()=>console.log("Menu"),
-      },
-      {
-        icon:'boxes',
-        name:'Pickups',
-        func:()=>props.navigation.navigate('Pickup'),
-      },
-      {
         icon:'thumbtack',
-        name:'Track Pickup',
-        func:()=>console.log("Menu"),
+        name:'Track Parcel',
+        func:()=>props.navigation.navigate('Track'),
       },
       {
         icon:'wallet',
