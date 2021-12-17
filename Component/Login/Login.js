@@ -122,6 +122,7 @@ const payload=(e)=>{
     if(e.data.payload.token){
         getUser(e.data.payload.token);
         setAppOp({...appOp,token:e.data.payload.token});
+        
         storeToken(e.data.payload.token).then((check)=>{
           console.log(check)
         }).catch((err)=>{

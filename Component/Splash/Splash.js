@@ -38,7 +38,13 @@ export default function Splash({navigation}){
     // check if the payload has expired and send the user to the login section 
    }
  const userProfilePayload=(e)=>{
-  setUser(e.data.payload, navigation.dispatch(StackActions.replace('Dashboard')));
+   if(e.data.payload.length>0){
+    setUser(e.data.payload, navigation.dispatch(StackActions.replace('Dashboard')));
+   }else{
+     //empty payload returned
+     navigation.dispatch(StackActions.replace('Login'));
+   }
+ 
   
  
  }
