@@ -10,6 +10,11 @@ import axios from "axios";
   }
   
  */
+  export const currentDate=()=>{
+    var today=new Date();
+    return today.getFullYear();
+}
+
 export const pinColor = {
   color1: "red",
   color2: "tomato",
@@ -407,6 +412,7 @@ export const ngStates = [
 
 export const symbols = {
   naira: "\u20A6",
+  copyright:"\u00A9"
 };
    
  export const  deliveryType=[

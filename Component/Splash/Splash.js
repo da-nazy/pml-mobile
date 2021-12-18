@@ -9,7 +9,7 @@ import { StackActions } from '@react-navigation/native';
 import LoaderComp from '../WorkerComp/LoaderComp';
 import {AppColor} from '../WorkerComp/AppColor';
 import { getToken } from '../WorkerComp/ExternalFunction';
-import { api,apiRequest } from '../WorkerComp/Api';
+import { api,apiRequest, symbols ,currentDate} from '../WorkerComp/Api';
 import {UserContext} from '../DataProvider/UserContext';
 export default function Splash({navigation}){
     const {navigate}=navigation;
@@ -86,14 +86,14 @@ export default function Splash({navigation}){
       }else{
        
          // setTimeout(()=>navigate('Login'),2000);
-       //  navigation.dispatch(StackActions.replace('Login'));
+        navigation.dispatch(StackActions.replace('Login'));
       }
     }).catch((err)=>{
     console.log(err)
     })
 
     return(
-        <ScrollView style={styles.container}>
+        <ScrollView contentContainerStyle={styles.container}>
             
             <View style={{...styles.headCont}}>
             <View style={{...styles.cont1}}><Text style={{...styles.pmtTxt}}>PMT {'\n'}LOGISTICS</Text>
@@ -102,13 +102,24 @@ export default function Splash({navigation}){
             <View style={{...styles.splashCont}}>
               <Image source={splashImg} resizeMode='contain' height={270}/>
             </View>
+            <View style={{...styles.cpCont}}><Text  style={{...styles.ctTxt}}>{symbols.copyright}PMTL {currentDate()}</Text></View>
              {appOp.load&&<LoaderComp size={40} color='#433E91'/>}
              </ScrollView>
     )
 }
 const styles=StyleSheet.create({
+  cpCont:{
+  marginBottom:20
+  },
+  ctTxt:{
+       fontSize:20,
+       color:`${AppColor.secondary}`,
+       fontWeight:'500',
+       textAlign:'center',
+       
+  },
   splashCont:{
-   marginTop:122,
+
    height:270,
   },
   headCont:{
@@ -154,6 +165,8 @@ const styles=StyleSheet.create({
     container:{
         flex:1,
         backgroundColor:'#fff',
+        justifyContent:'space-between'
+        
       },
       txt:{
         color:'#fff',
