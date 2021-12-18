@@ -1,43 +1,207 @@
-import React from 'react';
-import {View,TextInput,Image,StyleSheet,Text,ScrollView} from 'react-native';
-import {IconComp} from '../WorkerComp/ExternalFunction';
-import { AppColor } from '../WorkerComp/AppColor';
-import  order from '../Assets/order.jpg';
-export default function Track(){
-    //Should get the code from route params
-    return(
-        <ScrollView>
-         <View style={{...style.searchCont}}>
-            <Image source={order} style={style.image} resizeMode={"stretch"} />
-             <View>
-                 <Text style={{fontWeight:'700',fontSize:20,color:"#fff",textAlign:'center'}}>Track Your Parcel</Text>
-                 <Text style={{textAlign:"center"}}>Enter your track number to track your parcel</Text>
-                <View>
-                {IconComp ("search",null,15,AppColor.third)}
-                <TextInput placeholder='Search by track number' onChangeText={(e)=>console.log(e)}>
+import React,{useState} from "react";
+import {
+  View,
+  TextInput,
+  Image,
+  StyleSheet,
+  Text,
+  ScrollView,
+} from "react-native";
+import { IconComp } from "../WorkerComp/ExternalFunction";
+import { AppColor } from "../WorkerComp/AppColor";
+import trackIcon from "../Assets/trackIcon.png";
+import { TouchableOpacity } from "react-native-gesture-handler";
+import LoaderComp from "../WorkerComp/LoaderComp";
+import { ActivityIndicator } from "react-native-paper";
+export default function Track() {
+    const[track,setTrack]=useState( );
 
-                </TextInput>
-                </View>
+    const[tracknumber,setTracknumber]=useState({
+        error:false,
+        number:""
+    })
+  const [appDetails,setAppDetails]=useState({
+      load:false,
 
-             </View>
-         </View>
+  })
+  //Should get the code from route params
+  const trackComp=(desc,value,active)=>{
+   return <View style={{ paddingLeft: 10 }}>
+    <View style={{ flexDirection: "row", alignItems: "center" }}>
+      {IconComp("egg", { marginBottom: 20 }, 20,`${active?AppColor.third:"#C4C4C4"}`)}
+      <View>
+        <Text style={{ ...style.trackText }}>{desc}</Text>
+        <Text style={{ marginLeft: 10 }}>{value} </Text>
+      </View>
+    </View>
+  </View>  
+  }
 
-        </ScrollView>
-    )
+  const checkTrack=()=>{
+      var check=true;
+      if(!tracknumber.number){
+          setTracknumber({...tracknumber,error:true});
+          check=false;
+      }else{
+        setTracknumber({...tracknumber,error:false});
+      }
+      return check
+  }
+   const getTrack=()=>{
+      if(checkTrack()){
+        var trackObject={
+            method:'get',
+            url:`${api.localUrl}${api.userProfile}`,
+                headers:{
+                    Authorization:' Bearer ' + token,
+                    'Cache-Control': 'no-cache',
+                    Pragma: 'no-cache',
+                  }
+            
+        }
+       // console.log(userObject);
+    
+       apiRequest(trackObject,(e)=>{setAppOp({...appOp,load:e})},(e)=>{userProfileSuc(e)},(e)=>{userProfileFail(e)},(e)=>{userProfilePayload(e)})
+       
+      }
+   
+   }
+  return (
+    <ScrollView style={{display:'flex'}}>
+       
+      <Text style={{ ...style.tInfo }}>Tracking Information</Text>
+      <View style={{ ...style.searchCont }}>
+        <Text style={{ ...style.tShip }}>Track your shipment</Text>
+        <View style={{ ...style.searchInputContainer }}>
+          <TouchableOpacity style={{ marginRight: 5 }} onPress={()=>checkTrack()}>
+            {IconComp("search", null, 20, `${AppColor.fifth}`)}
+          </TouchableOpacity>
+          <TextInput
+            placeholder="Search by track number"
+            style={{paddingLeft:5, width: "80%",height:'80%',borderColor:`${tracknumber.error?'red':"#fff"}`,borderWidth:1 }}
+            keyboardType="numeric"
+            onChangeText={(e)=>{setTracknumber({...tracknumber,number:e})}}
+          />
+        </View>
+        <View style={{ ...style.imgContainaer }}>
+          <Image
+            source={trackIcon}
+            height={200}
+            width={230}
+            style={{ borderWidth: 2 }}
+          />
+        </View>
+      </View>
+      
+     {track?  <View style={{ margin: 10, height: 300 }}>
+        <Text style={{ ...style.tHistory }}>History</Text> 
+        {trackComp("From",track.terminalFrom.address,false)}
+        {trackComp("Current Position",track.terminalStore.address,true)}
+        {trackComp("Destination",track.terminalStore.address,false)}
+      </View>:<View style={{ ...style.noTrack }}>
+        <Text style={{ ...style.trackText, textAlign: "center" }}>
+          Parcel hasn't been packaged yet!
+        </Text>
+      </View>}  
+       {appDetails.load&&<ActivityIndicator animating={true} size={35} color={AppColor.third}/>
+   }
+    
+  
+  
+
+    </ScrollView>
+  );
 }
 
-const style=StyleSheet.create({
-    searchCont:{
-    height:400,
-    borderBottomLeftRadius:20,
-    borderBottomRightRadius:20,
-    backgroundColor:'#A7C7FA'
+const style = StyleSheet.create({
+  noTrack: {
+    width: "80%",
+    backgroundColor: "#fff",
+    alignSelf: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 4,
     },
-   searchInput:{
+    shadowOpacity: 0.3,
+    shadowRadius: 4.65,
+    elevation: 8,
+    marginBottom:10,
+    marginTop:20
+  },
+  imgContainaer: {
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "center",
+    width: "70%",
+    alignSelf: "center",
+    marginTop: 5,
+  },
+  trackText: {
+    fontWeight: "700",
+    fontSize: 15,
+    fontStyle: "normal",
+    color: `${AppColor.fifth}`,
+    margin: 10,
+  },
+  tHistory: {
+    fontWeight: "700",
+    fontSize: 20,
+    fontStyle: "normal",
+    color: `${AppColor.fifth}`,
+    margin: 10,
+  },
+  searchInputContainer: {
+    marginTop: 12,
+    height: 50,
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
+    width: "85%",
+    borderRadius: 10,
+    alignSelf: "center",
+    backgroundColor: "#fff",
+    paddingLeft: 15,
+  },
+  searchInput: {
+    height: "80%",
+    borderWidth: 1,
+    width: "70%",
+  },
+  tShip: {
+    fontWeight: "700",
+    color: "#fff",
+    textAlign: "center",
+    marginTop: 12,
+  },
+  tInfo: {
+    fontWeight: "700",
+    fontSize: 20,
+    fontStyle: "normal",
+    textAlign: "center",
+    color: `${AppColor.fifth}`,
+    margin: 10,
+  },
+  searchCont: {
+    marginTop: 38,
+    height: 342,
+    borderRadius: 20,
+    backgroundColor: `${AppColor.lightThird1}`,
+    width: "85%",
+    alignSelf: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 4,
+    },
+    shadowOpacity: 0.3,
+    shadowRadius: 4.65,
 
-   },
-   image:{
-      width:'100%',
-      height:200 
-   }
-})
+    elevation: 8,
+  },
+  searchInput: {},
+  image: {
+    width: "100%",
+    height: 200,
+  },
+});

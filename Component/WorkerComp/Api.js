@@ -441,7 +441,7 @@ export const api = {
   recoverPassword: "api/crm/customers/otp",
   // localUrl:' itmain http://172.16.17.30/ online api.pmt.com.ng  palm:192.168.43.122',172.16.17.174 ,
   localUrl: "https://api.pmt.com.ng/",
-  localUrl:'http://172.16.17.27/',
+  //localUrl:'http://172.16.17.27/',
   googleReversGeoCodeUrl:
     "https://maps.googleapis.com/maps/api/geocode/json?latlng=",
   googleApiKey: "AIzaSyD1gihWTJzSjIyCT-2zil_tWgGltUZTbMQ",

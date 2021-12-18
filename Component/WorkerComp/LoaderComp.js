@@ -1,5 +1,5 @@
 import React from 'react';
-import {View,Text,ActivityIndicator,Dimensions} from 'react-native';
+import {View,ActivityIndicator,Dimensions} from 'react-native';
 export default function LoaderComp({size,color}){
 
     return (

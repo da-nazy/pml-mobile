@@ -1,8 +1,10 @@
 
 import React,{useState,useEffect, useContext} from 'react';
-import { View,Text,ImageBackground,StyleSheet, Dimensions,Image} from 'react-native';
+import { View,Text,ImageBackground,StyleSheet, Dimensions,Image,ScrollView} from 'react-native';
 import splash_background from '../Assets/splash_background.jpg';
+import splashImg from '../Assets/splashImg.png';
 import logowhite from '../Assets/logowhite.png';
+import logo from '../Assets/logo.png';
 import { StackActions } from '@react-navigation/native';
 import LoaderComp from '../WorkerComp/LoaderComp';
 import {AppColor} from '../WorkerComp/AppColor';
@@ -38,7 +40,9 @@ export default function Splash({navigation}){
     // check if the payload has expired and send the user to the login section 
    }
  const userProfilePayload=(e)=>{
-   if(e.data.payload.length>0){
+   console.log(e.data.payload);
+
+   if(e.data.payload){
     setUser(e.data.payload, navigation.dispatch(StackActions.replace('Dashboard')));
    }else{
      //empty payload returned
@@ -82,44 +86,74 @@ export default function Splash({navigation}){
       }else{
        
          // setTimeout(()=>navigate('Login'),2000);
-         navigation.dispatch(StackActions.replace('Login'));
+       //  navigation.dispatch(StackActions.replace('Login'));
       }
     }).catch((err)=>{
     console.log(err)
     })
 
     return(
-        <View style={styles.container}>
+        <ScrollView style={styles.container}>
             
-            <ImageBackground
-            source={splash_background}
-            resizeMode="cover" style={styles.image}
-            >
-             
-             <View style={{backgroundColor:`${AppColor.third}`,borderWidth:1,borderColor:'#F38640',height:100,width:100,justifyContent:'center',borderRadius:5,alignSelf:'center'}}>
-             <View style={{width:'100%',display:'flex',justifyContent:'center'}}>
-             <Text style={{ fontSize: 15, fontWeight: "bold", color: "#fff" ,textAlign:'center'}}>
-              PMT
-            </Text>
-            <Text style={{ fontSize: 6, fontWeight: "bold", color: "#fff" ,textAlign:'center'}}>
-              LOGISTICS
-            </Text>
-             </View>
-             <Image source={logowhite} style={{height:25,width:20,borderColor:'#000',alignSelf:'flex-end',marginRight:-7}}/>
-             </View>
-            
-            </ImageBackground>
+            <View style={{...styles.headCont}}>
+            <View style={{...styles.cont1}}><Text style={{...styles.pmtTxt}}>PMT {'\n'}LOGISTICS</Text>
+            <View style={{...styles.logoCont}}><Image source={logo} style={{...styles.logo}}/></View></View>
+            </View>
+            <View style={{...styles.splashCont}}>
+              <Image source={splashImg} resizeMode='contain' height={270}/>
+            </View>
              {appOp.load&&<LoaderComp size={40} color='#433E91'/>}
-             </View>
+             </ScrollView>
     )
 }
 const styles=StyleSheet.create({
+  splashCont:{
+   marginTop:122,
+   height:270,
+  },
+  headCont:{
+    flexDirection:'row',
+    justifyContent:'center',
+  },
+  logoCont:{
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 3,
+    },
+    shadowOpacity: 0.29,
+    shadowRadius: 4.65,
+    
+    elevation: 7,
+  },
+  logo:{
+    height:37,
+    width:40,
+  },
+  cont1:{
+   marginTop:96,
+   width:'85%',
+   flexDirection:'row',
+  justifyContent:'space-between',
+  display:'flex',
+  },
+  imgCont:{
+  height:37,
+  width:40 
+  }, 
+  pmtTxt:{
+    fontWeight:'700',
+    fontSize:24,
+    color:`${AppColor.secondary}`,
+    textShadowRadius:5,
+  },
     image: {
         flex: 1,
         justifyContent: "center"
       },
     container:{
         flex:1,
+        backgroundColor:'#fff',
       },
       txt:{
         color:'#fff',
