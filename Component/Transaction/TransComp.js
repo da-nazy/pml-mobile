@@ -18,6 +18,13 @@ export default function TransComp({color,iconName,func,transTime,transAmount,tra
 }
 
 const style=StyleSheet.create({
+  transAmount:{
+    fontSize:18,
+    width:'20%',
+    alignSelf:'center',
+    textAlign:'center',
+    color:`${AppColor.third}`
+  },
     trans:{
         margin:10,
         marginTop:15,

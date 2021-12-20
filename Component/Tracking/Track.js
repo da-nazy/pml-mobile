@@ -11,7 +11,6 @@ import { IconComp } from "../WorkerComp/ExternalFunction";
 import { AppColor } from "../WorkerComp/AppColor";
 import trackIcon from "../Assets/trackIcon.png";
 import { TouchableOpacity } from "react-native-gesture-handler";
-import LoaderComp from "../WorkerComp/LoaderComp";
 import { ActivityIndicator } from "react-native-paper";
 export default function Track() {
     const[track,setTrack]=useState( );

@@ -1,7 +1,8 @@
 {
   "expo": {
     "name": "pmlLogistics",
-    "slug": "pmlGo",
+    "slug": "pmlLogistics",
+    "icon":"./Component/Assets/logo.png",
     "version": "1.0.0",
     "assetBundlePatterns": [
       "**/*"

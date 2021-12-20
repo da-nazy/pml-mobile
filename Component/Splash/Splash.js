@@ -1,9 +1,7 @@
 
 import React,{useState,useEffect, useContext} from 'react';
 import { View,Text,ImageBackground,StyleSheet, Dimensions,Image,ScrollView} from 'react-native';
-import splash_background from '../Assets/splash_background.jpg';
 import splashImg from '../Assets/splashImg.png';
-import logowhite from '../Assets/logowhite.png';
 import logo from '../Assets/logo.png';
 import { StackActions } from '@react-navigation/native';
 import LoaderComp from '../WorkerComp/LoaderComp';
