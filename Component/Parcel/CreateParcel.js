@@ -42,6 +42,11 @@ export default function CreateParcel({navigation}) {
   const [dateshow, setDateShow] = useState(false);
   const [appDate, setAppDate] = useState(new Date(1598051730000));
   var currentDate=new Date();
+  const[terminals,setTerminals]=useState(null);
+  const[selectedTerminal,setSelectedTerminal]=useState({
+    error:false,
+    id:''
+  });
   const[estimateBill,setEstimateBill]=useState({
     bill:null,
     error:false,
@@ -112,11 +117,32 @@ export default function CreateParcel({navigation}) {
   const failFunc = (e) => {
     Alert.alert("Error", e);
   };
+  const [terminalTo,setTerminalTo]=useState({
+    error:false,
+    id:''
+  })
+
+  const terminalPayLoad=(e)=>{
+  var temp=[];
+ if(e.data.payload.length){
+    e.data.payload.map((e,i)=>{
+     if(e.subsidiary==="PML"){
+       
+       temp.push({name:e.name,id:e.id})
+     }
+    })
+    setTerminals(sortAlphabet(temp))
+ }
+  }
      useEffect(()=>{
        return()=>{
          setWorth({...worth,worth:''});
           setCurrentItem(null);
        }
+     },[])
+
+     useEffect(()=>{
+      getTerminals()
      },[])
   const userCheckPayload=(e)=>{
     console.log(e.data.payload.id);
@@ -136,12 +162,20 @@ export default function CreateParcel({navigation}) {
   const onRefresh=useCallback(()=>{
    setAppDetails({...appDetails,refresh:true});
    getCategory();
-  
+   getTerminals();
   wait(200).then(()=>setAppDetails({...appDetails,refresh:false}))
   })
-  console.log(sortAlphabet(ngStates).map((e,i)=>{
-    return(e)
-  }))
+
+  const getTerminals=()=>{
+    var requestObject={
+      method:'get',
+      url:`${api.localUrl}${api.pmlTerminal}`,
+      data:{}
+    }
+
+     apiRequest(requestObject,(e)=>console.log(e),(e)=>succFunc(e),(e)=>failFunc(e),(e)=>terminalPayLoad(e));
+ 
+  }
 
   const sortState=(nStates)=>{
   var states=[];
@@ -213,7 +247,6 @@ export default function CreateParcel({navigation}) {
   }
     
   const compParcel=()=>{
-     setAppDetails({...appDetails,load:true});
       setUserLoc({userLoc, lat:null, lng:null,address:null,type:1});
       setSenderLoc({senderLoc, lat:null, lng:null,address:null,type:1});
       setuserPickupDetails({...userPickupDetails, pickupType:'',locType:1,operation:''} );
@@ -298,7 +331,22 @@ export default function CreateParcel({navigation}) {
     if(!delivery_Type.name){
       check=false;
     }
-   
+     if(delivery_Type.name==="TERMINAL"){
+       if(!selectedTerminal.id){
+       check=false;
+       setSelectedTerminal({...selectedTerminal,error:true})
+       }else{
+      setSelectedTerminal({...selectedTerminal,error:false})
+       }
+
+       if(!terminalTo.id){
+         check=false;
+         setTerminalTo({...terminalTo,error:true});
+       }else{
+         setTerminalTo({...terminalTo,error:false})
+       }
+
+     }
     return check;
   };
      
@@ -310,10 +358,12 @@ export default function CreateParcel({navigation}) {
 
   const createParcelPayload=(e)=>{
     console.log(e);
+    // set going back to false
     Alert.alert("Success","Parcel Created Successfully",[
       {
         text:'Ok',
-      onPress:()=>compParcel(),
+      onPress:()=>
+      setAppDetails({...appDetails,load:true},compParcel()),
       }
     ])
   }
@@ -424,6 +474,15 @@ export default function CreateParcel({navigation}) {
         delete e.id;
         createParcelObject.data.items.push(e);
       })
+       if(delivery_Type.name==="TERMINAL"){
+         if(selectedTerminal.id){
+           createParcelObject.data['terminalFrom']=selectedTerminal.id;
+         }
+         if(terminalTo.id){
+           createParcelObject.data['terminalTo']=terminalTo.id
+         }
+
+       }
        console.log(createParcelObject);
        apiRequest(createParcelObject,(e)=>setAppDetails({...appDetails,load:e}),(e)=>succFunc(e),(e)=>failFunc(e),(e)=>createParcelPayload(e));
     
@@ -670,7 +729,7 @@ export default function CreateParcel({navigation}) {
         >
 
          <View style={{flexDirection:'column',display:'flex',width:'100%'}}>
-         <View style={{ width: "100%", borderWidth: 1, borderRadius: 2 ,marginBottom:10}}>
+         <View style={{ width: "100%", borderWidth: 1, borderRadius: 2 ,marginBottom:10,color:'#bbb'}}>
             <Picker
               selectedValue={appDetails.packageId}
               onValueChange={(itemValue, itemIndex) =>
@@ -686,19 +745,57 @@ export default function CreateParcel({navigation}) {
             </Picker>
           </View>
 
-          <View style={{ width: "100%", borderWidth: 1, borderRadius: 2 }}>
+          <View style={{ width: "100%", borderWidth: 1, borderRadius: 2,color:'#bbb'}}>
             <Picker
               selectedValue={delivery_Type.name}
               onValueChange={(itemValue, itemIndex) =>
                 setDelivery_Type({...delivery_Type,name:itemValue})
               }
-              style={{ borderWidth: 1, width: "100%" }}
+              style={{width: "100%" }}
             >
               <Picker.Item label="Delivery Type" value="" />
               <Picker.Item  label={deliveryType[0]} value={deliveryType[0]}/>
               <Picker.Item  label={deliveryType[1]} value={deliveryType[1]}/>
             </Picker>
           </View>
+          
+        {delivery_Type.name==="TERMINAL"? 
+       <View style={{flexDirection:'row',justifyContent:'space-between'}}>
+          <View style={{ width: "49%", borderWidth:selectedTerminal.error?2:1, borderRadius: 2,marginTop:5 ,borderColor:selectedTerminal.error?'#8E0505':'#bbb'}}>
+            <Picker
+              selectedValue={selectedTerminal.id}
+              onValueChange={(itemValue, itemIndex) =>
+               setSelectedTerminal({...selectedTerminal,id:itemValue})
+           
+              }
+              style={{ width: "100%"}}
+            >
+              <Picker.Item label="TerminalFrom" value={""} />
+              {terminals.map((e,i)=>{
+               return <Picker.Item key={i}  label={e.name} value={e.id}/>
+              })}
+              
+            </Picker>
+          </View>
+          <View style={{ width: "49%", borderWidth:terminalTo.error?2:1, borderRadius: 2,marginTop:5 ,borderColor:terminalTo.error?'#8E0505':'#bbb'}}>
+            <Picker
+              selectedValue={terminalTo.id}
+              onValueChange={(itemValue, itemIndex) =>
+               setTerminalTo({...terminalTo,id:itemValue})
+           
+              }
+              style={{ width: "100%"}}
+            >
+              <Picker.Item label="TerminalTo" value={""} />
+              {terminals.map((e,i)=>{
+               return <Picker.Item key={i}  label={e.name} value={e.id}/>
+              })}
+              
+            </Picker>
+          </View>
+       </View>
+       :null}
+
          </View>
 
         </View>
@@ -853,11 +950,11 @@ export default function CreateParcel({navigation}) {
             mode="outlined"
             editable={false}
             value={estimateBill.bill?estimateBill.bill.toString():''}
-            style={{ width: "80%" ,backgroundColor:'#fff',height:40}}
+            style={{ width: "60%" ,backgroundColor:'#fff',height:40}}
             error={estimateBill.error}
           />
           <TouchableOpacity onPress={()=>getEstimateBilling()} style={{ justifyContent: "center", width: "10%" }}>
-            {IconComp("sync-alt", { textAlign: "center" }, 15, AppColor.third)}
+           {IconComp("sync-alt", { textAlign: "center" }, 15, AppColor.third)}
           </TouchableOpacity>
         </View>
         <TouchableOpacity onPress={() => registerParcel()} style={style.createBtn}>

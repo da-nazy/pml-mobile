@@ -25,7 +25,17 @@ export default function Menu({ navigation }) {
   const [appDetails, setAppDetails] = useState({
     name: "",
   });
-
+ const[trackNumber,setTrackNumber]=useState({
+   number:'',
+   error:false,
+ })
+ const checkTrackNumber=()=>{
+   if(!trackNumber.number){
+     setTrackNumber({...trackNumber,error:true});
+   }else{
+    setTrackNumber({...trackNumber,error:false},navigate("Track",{number:trackNumber.number}));
+   }
+ }
   useEffect(() => {
     // setAppDetails({...appDetails,name:user.surname?user.surname:''});
     if (user) {
@@ -165,6 +175,9 @@ export default function Menu({ navigation }) {
           <View style={{ flexDirection: "row", justifyContent: "center" }}>
             <TextInput
             placeholder="Parcel Code"
+            placeholderTextColor={AppColor.third}
+            keyboardType="numeric"
+            onChangeText={(e)=>setTrackNumber({...trackNumber,number:e})}
               style={{
                 width: 160,
                 height: 40,
@@ -172,9 +185,13 @@ export default function Menu({ navigation }) {
                 borderRadius: 5,
                 backgroundColor: "#fff",
                 padding: 5,
+                borderRadius:1,
+                borderWidth:1,
+                borderColor:`${trackNumber.error?"#8E0505":"#fff"}`
               }}
             />
             <TouchableOpacity
+            onPress={()=>checkTrackNumber()}
               style={{
                 height: 40,
                 width: 75,

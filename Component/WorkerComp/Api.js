@@ -445,6 +445,7 @@ export const api = {
   getCategory: "api/pml/categories",
   getState: "api/erp/states",
   recoverPassword: "api/crm/customers/otp",
+  trackParcel:"api/pml/pml-parcels/tracking/",
   // localUrl:' itmain http://172.16.17.30/ online api.pmt.com.ng  palm:192.168.43.122',172.16.17.174 ,
   localUrl: "https://api.pmt.com.ng/",
   //localUrl:'http://172.16.17.27/',
@@ -514,17 +515,21 @@ export const apiRequest = (
       // errorFun(error.response.data.message);
       // console.log(error.response.data);
       // typeof keyword is used to check the datatype
-      console.log(error.response);
+     // console.log(error.response);
       if (typeof error.response !== "undefined") {
         if (error.response.data.message) {
           errorFun(error.response.data.message);
         }
-        console.log(error.response);
-      } else {
+       
+      }else if(error.request){
+       errorFun(error.request);
+       console.log(error.request);
+      } 
+       else {
         console.log("Something happend retry again later.");
-        errorFun("Something happend retry again later.");
+        errorFun(error);
       }
-      console.log(error);
+     errorFun(error);
     });
 };
 

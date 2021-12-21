@@ -1,4 +1,4 @@
-import React,{useState} from "react";
+import React,{useContext, useState} from "react";
 import {
   View,
   TextInput,
@@ -6,15 +6,21 @@ import {
   StyleSheet,
   Text,
   ScrollView,
+  Alert,
 } from "react-native";
 import { IconComp } from "../WorkerComp/ExternalFunction";
 import { AppColor } from "../WorkerComp/AppColor";
 import trackIcon from "../Assets/trackIcon.png";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { ActivityIndicator } from "react-native-paper";
-export default function Track() {
+import { api,apiRequest} from "../WorkerComp/Api";
+import { UserContext } from "../DataProvider/UserContext";
+export default function Track({route}) {
+  const usercontext=useContext(UserContext);
+  const{authUser}=usercontext;
+  
     const[track,setTrack]=useState( );
-
+  
     const[tracknumber,setTracknumber]=useState({
         error:false,
         number:""
@@ -39,6 +45,7 @@ export default function Track() {
   const checkTrack=()=>{
       var check=true;
       if(!tracknumber.number){
+        
           setTracknumber({...tracknumber,error:true});
           check=false;
       }else{
@@ -46,36 +53,48 @@ export default function Track() {
       }
       return check
   }
+
+  const succFunc=(e)=>{
+   console.log(e);
+  }
+  const failFunc=(e)=>{
+    Alert.alert("Message",e)
+  }
+  const trackPayload=(e)=>{
+    console.log(e);
+  }
+
    const getTrack=()=>{
       if(checkTrack()){
         var trackObject={
             method:'get',
-            url:`${api.localUrl}${api.userProfile}`,
+            url:`${api.localUrl}${api.trackParcel}${tracknumber.number}`,
                 headers:{
-                    Authorization:' Bearer ' + token,
+                    Authorization:' Bearer ' + authUser.token,
                     'Cache-Control': 'no-cache',
                     Pragma: 'no-cache',
                   }
             
         }
-       // console.log(userObject);
+
+        console.log(trackObject);
     
-       apiRequest(trackObject,(e)=>{setAppOp({...appOp,load:e})},(e)=>{userProfileSuc(e)},(e)=>{userProfileFail(e)},(e)=>{userProfilePayload(e)})
+      apiRequest(trackObject,(e)=>{setAppDetails({...appDetails,load:e})},(e)=>{succFunc(e)},(e)=>{failFunc(e)},(e)=>{trackPayload(e)})
        
       }
    
    }
   return (
-    <ScrollView style={{display:'flex'}}>
-       
+    <ScrollView style={{display:'flex'}}> 
       <Text style={{ ...style.tInfo }}>Tracking Information</Text>
       <View style={{ ...style.searchCont }}>
         <Text style={{ ...style.tShip }}>Track your shipment</Text>
         <View style={{ ...style.searchInputContainer }}>
-          <TouchableOpacity style={{ marginRight: 5 }} onPress={()=>checkTrack()}>
+          <TouchableOpacity style={{ marginRight: 5 }} onPress={()=>getTrack()}>
             {IconComp("search", null, 20, `${AppColor.fifth}`)}
           </TouchableOpacity>
           <TextInput
+            value={tracknumber.number?tracknumber.number:route.params&&route.params.number.toString()}
             placeholder="Search by track number"
             style={{paddingLeft:5, width: "80%",height:'80%',borderColor:`${tracknumber.error?'red':"#fff"}`,borderWidth:1 }}
             keyboardType="numeric"

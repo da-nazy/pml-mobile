@@ -18,7 +18,7 @@ export default function Transaction(){
     if(!transactions){
         getTransactions();
     }
-    },[transactions])
+    },[])
    
     const transSuc=(e)=>{
         //console.log(e)

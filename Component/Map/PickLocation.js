@@ -50,6 +50,7 @@ export default function PickLocation({navigation}) {
        apiRequest(requestObject,(e)=>console.log(e),(e)=>succFunc(e),(e)=>errorFunc(e),(e)=>terminalPayLoad(e));
    
     }
+    
      useEffect(()=>{
        if(!terminals){
         getTerminals();

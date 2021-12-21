@@ -8,6 +8,7 @@ export const AppColor={
     lightThird:'#FEE4A8',
     lightThird1:'#F5893F',
  fifth:'#14125A',
+ sixth:"#5A4BD9",
 }
 /**
  * export const OutPut=(e)=>{
