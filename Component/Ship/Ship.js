@@ -68,7 +68,7 @@ export default function Ship(){
    const getUserPickup=()=>{
       var pickupObject={
             method:"get",
-            url:`${api.localUrl}${api.userParcels}${user.id}&paymentStatus=SUCCESSFUL&populate=items.category,assignment`,
+            url:`${api.localUrl}${api.userParcels}${user.id}&paymentStatus=SUCCESSFUL&populate=items.category,assignment&deliveryStatus=PENDING`,
             headers:{
              Authorization:' Bearer ' + authUser.token,
              'Cache-Control': 'no-cache',

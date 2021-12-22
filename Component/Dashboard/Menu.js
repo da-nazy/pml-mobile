@@ -102,6 +102,7 @@ export default function Menu({ navigation }) {
       },
       id: 5,
     },
+   
   ]);
 
   const failReq = (e) => {
@@ -306,7 +307,7 @@ export default function Menu({ navigation }) {
         </View>
         <View
           style={{
-            height: 450,
+            height: 500,
             margin: 5,
             flexDirection: "row",
             flexWrap: "wrap",
@@ -329,9 +330,9 @@ export default function Menu({ navigation }) {
                     backgroundColor: "#F0F0F0",
                   }}
                 >
-                  <Icon name={e.icon} size={40} color="#000" />
+                  <Icon name={e.icon} size={40} color={AppColor.third} />
                   <Text
-                    style={{ fontWeight: "bold", color: `${AppColor.third}` }}
+                    style={{ fontWeight: "bold", color: `${AppColor.primary}` }}
                   >
                     {e.name}
                   </Text>

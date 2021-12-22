@@ -4,7 +4,7 @@ import Icon from 'react-native-vector-icons/FontAwesome5';
 import { AppColor } from '../WorkerComp/AppColor';
 import  ItemComp from './ItemComp';
 import Pickupoperation from './Pickupopeation';
-export default function ParcelComp({catIcon,func,parcel,pickOp}) {
+export default function ParcelComp({catIcon,func,parcel,pickOp,display}) {
   const [parcelDisplay,setParcelDisplay]=useState(false);
  
   const parcelDesc=(name,value)=>{
@@ -26,7 +26,7 @@ export default function ParcelComp({catIcon,func,parcel,pickOp}) {
        {parcelDesc("Parcel:",parcel.items.length.toString())}
        {parcelDesc("Date:",parcel.createdAt.split("T")[0])}
        {parcelDesc("Amount:",parcel.costPayable)}
-       {parcelDesc("Assigned:",parcel.assignment?"Asssigned":"Not Assigned")}
+       {display?null:parcelDesc("Assigned:",parcel.assignment?"Asssigned":"Not Assigned")}
 
        </View>
       

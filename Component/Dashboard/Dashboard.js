@@ -17,6 +17,7 @@ import Profile from "../Profile/Profile";
 import Wallet from "../Wallet/Wallet";
 import ResetPassword from "../ResetPassword/ResetPassword";
 import Track from "../Tracking/Track";
+import History from '../History/History';
 const Drawer = createDrawerNavigator();
 export default function Dashboard() {
   /**
@@ -111,7 +112,11 @@ export default function Dashboard() {
         component={ResetPassword}
         options={{ headerShown: false }}
       />
-      
+      <Drawer.Screen
+        name="History"
+        component={History}
+        options={{ headerShown: false }}
+      />
     </Drawer.Navigator>
   );
 }

@@ -516,20 +516,16 @@ export const apiRequest = (
       // console.log(error.response.data);
       // typeof keyword is used to check the datatype
      // console.log(error.response);
-      if (typeof error.response !== "undefined") {
+      if (typeof error.response !=="undefined") {
         if (error.response.data.message) {
           errorFun(error.response.data.message);
         }
        
-      }else if(error.request){
-       errorFun(error.request);
-       console.log(error.request);
-      } 
-       else {
-        console.log("Something happend retry again later.");
-        errorFun(error);
       }
-     errorFun(error);
+       else {
+         errorFun(error);
+      }
+  
     });
 };
 

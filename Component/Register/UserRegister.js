@@ -194,7 +194,7 @@ export default function UserRegister({navigation,onCreate}) {
           style={{
             fontSize: 20,
             fontWeight: "bold",
-            color: `${AppColor.primary}`,
+            color: `${AppColor.third}`,
           }}
         >
           PMT

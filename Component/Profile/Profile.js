@@ -320,7 +320,6 @@ const style = StyleSheet.create({
     height:40,
     width:100,
     borderRadius:5,
-   
     backgroundColor:`${AppColor.third}`,
     justifyContent:'center',
     shadowColor: `${AppColor.third}`,

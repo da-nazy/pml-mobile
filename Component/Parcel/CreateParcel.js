@@ -467,7 +467,7 @@ export default function CreateParcel({navigation}) {
           paymentGateway:"WALLET",
           identification:id.id,
           deliveryType:delivery_Type.name,
-          vehicleType:userPickupDetails.vehicleType,
+          vehicleType:userPickupDetails.pickupType,
          }
        }
        item.map((e)=>{
@@ -483,8 +483,8 @@ export default function CreateParcel({navigation}) {
          }
 
        }
-       console.log(createParcelObject);
-       apiRequest(createParcelObject,(e)=>setAppDetails({...appDetails,load:e}),(e)=>succFunc(e),(e)=>failFunc(e),(e)=>createParcelPayload(e));
+     //  console.log(createParcelObject);
+      apiRequest(createParcelObject,(e)=>setAppDetails({...appDetails,load:e}),(e)=>succFunc(e),(e)=>failFunc(e),(e)=>createParcelPayload(e));
     
     }else{
       Alert.alert("Error","Empty fields detected");

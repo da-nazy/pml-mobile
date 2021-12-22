@@ -1,4 +1,4 @@
-import React,{useContext, useState} from "react";
+import React,{useContext, useState,useEffect} from "react";
 import {
   View,
   TextInput,
@@ -19,8 +19,8 @@ export default function Track({route}) {
   const usercontext=useContext(UserContext);
   const{authUser}=usercontext;
   
-    const[track,setTrack]=useState( );
-  
+    const[track,setTrack]=useState();
+     const[trackEm,setTrackEm]=useState(null);
     const[tracknumber,setTracknumber]=useState({
         error:false,
         number:""
@@ -29,11 +29,15 @@ export default function Track({route}) {
       load:false,
 
   })
+  useEffect(()=>{
+    return ()=>setTracknumber({...tracknumber,number:null})
+  },[])
+
   //Should get the code from route params
-  const trackComp=(desc,value,active)=>{
+  const trackComp=(desc,value,active,icon)=>{
    return <View style={{ paddingLeft: 10 }}>
     <View style={{ flexDirection: "row", alignItems: "center" }}>
-      {IconComp("egg", { marginBottom: 20 }, 20,`${active?AppColor.third:"#C4C4C4"}`)}
+      {IconComp(icon?icon:"egg", { marginBottom: 20 }, 20,`${active?AppColor.third:"#C4C4C4"}`)}
       <View>
         <Text style={{ ...style.trackText }}>{desc}</Text>
         <Text style={{ marginLeft: 10 }}>{value} </Text>
@@ -58,10 +62,15 @@ export default function Track({route}) {
    console.log(e);
   }
   const failFunc=(e)=>{
-    Alert.alert("Message",e)
+  
+    if(e.includes("not found")){
+   setTrackEm(e);
+   setTrack(null);
+    }
   }
   const trackPayload=(e)=>{
-    console.log(e);
+    console.log(e.data.payload);
+    setTrack(e.data.payload);
   }
 
    const getTrack=()=>{
@@ -90,9 +99,7 @@ export default function Track({route}) {
       <View style={{ ...style.searchCont }}>
         <Text style={{ ...style.tShip }}>Track your shipment</Text>
         <View style={{ ...style.searchInputContainer }}>
-          <TouchableOpacity style={{ marginRight: 5 }} onPress={()=>getTrack()}>
-            {IconComp("search", null, 20, `${AppColor.fifth}`)}
-          </TouchableOpacity>
+        
           <TextInput
             value={tracknumber.number?tracknumber.number:route.params&&route.params.number.toString()}
             placeholder="Search by track number"
@@ -100,6 +107,9 @@ export default function Track({route}) {
             keyboardType="numeric"
             onChangeText={(e)=>{setTracknumber({...tracknumber,number:e})}}
           />
+            <TouchableOpacity style={{ marginRight: 5 }} onPress={()=>getTrack()}>
+            {IconComp("search", null, 20, `${AppColor.fifth}`)}
+          </TouchableOpacity>
         </View>
         <View style={{ ...style.imgContainaer }}>
           <Image
@@ -111,14 +121,17 @@ export default function Track({route}) {
         </View>
       </View>
       
-     {track?  <View style={{ margin: 10, height: 300 }}>
+     {track?  <View style={{ margin: 10, height:500 }}>
         <Text style={{ ...style.tHistory }}>History</Text> 
-        {trackComp("From",track.terminalFrom.address,false)}
-        {trackComp("Current Position",track.terminalStore.address,true)}
-        {trackComp("Destination",track.terminalStore.address,false)}
+        {track.terminalFrom&&trackComp("From",track.terminalFrom.address,false)}
+        {track.terminalTo&&trackComp("Current Position",track.terminalStore.address,true)}
+        {track.terminalStore&&trackComp("Destination",track.terminalStore.address,false)}
+        {trackComp("Expected Date",track.expectedDate.split('T')[0],false)}
+        {trackComp("Delivery Status",track.deliveryStatus)}
+        {trackComp("Routing",track.routing,true,"route")}
       </View>:<View style={{ ...style.noTrack }}>
         <Text style={{ ...style.trackText, textAlign: "center" }}>
-          Parcel hasn't been packaged yet!
+         {trackEm?trackEm:"Track your parcel here!"}
         </Text>
       </View>}  
        {appDetails.load&&<ActivityIndicator animating={true} size={35} color={AppColor.third}/>

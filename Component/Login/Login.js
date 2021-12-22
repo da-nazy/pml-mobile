@@ -244,7 +244,7 @@ export default function Login({ navigation }) {
           style={{
             fontSize: 40,
             fontWeight: "bold",
-            color: `${AppColor.primary}`,
+            color: `${AppColor.third}`,
           }}
         >
           PMT
@@ -307,8 +307,7 @@ export default function Login({ navigation }) {
         <TouchableOpacity
           onPress={() => checkInput()}
           style={{
-            backgroundColor: `${AppColor.primary}`,
-            borderWidth: 1,
+            backgroundColor: `${AppColor.third}`,
             width: Dimensions.get("screen").width / 1.2,
             alignSelf: "center",
             marginTop: 40,

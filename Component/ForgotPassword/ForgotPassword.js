@@ -90,7 +90,7 @@ export default function ForgotPassword(){
        <ScrollView>
           <View style={{marginTop:80,justifyContent:'center',alignItems:'center',marginBottom:40}}><Icon name="user-lock" size={65} color="#000"/>
            </View>
-           <View style={{alignItems:'center'}}><Text style={{textAlign:'center',fontSize:25,fontWeight:'bold',marginBottom:20}}>Forgot Password?</Text><Text style={{fontSize:18,width:'70%',textAlign:'center',color:'#A0A0A0'}}>
+           <View style={{alignItems:'center'}}><Text style={{textAlign:'center',fontSize:25,fontWeight:'bold',marginBottom:20,color:`${AppColor.third}`}}>Forgot Password?</Text><Text style={{fontSize:18,width:'70%',textAlign:'center',color:'#A0A0A0'}}>
                    Enter your registered email to reset your password
                </Text>
            </View>
@@ -113,7 +113,7 @@ const style=StyleSheet.create({
          margin:15,
          marginTop:20,
          height:45,
-         backgroundColor:'#000',
+         backgroundColor:`${AppColor.third}`,
         shadowColor: "#000",
         shadowOffset: {
           width: 0,
