@@ -2,7 +2,7 @@
 import React,{useState,useEffect, useContext} from 'react';
 import { View,Text,ImageBackground,StyleSheet, Dimensions,Image,ScrollView} from 'react-native';
 import splashImg from '../Assets/splashImg.png';
-import logo from '../Assets/logo.png';
+import logo from '../Assets/peace-logo.png';
 import { StackActions } from '@react-navigation/native';
 import LoaderComp from '../WorkerComp/LoaderComp';
 import {AppColor} from '../WorkerComp/AppColor';

@@ -2,7 +2,7 @@
   "expo": {
     "name": "pmlLogistics",
     "slug": "pmlLogistics",
-    "icon":"./Component/Assets/logo.png",
+    "icon":"./Component/Assets/peace-logo.png",
     "version": "1.0.0",
     "assetBundlePatterns": [
       "**/*"
