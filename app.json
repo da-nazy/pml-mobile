@@ -2,9 +2,18 @@
   "expo": {
     "name": "pmllogistics",
     "slug": "pmllogistics",
+    "icon": "./Component/Assets/pmllog.png",
     "version": "1.0.0",
     "assetBundlePatterns": [
       "**/*"
-    ]
+    ],
+    "android": {
+      "package": "com.pmllogistics",
+      "config": {
+        "googleMaps": {
+          "apiKey": "AIzaSyDqgx6vJ32-zftpVRgo7p2lfKsoAT9QO1s"
+        }
+      }
+    }
   }
 }
