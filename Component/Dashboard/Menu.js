@@ -18,14 +18,16 @@ import Icon from 'react-native-vector-icons/FontAwesome5';
 import { UserContext } from '../DataProvider/UserContext';
 import { api, apiRequest } from '../WorkerComp/Api';
 import { IconComp } from '../WorkerComp/ExternalFunction';
-export default function Menu({ navigation }) {
+import { useToast } from 'react-native-styled-toast';
+export default function Menu({route, navigation }) {
+	const {toast}=useToast();
 	const usercontext = useContext(UserContext);
 	const { user, userWallet, setUserWallet, authUser } = usercontext;
 	const { navigate } = navigation;
-
-	const [appDetails, setAppDetails] = useState({
-		name: '',
-	});
+     const [appDetails,setAppDetails]=useState({
+		firstTime:false
+	 })
+	
 	const [trackNumber, setTrackNumber] = useState({
 		number: '',
 		error: false,
@@ -40,15 +42,19 @@ export default function Menu({ navigation }) {
 			);
 		}
 	};
-	useEffect(() => {
-		if (user) {
-			setAppDetails({ ...appDetails, name: user.surname });
-		}
-	}, [user]);
+
+
+
+	
+
 
 	useEffect(
 		() => {
+			
+			
+	
 			if (!userWallet) {
+				
 				getUserWallet();
 			}
 		},
@@ -56,6 +62,8 @@ export default function Menu({ navigation }) {
 		// eslint-disable-next-line
 		[userWallet]
 	);
+
+	
 
 	const [wallet, setWallet] = useState({
 		walletLodaded: true,
@@ -76,7 +84,7 @@ export default function Menu({ navigation }) {
 		{
 			icon: 'ship',
 			name: 'Shipment',
-			callAction: 'Outbound items',
+			callAction: 'Outbound Items',
 			// To pass pickup param
 			func: () => {
 				navigate('Ship');
@@ -112,12 +120,11 @@ export default function Menu({ navigation }) {
 		// (e);
 	};
 	const userWalletPayload = (e) => {
+		
 		if (e.data.payload.length !== 0) {
 			if (e.data.payload[0].balance) {
-				setUserWallet(
-					e.data.payload[0],
-					setWallet({ ...wallet, amount: e.data.payload[0].balance })
-				);
+				setUserWallet(e.data.payload[0]	);
+			//	setWallet({ ...wallet, amount: e.data.payload[0].balance });
 			}
 		} else {
 		}
@@ -182,7 +189,7 @@ export default function Menu({ navigation }) {
 							color: '#fff',
 						}}
 					>
-						Hello!, {appDetails.name ? appDetails.name : ''}
+						Hello!, {user?.surname ? user.surname : ''}
 					</Text>
 
 					<View style={{ flexDirection: 'row', justifyContent: 'center' }}>
@@ -281,9 +288,7 @@ export default function Menu({ navigation }) {
 							{wallet.walletLodaded ? (
 								<Text style={{ alignSelf: 'center', fontWeight: 'bold' }}>
 									{'\u20A6'}
-									{wallet.amount
-										? wallet.amount
-										: userWallet && userWallet.balance}
+									{userWallet? userWallet.balance:'0'}
 								</Text>
 							) : (
 								<ActivityIndicator size='small' color={AppColor.third} />

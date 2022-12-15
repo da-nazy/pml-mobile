@@ -27,17 +27,18 @@ export default function PickLocation({navigation}) {
         terminal.push({location:e.location})
       }
     })
-  //  (terminal);
-    setTerminals(terminal,(terminals,"testd"));
+    console.log(terminal);
+    setTerminals(terminal);
   }
 
   const succFunc=(e)=>{
   //(e)
+  console.log(e)
   }
  
 
   const errorFunc=(e)=>{
-   // (e);
+  console.log(e)
   } 
 
     const getTerminals=()=>{
@@ -47,7 +48,7 @@ export default function PickLocation({navigation}) {
         data:{}
       }
   
-       apiRequest(requestObject,(e)=>(e),(e)=>succFunc(e),(e)=>errorFunc(e),(e)=>terminalPayLoad(e));
+       apiRequest(requestObject,(e)=>console.log(e),(e)=>succFunc(e),(e)=>errorFunc(e),(e)=>terminalPayLoad(e));
    
     }
     
@@ -108,7 +109,7 @@ export default function PickLocation({navigation}) {
     }
 
      apiRequest(requestObject,(a)=>(console.log(a)),(a)=>succFunc(a),(a)=>errorFunc(a),(a)=>payLoad(a));
- console.log(requestObject);
+    console.log(requestObject);
   }
         
      const searchResult=()=>{
@@ -132,6 +133,7 @@ export default function PickLocation({navigation}) {
 
     const setCoord=(e,c)=>{
    //   ("Okay");
+   console.log(e,c,'testing danny');
         if(!pin.longitude>0){
     
         if(userPickupDetails.locType==1){
@@ -152,10 +154,11 @@ export default function PickLocation({navigation}) {
     
   return (
     <View style={styles.container}><StatusBar animated={true} backgroundColor={AppColor.third}/>
-      {pin.longitude>0?
+      {pin.longitude?
       <MapView style={styles.map}  
        zoomEnabled={true}
-       onMapReady={()=>("Okay")}
+       key={api.googleApiKey}
+       onMapReady={()=>console.log("Okay")}
        initialRegion={{
       latitude: pin.latitude,
       longitude: pin.longitude,
@@ -169,7 +172,7 @@ export default function PickLocation({navigation}) {
      pinColor={pinColor.color17}
      draggable={true}
      onDragStart={(e)=>{
-      //  (userLoc,senderLoc)
+        console.log(e);
      }}
      onDragEnd={(e)=>{
       setPin({ latitude:e.nativeEvent.coordinate.latitude,
@@ -201,6 +204,9 @@ export default function PickLocation({navigation}) {
 }
 
 const styles = StyleSheet.create({
+  searchResultCont:{
+    
+  },
   container: {
     flex: 1,
     backgroundColor: '#fff',

@@ -486,7 +486,7 @@ export const api = {
 /**
  * object should be passed in to the axios call
  * containing the following
- * method,url,data , and authoriztion if need be .head
+ * method,url,data , and authorization if need be .head
  *
  */
 // Generic request call
@@ -550,8 +550,7 @@ export const requestApi = (request, load, errorPayload, setPayload) => {
 		.then(function (response) {
 			if (typeof response.data === 'undefined') {
 				load(false);
-				throw new Error ('Unknown error occurred');
-				
+				throw new Error ('Unknown error occurred');	
 			} else {
 				setPayload(response.data);
 			}

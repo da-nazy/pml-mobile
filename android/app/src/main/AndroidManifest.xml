@@ -31,7 +31,7 @@
    android:theme="@style/AppTheme"
     android:usesCleartextTraffic="true">
 
-    <meta-data android:name="com.google.android.geo.API_KEY" android:value="AIzaSyDqgx6vJ32-zftpVRgo7p2lfKsoAT9QO1s"/>
+    <meta-data android:name="com.google.android.geo.API_KEY" android:value="AIzaSyBTpZJXDeX0W1h-0h-1_KYsuDVsdbRpE5o"/>
     <meta-data android:name="expo.modules.updates.EXPO_UPDATE_URL" android:value="YOUR-APP-URL-HERE"/>
     <meta-data android:name="expo.modules.updates.EXPO_SDK_VERSION" android:value="YOUR-APP-SDK-VERSION-HERE"/>
     <activity android:name=".MainActivity" android:label="@string/app_name" android:configChanges="keyboard|keyboardHidden|orientation|screenSize|uiMode" android:launchMode="singleTask" android:windowSoftInputMode="adjustResize" android:theme="@style/Theme.App.SplashScreen" android:exported="true" android:screenOrientation="portrait">

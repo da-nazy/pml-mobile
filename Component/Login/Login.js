@@ -76,6 +76,7 @@ export default function Login({ navigation }) {
 		btmRef.current.close();
 	};
 	const userProfilePayload = (e) => {
+		
 		if (e.data.success) {
 			setUser(
 				e.data.payload,
@@ -87,17 +88,13 @@ export default function Login({ navigation }) {
 			} else {
 				// ("No otp");
 				// should login
-				navigation.dispatch(StackActions.replace('Dashboard'));
+				navigation.dispatch(StackActions.replace('Dashboard',{firstTime:true}));
 			}
 		}
 	};
 
 	const userProfileSuc = (e) => {
-		toast({
-			message:'Login  Successful',
-			intent:'SUCCESS'
-		   })
-	
+		console.log(e)
 	};
 	const userProfileFail = (e) => {
 		return Alert.alert('Error', e);

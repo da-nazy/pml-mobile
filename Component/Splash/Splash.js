@@ -80,6 +80,7 @@ export default function Splash({ navigation }) {
 	const userProfileSuc = (e) => {
 		console.log(e);
 	};
+
 	const versionSuc = (e) => {
 		console.log(e);
 	};
@@ -91,7 +92,7 @@ export default function Splash({ navigation }) {
 		} else {
 			setUser(
 				e.payload,
-				navigation.dispatch(StackActions.replace('Dashboard'))
+				navigation.dispatch(StackActions.replace('Dashboard',{firstTime:true}))
 			);
 		}
 	};

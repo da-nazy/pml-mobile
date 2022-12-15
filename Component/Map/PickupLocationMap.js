@@ -49,6 +49,7 @@ export default function PickupLocationMap({ navigation }) {
           position: "absolute",
           alignSelf: "flex-end",
           flexDirection: "row",
+      
           width: "95%",
           bottom: 25,
           height: 50,
@@ -93,9 +94,11 @@ export default function PickupLocationMap({ navigation }) {
   };
 
   const succFunc = (e) => {
-    //(e);
+    console.log(e);
   };
- 
+   const errorFunc=(e)=>{
+    console.log(e)
+   }
   // Calling the Location to get LatLng for user.
 
   const [pickupAddress, setPickupAddress] = useState({
@@ -112,7 +115,7 @@ export default function PickupLocationMap({ navigation }) {
   });
 
   const payload = (e) => {
-  
+      console.log(e,'testing danny');
     if (e.data.results[0].formatted_address) {
       // setPickupAddress({...pickupAddress,address:e.data.results[0].formatted_address})
       setCoordinates( { ...coordinates, address: e.data.results[0].formatted_address });
@@ -241,7 +244,9 @@ export default function PickupLocationMap({ navigation }) {
             provider="google"
           >
             <MapViewDirections
-              lineDashPattern={[0]}
+            lineDashPattern={[0]}
+            key={api.googleApiKey}
+             onError={(e)=>console.log(e)}
               origin={{
                 latitude: userLoc.lat,
                 longitude: userLoc.lng,

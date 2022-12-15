@@ -1,4 +1,4 @@
-import React from 'react';
+import React,{useEffect} from 'react';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { UserDrawerContent } from '../WorkerComp/UserDrawerContent';
 import SearchAdress from '../Map/SearchAddress';
@@ -22,12 +22,14 @@ import Icon from 'react-native-vector-icons/FontAwesome5';
 import { useToast } from 'react-native-styled-toast'; 
 
 const Drawer = createDrawerNavigator();
-export default function Dashboard({ navigation }) {
+export default function Dashboard({route, navigation }) {
 	const {toast}=useToast();
-
+   
+	 
 	return (
 		<Drawer.Navigator
 			drawerContent={(props) => <UserDrawerContent {...props} />}
+			 
 			screenOptions={{
 				activeTintColor: `${AppColor.third}`,
 				itemStyle: { padding: 0 },
@@ -40,11 +42,9 @@ export default function Dashboard({ navigation }) {
 			<Drawer.Screen
 				name='Menu'
 				component={Menu}
+				initialParams={{params:route?.params?.firstTime}}
 				options={{
 					headerShown: false,
-					drawerStyle: {
-						display: 'none',
-					},
 					drawerIcon: ({ color }) => (
 						<Icon name='bars' size={15} color={color} />
 					),
