@@ -50,9 +50,6 @@ export default function Menu({route, navigation }) {
 
 	useEffect(
 		() => {
-			
-			
-	
 			if (!userWallet) {
 				
 				getUserWallet();

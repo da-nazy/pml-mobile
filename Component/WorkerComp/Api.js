@@ -474,7 +474,7 @@ export const api = {
 	pickupOperation: 'api/pml/assignments/operation/customer',
 	pmlTerminal: 'api/erp/terminals',
 	appVersion: 'api/erp/settings/version/PML_LOGISTIC',
-	versionKey: '1.10',
+	versionKey: '1.11',
 	playstoreLink:
 		'https://play.google.com/store/apps/details?id=com.pmllogistics',
 	ewallet:Ewallet,
